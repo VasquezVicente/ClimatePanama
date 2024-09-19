@@ -1,0 +1,7 @@
+"0","dir.create(""../data_reanalysis"", showWarnings = FALSE)"
+"0","extentMap  <- raster::extent(c(-80.2,-79.4, 8.8, 9.5))"
+"0","options(download.file.method = ""curl"")"
+"0","options(timeout = 1080000)"
+"0",""
+"0","# This table contains all the permalinks neccesary for download"
+"0","links<-read.csv(""../tables/reanalysis_links.csv"", header = TRUE, sep = "","") "

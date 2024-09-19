@@ -1,0 +1,2 @@
+"0","model_annual<- lmer(annualPrecip~ site +(1|year), data=precipitation_data_subset)"
+"0","model_jfma<- lmer(jfmaPrecip~ site +(1|year), data=precipitation_data_subset)"

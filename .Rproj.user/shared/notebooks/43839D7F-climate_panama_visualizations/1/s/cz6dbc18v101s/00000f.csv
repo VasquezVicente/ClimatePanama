@@ -1,0 +1,8 @@
+"0","striStation <- striStation %>%"
+"0","  dplyr::mutate("
+"0","    longitude = as.character(longitude),    "
+"0","    longitude = readr::parse_number(longitude) "
+"0","  )"
+"0","striStation$source<- ""STRI"""
+"0","acpStation$source<-""ACP"""
+"0","precipitation_data_subset<-read.csv(file=""../tables/climatologies.csv"")"

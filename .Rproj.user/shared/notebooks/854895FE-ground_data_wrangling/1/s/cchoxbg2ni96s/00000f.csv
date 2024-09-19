@@ -1,0 +1,3 @@
+"0","monthlyPrecipData<- acpDATA%>%bind_rows(striDATA)"
+"0","monthlyPrecipData$year<- as.numeric(format(as.Date(monthlyPrecipData$month_year, format=""%Y-%m-%d""),""%Y""))"
+"0","monthlyPrecipData$month<- as.numeric(format(as.Date(monthlyPrecipData$month_year, format=""%Y-%m-%d""),""%m""))"

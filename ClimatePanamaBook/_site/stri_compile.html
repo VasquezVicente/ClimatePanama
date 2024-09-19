@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Gather STRI data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Gather STRI data</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="about" class="level1">
+<h1>About</h1>
+<section id="libraries" class="level2">
+<h2 class="anchored" data-anchor-id="libraries">Libraries</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.3     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data" class="level2">
+<h2 class="anchored" data-anchor-id="data">Data</h2>
+<p>The stri_met_stations.csv contains links and metadata for all sites listed in https://biogeodb.stri.si.edu/physical_monitoring/</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>DIRTOMET<span class="ot">&lt;-</span><span class="st">"../tables/stri_met_stations.csv"</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>met_stations<span class="ot">&lt;-</span> <span class="fu">read.csv</span>(DIRTOMET)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>all_stations<span class="ot">&lt;-</span><span class="fu">unique</span>(met_stations<span class="sc">$</span>alias)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(all_stations)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "CELESTINO"  "AVA"        "BCICLEAR"   "BCIELECT"   "BOCAS"     
+ [6] "PCULEBRA"   "FORTUNA"    "GALETASTRI" "PNM"        "SANBLAS"   
+[11] "SHERMAN"   </code></pre>
+</div>
+</div>
+</section>
+<section id="functions" class="level2">
+<h2 class="anchored" data-anchor-id="functions">Functions</h2>
+<p>The following function calculates monthly precipitation given the standard format of the STRI data, by default it only includes values label as “good”</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>monthly_precip<span class="ot">&lt;-</span> <span class="cf">function</span>(file, <span class="at">include=</span>(<span class="st">"good"</span>),site_name){</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    sheets<span class="ot">&lt;-</span><span class="fu">read.csv</span>(file) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(chk_note <span class="sc">%in%</span> include) </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">nrow</span>(sheets)<span class="sc">&lt;</span><span class="dv">30</span>){</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"Error: not enough days with good measurments"</span>)}</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    daily_precip<span class="ot">&lt;-</span>sheets<span class="sc">%&gt;%</span><span class="fu">group_by</span>(date)<span class="sc">%&gt;%</span><span class="fu">summarize</span>(<span class="at">daily_precip=</span> <span class="fu">sum</span>(ra, <span class="at">na.rm =</span> T))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    monthly_precip <span class="ot">&lt;-</span> daily_precip <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">month_year =</span> <span class="fu">as.Date</span>(<span class="fu">paste0</span>(<span class="fu">format</span>(<span class="fu">as.Date</span>(date, <span class="st">"%d/%m/%Y"</span>), <span class="st">"%Y-%m"</span>), <span class="st">"-01"</span>)))<span class="sc">%&gt;%</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(month_year) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">monthly_precip =</span> <span class="fu">sum</span>(daily_precip, <span class="at">na.rm =</span> T))</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    monthly_precip<span class="sc">$</span>site<span class="ot">&lt;-</span>site_name</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(monthly_precip)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The download_met function download the file , unzips it and then erases the zip file</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>download_met<span class="ot">&lt;-</span> <span class="cf">function</span>(site,csv){</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    link<span class="ot">&lt;-</span>csv[csv<span class="sc">$</span>alias<span class="sc">==</span>site,<span class="st">'link'</span>]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    destfile<span class="ot">&lt;-</span><span class="fu">paste0</span>(<span class="st">"../data_ground/met_data/STRI_data/"</span>,csv[csv<span class="sc">$</span>alias<span class="sc">==</span>site,<span class="st">'alias'</span>],<span class="st">".zip"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">download.file</span>(link,<span class="at">destfile =</span>destfile  , <span class="at">mode =</span> <span class="st">"wb"</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unzip</span>(destfile, <span class="at">exdir =</span> <span class="fu">paste0</span>(<span class="st">"../data_ground/met_data/STRI_data/"</span>,csv[csv<span class="sc">$</span>alias<span class="sc">==</span>site,<span class="st">'alias'</span>]))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">file.remove</span>(destfile)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="loop-over-sites-with-a-regular-format-or-only-having-a-single-csv-file." class="level2">
+<h2 class="anchored" data-anchor-id="loop-over-sites-with-a-regular-format-or-only-having-a-single-csv-file.">Loop over sites with a <strong>regular format</strong> or only having a single csv file.</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sites <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"PCULEBRA"</span>, <span class="st">"FORTUNA"</span>, <span class="st">"PNM"</span>, <span class="st">"SHERMAN"</span>, <span class="st">"AVA"</span>, <span class="st">"BCICLEAR"</span>, <span class="st">"BCIELECT"</span>, <span class="st">"BOCAS"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (site <span class="cf">in</span> sites) {</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">download_met</span>(site, met_stations)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  files_in_site <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="fu">paste0</span>(<span class="st">"../data_ground/met_data/STRI_data/"</span>, met_stations[met_stations<span class="sc">$</span>alias <span class="sc">==</span> site, <span class="st">'alias'</span>]),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                              <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">pattern =</span> <span class="st">".csv"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  This_site <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>(<span class="fu">monthly_precip</span>(files_in_site[<span class="dv">1</span>], <span class="at">include =</span> <span class="fu">c</span>(<span class="st">"good"</span>, <span class="st">"adjusted"</span>), <span class="at">site_name =</span> met_stations[met_stations<span class="sc">$</span>alias <span class="sc">==</span> site, <span class="st">'alias'</span>]),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">error =</span> <span class="cf">function</span>(e) <span class="cn">NULL</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(This_site)) {</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write.csv</span>(This_site, <span class="fu">paste0</span>(<span class="st">'../data_ground/met_data/STRI_data/'</span>, met_stations[met_stations<span class="sc">$</span>alias <span class="sc">==</span> site, <span class="st">'alias'</span>], <span class="st">'.csv'</span>))</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rm</span>(This_site)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="the-following-stations-do-not-have-a-regular-format" class="level2">
+<h2 class="anchored" data-anchor-id="the-following-stations-do-not-have-a-regular-format">The following stations <strong>do not have a regular format</strong></h2>
+<section id="galeta" class="level3">
+<h3 class="anchored" data-anchor-id="galeta">Galeta</h3>
+<p>GALETASTRI and GALETALAB share the same values in the first years, then in 2002 the values are different GALETALAB stops in 2007.</p>
+<p>We accept the adjusted values for GALETASTRI which is the tower station, the metadata inform us that the ACP close-by station Limon bay was used for the gap filling.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>site<span class="ot">=</span> <span class="st">"GALETASTRI"</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">download_met</span>(site, met_stations)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>files_in_site<span class="ot">&lt;-</span><span class="fu">list.files</span>(<span class="fu">paste0</span>(<span class="st">"../data_ground/met_data/STRI_data/"</span>,met_stations[met_stations<span class="sc">$</span>alias<span class="sc">==</span>site,<span class="st">'alias'</span>]),<span class="at">recursive =</span> T, <span class="at">pattern =</span> <span class="st">".csv"</span>, <span class="at">full.names =</span> T)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>This_site<span class="ot">&lt;-</span><span class="fu">monthly_precip</span>(files_in_site[<span class="dv">2</span>],<span class="at">include=</span><span class="fu">c</span>(<span class="st">"good"</span>,<span class="st">"adjusted"</span>), <span class="at">site_name =</span> met_stations[met_stations<span class="sc">$</span>alias<span class="sc">==</span>site,<span class="st">'alias'</span>])</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">exists</span>(<span class="st">'This_site'</span>)) {</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write.csv</span>(This_site, <span class="fu">paste0</span>(<span class="st">'../data_ground/met_data/STRI_data/'</span>, met_stations[met_stations<span class="sc">$</span>alias <span class="sc">==</span> site, <span class="st">'alias'</span>], <span class="st">'.csv'</span>))</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">remove</span>(This_site)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>GALETALAB has a second sensor in the laboratory. It has no notes, and does not follow the format of the other stations</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>GALETALAB<span class="ot">&lt;-</span> <span class="fu">read.csv</span>(files_in_site[<span class="dv">1</span>])<span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">month_year =</span> <span class="fu">as.Date</span>(<span class="fu">paste0</span>(<span class="fu">format</span>(<span class="fu">as.Date</span>(date.time..yyyy.mm.dd.hh.mm.ss., <span class="st">"%Y-%m-%d"</span>), <span class="st">"%Y-%m"</span>), <span class="st">"-01"</span>)))<span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">group_by</span>(month_year)<span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">monthly_precip =</span> <span class="fu">sum</span>(ra.mm., <span class="at">na.rm =</span> T))<span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">site=</span><span class="st">"GALETALAB"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">exists</span>(<span class="st">'GALETALAB'</span>)) {</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write.csv</span>(GALETALAB, <span class="fu">paste0</span>(<span class="st">'../data_ground/met_data/STRI_data/'</span>, <span class="st">"GALETALAB"</span>, <span class="st">'.csv'</span>))</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">remove</span>(GALETALAB)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="san-blas" class="level3">
+<h3 class="anchored" data-anchor-id="san-blas">San blas</h3>
+<p>The san blas station does not follow the standard format and only provides with the summaries.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>site<span class="ot">=</span> <span class="st">"SANBLAS"</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(met_stations[met_stations<span class="sc">$</span>alias<span class="sc">==</span>site,<span class="st">'link'</span>],<span class="at">destfile =</span><span class="fu">paste0</span>(<span class="st">"../data_ground/met_data/STRI_data/"</span>,met_stations[met_stations<span class="sc">$</span>alias<span class="sc">==</span>site,<span class="st">'alias'</span>],<span class="st">".xlsx"</span>)  , <span class="at">mode =</span> <span class="st">"wb"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>file<span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="fu">paste0</span>(<span class="st">"../data_ground/met_data/STRI_data/"</span>,met_stations[met_stations<span class="sc">$</span>alias<span class="sc">==</span>site,<span class="st">'alias'</span>],<span class="st">".xlsx"</span>), <span class="at">sheet =</span> <span class="dv">4</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>file<span class="ot">&lt;-</span>file[<span class="dv">2</span><span class="sc">:</span><span class="dv">9</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">13</span>]</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>SANBLAS<span class="ot">&lt;-</span> file<span class="sc">%&gt;%</span><span class="fu">rename</span>(<span class="st">'01'</span><span class="ot">=</span><span class="st">'...2'</span>,<span class="st">'02'</span><span class="ot">=</span> <span class="st">'...3'</span>,<span class="st">'03'</span><span class="ot">=</span> <span class="st">'...4'</span>,<span class="st">'04'</span><span class="ot">=</span> <span class="st">'...5'</span>,<span class="st">'05'</span><span class="ot">=</span> <span class="st">'...6'</span>,<span class="st">'06'</span><span class="ot">=</span> <span class="st">'...7'</span>,<span class="st">'07'</span><span class="ot">=</span> <span class="st">'...8'</span>,<span class="st">'08'</span><span class="ot">=</span> <span class="st">'...9'</span>,<span class="st">'09'</span><span class="ot">=</span> <span class="st">'...10'</span>,<span class="st">'10'</span><span class="ot">=</span> <span class="st">'...11'</span>,<span class="st">'11'</span><span class="ot">=</span> <span class="st">'...12'</span>,<span class="st">'12'</span><span class="ot">=</span> <span class="st">'...13'</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">'01'</span>,<span class="st">'02'</span>,<span class="st">'03'</span>,<span class="st">'04'</span>,<span class="st">'05'</span>,<span class="st">'06'</span>,<span class="st">'07'</span>,<span class="st">'08'</span>,<span class="st">'09'</span>,<span class="st">'10'</span>,<span class="st">'11'</span>,<span class="st">'12'</span>), <span class="at">names_to =</span> <span class="st">'month'</span>, <span class="at">values_to =</span> <span class="st">'monthly_precip'</span>)<span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">month_year =</span> <span class="fu">as.Date</span>(<span class="fu">paste0</span>(<span class="fu">format</span>(<span class="fu">as.Date</span>(<span class="fu">paste0</span>(<span class="st">'01/'</span>,month,<span class="st">'/2000'</span>), <span class="st">"%d/%m/%Y"</span>), <span class="st">"%Y-%m"</span>), <span class="st">"-01"</span>)))<span class="sc">%&gt;%</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(month_year, monthly_precip)<span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">site=</span><span class="st">"SANBLAS"</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">exists</span>(<span class="st">'SANBLAS'</span>)) {</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write.csv</span>(SANBLAS, <span class="fu">paste0</span>(<span class="st">'../data_ground/met_data/STRI_data/'</span>, <span class="st">"SANBLAS"</span>, <span class="st">'.csv'</span>))</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="fu">remove</span>(SANBLAS)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="fu">file.remove</span>(<span class="fu">paste0</span>(<span class="st">"../data_ground/met_data/STRI_data/"</span>,met_stations[met_stations<span class="sc">$</span>alias<span class="sc">==</span>site,<span class="st">'alias'</span>],<span class="st">".xlsx"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+</section>
+<section id="agua-saluda-celestino-tower" class="level3">
+<h3 class="anchored" data-anchor-id="agua-saluda-celestino-tower">Agua saluda Celestino tower</h3>
+<p>This site has 2 sensors within meters of each other</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>site<span class="ot">=</span> <span class="st">"CELESTINO"</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">download_met</span>(site, met_stations)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>files_in_site<span class="ot">&lt;-</span><span class="fu">list.files</span>(<span class="fu">paste0</span>(<span class="st">"../data_ground/met_data/STRI_data/"</span>,met_stations[met_stations<span class="sc">$</span>alias<span class="sc">==</span>site,<span class="st">'alias'</span>]),</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">recursive =</span> T, <span class="at">pattern =</span> <span class="st">".csv"</span>, <span class="at">full.names =</span> T)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>This_siteN<span class="ot">=</span><span class="fu">monthly_precip</span>(files_in_site[<span class="dv">1</span>],<span class="at">include=</span><span class="fu">c</span>(<span class="st">"good"</span>,<span class="st">"adjusted"</span>), <span class="at">site_name =</span> met_stations[met_stations<span class="sc">$</span>alias<span class="sc">==</span>site,<span class="st">'alias'</span>])</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>This_siteS<span class="ot">=</span><span class="fu">monthly_precip</span>(files_in_site[<span class="dv">2</span>],<span class="at">include=</span><span class="fu">c</span>(<span class="st">"good"</span>,<span class="st">"adjusted"</span>), <span class="at">site_name =</span> met_stations[met_stations<span class="sc">$</span>alias<span class="sc">==</span>site,<span class="st">'alias'</span>])</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(This_siteN<span class="sc">$</span>monthly_precip, This_siteS<span class="sc">$</span>monthly_precip)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="stri_compile_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Merge both sensors and average them.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>CELESTINO<span class="ot">=</span> <span class="fu">merge</span>(This_siteN, This_siteS, <span class="at">by =</span> <span class="st">"month_year"</span>, <span class="at">all =</span> <span class="cn">TRUE</span>)<span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">monthly_precip =</span> <span class="fu">rowMeans</span>(.[, <span class="fu">c</span>(<span class="st">"monthly_precip.x"</span>, <span class="st">"monthly_precip.y"</span>)], <span class="at">na.rm =</span> <span class="cn">TRUE</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(month_year, monthly_precip)<span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">site=</span><span class="st">"CELESTINO"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">exists</span>(<span class="st">'CELESTINO'</span>)) {</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write.csv</span>(CELESTINO, <span class="fu">paste0</span>(<span class="st">'../data_ground/met_data/STRI_data/'</span>, met_stations[met_stations<span class="sc">$</span>alias <span class="sc">==</span> site, <span class="st">'alias'</span>], <span class="st">'.csv'</span>))</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">remove</span>(CELESTINO)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="combine-all-the-downloaded-sites" class="level2">
+<h2 class="anchored" data-anchor-id="combine-all-the-downloaded-sites">Combine all the downloaded sites</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>all <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (site <span class="cf">in</span> all_stations) {</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  thecsv <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="st">'../data_ground/met_data/STRI_data'</span>, <span class="fu">paste0</span>(site, <span class="st">'.csv'</span>))</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">file.exists</span>(thecsv)) {</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    append_stations <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(thecsv)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    all <span class="ot">&lt;-</span> <span class="fu">rbind</span>(all, append_stations)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>all<span class="ot">&lt;-</span> all<span class="sc">%&gt;%</span><span class="fu">select</span>(month_year, monthly_precip, site)<span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">month_year =</span> <span class="fu">as.Date</span>(month_year))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="remove-all-content-from-the-folder" class="level2">
+<h2 class="anchored" data-anchor-id="remove-all-content-from-the-folder">remove all content from the folder</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>directory_path <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">'../data_ground/met_data/STRI_data/'</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unlink</span>(directory_path, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(directory_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="write-the-stri_monthltprecip-file" class="level1">
+<h1>Write the STRI_monthltPrecip file</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(all, <span class="fu">paste0</span>(<span class="st">'../data_ground/met_data/STRI_data/'</span>, <span class="st">"STRI_monthlyPrecip"</span>, <span class="st">'.csv'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,5 @@
+"0","write.csv(precipitation,""../tables/precipitation.csv"", row.names = FALSE)"
+"2","Warning: cannot open file '../tables/precipitation.csv': Permission denied"
+"2","Error in file(file, ifelse(append, ""a"", ""w"")) : 
+  cannot open the connection
+"

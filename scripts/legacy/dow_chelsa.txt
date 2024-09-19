@@ -1,0 +1,25 @@
+library(raster)
+library(readxl)
+getOption('timeout')
+options(timeout = 1200000)
+panlatlon <-  c(-84,-76, 6, 10) 
+setwd("F:/Vicente")
+
+chelsa_timeseries<- read_excel("chelsa_timeseries.xlsx")
+chelsa_timeseries$url<- paste0(chelsa_timeseries$base, chelsa_timeseries$day,chelsa_timeseries$sep,chelsa_timeseries$year,chelsa_timeseries$type)
+chelsa_timeseries$dest<- paste0(substring(chelsa_timeseries$base,41,60),chelsa_timeseries$day, chelsa_timeseries$sep, chelsa_timeseries$year,chelsa_timeseries$type)
+
+for (i in 13:length(chelsa_timeseries$url)){
+  download.file(chelsa_timeseries$url[i], chelsa_timeseries$dest[i], method = 'libcurl')
+  unzip(chelsa_timeseries$dest[i])
+  raslist<- list.files("source")
+  raslist<-paste0("source/",raslist)
+  ras<- lapply(raslist, raster)
+  ras_crop<- lapply(X= ras, FUN= crop, y= panlatlon)
+  
+  for (x in 1:length(raslist)){
+    writeRaster(ras_crop[[x]],filename= paste0("output/",ras_crop[[x]]@data@names,".tif"))
+  }
+  unlink( chelsa_timeseries$dest[i])
+  unlink("source", recursive=TRUE)
+}

@@ -1,0 +1,12 @@
+macro_site,local_site ,alias ,note,latitude ,longitude,sensor,link 
+Agua salud ,Celestino tower ,CELESTINO,There is two sensors a couple meters away. N and S,9.21142,-79.72656,Rain Gauge Novalynx Model 260-2520,https://smithsonian.figshare.com/ndownloader/files/42353586
+BCI,Ava tower,AVA,5 min frequency,9.1566,-79.84828,Campbell Sci. TB4 tipping bucket,https://smithsonian.figshare.com/ndownloader/files/41541687
+BCI,Clearing manual,BCICLEAR,2 sensors prorated,9.163114,-79.838233,"Rain gauge Novalynx Modelv 260-2510, Rain gauge Novalynx Model 260-2520",https://smithsonian.figshare.com/ndownloader/files/39145814
+BCI,Clearing electronic,BCIELECT,"many files, only use the first",9.163114,-79.838233,Campbell Sci. TB4 tipping bucket,https://smithsonian.figshare.com/ndownloader/files/42353145
+Bocas del toro,Main platform,BOCAS,15 min frequency,9.350827,-82.257943,CAMPBELL SCI. CS700 TIPPING BUCKET,https://smithsonian.figshare.com/ndownloader/files/39145592
+Punta Culebra,Tower,PCULEBRA,15 frequency,8.9107694,-79.5289139,CAMPBELL SCI CS700 TIPPING BUCKET,https://smithsonian.figshare.com/ndownloader/files/42354615
+Fortuna,Centro de investigaciones Arauz,FORTUNA,initial measurments were made with basic plastic rain gauge,8.7216333,-82.2375278,NovaLynx 260-2510 Standard Rain Gauge,https://smithsonian.figshare.com/ndownloader/files/42354813
+Punta Galeta,tower and lab,GALETASTRI,two sets from different positions,9.40275,-79.86083,Hydrological Services Model TB3 tipping buckets,https://smithsonian.figshare.com/ndownloader/files/42355005
+Parque Natural Metropolitano,canopy crane,PNM,15 min frequency,8.994875,-79.54311667,CAMPBELL SCI. TB4,https://smithsonian.figshare.com/ndownloader/files/42355608
+San blas,San blas station,SANBLAS,the station was closed in 1988,9.552572,-78.952256,Stevens A/F encoder Model AF-1,https://smithsonian.figshare.com/ndownloader/files/25186028
+San lorenzo,Sherman,SHERMAN,two sensors in the crane,9.280975,-79.97451944,CAMPBELL SCI. TB4,https://smithsonian.figshare.com/ndownloader/files/42355974

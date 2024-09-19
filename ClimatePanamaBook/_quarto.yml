@@ -1,0 +1,25 @@
+project:
+  type: book
+  output-dir: docs
+book:
+  title: "ClimatePanamaBook"
+  author: "Vicente Vasquez"
+  date: "10/18/2023"
+  chapters:
+    - index.qmd
+    - stri_compile.qmd
+    - acp_compile.qmd
+    - ground_data_wrangling.qmd
+    - Download_gridded_precipitation.qmd
+    - results_precip.qmd
+    - climate_panama_visualizations.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+
+editor: visual
+

@@ -1,0 +1,7 @@
+"0","#anova"
+"0","means_GALETA<-GALETA_subset%>%group_by(site)%>%summarize(mean_annual_precip=mean(annualPrecip),sd_annual_precip=sd(annualPrecip),n=n())"
+"0","anova_galeta<- aov(annualPrecip ~ site, data = GALETA_subset)"
+"0","tukey_results_galeta <- TukeyHSD(anova_galeta)"
+"0",""
+"0","#ANOVA results"
+"0","print(means_GALETA)"

@@ -1,0 +1,8 @@
+"0",""
+"0",""
+"0","#pbcor 0.05 degree original"
+"0","pbcor_chelsa<- list.files(""../data_reanalysis/PBCOR/CHELSA 1.2 corrected"",full.names=TRUE)"
+"0","pbcor_chelsa<-pbcor_chelsa[1:4]"
+"0","pbcor_chelsa<-annual_pan(pbcor_chelsa,extentMap)"
+"0","pbcor_chelsa<-projectRaster(pbcor_chelsa,chelsa_orig,method='ngb')"
+"0","plot(pbcor_chelsa)"

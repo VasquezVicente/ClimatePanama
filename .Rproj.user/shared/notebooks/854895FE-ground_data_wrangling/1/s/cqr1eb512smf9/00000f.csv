@@ -1,0 +1,6 @@
+"0","#| message: false"
+"0","precipitation_data<- monthlyPrecipData %>% "
+"0","              filter(!is.na(monthly_precip))%>%"
+"0","              group_by(site, year)%>%filter(n() == 12)%>%"
+"0","              summarize(annualPrecip = sum(monthly_precip, na.rm = TRUE),"
+"0","              jfmaPrecip = sum(monthly_precip[month %in% c(1,2,3,4)], na.rm = TRUE))"

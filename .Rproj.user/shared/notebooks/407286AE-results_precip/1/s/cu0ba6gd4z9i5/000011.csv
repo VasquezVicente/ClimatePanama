@@ -1,0 +1,8 @@
+"0","setwd(""C:/Users/Vicente/repo/ClimatePanama/ClimatePanamaBook"")"
+"0","# Read in the data"
+"0","data_ground<- read.csv(""../tables/precipitation.csv"")"
+"0","striStation<- read.csv(""../tables/stri_met_stations.csv"")"
+"0","acpStation<- read.csv(""../data_ground/met_data/ACP_data/cleanedVV/ACP_met_stations.csv"")"
+"0",""
+"0","#Global variables"
+"0","extentMap  <- raster::extent(c(-80.2,-79.4, 8.8, 9.5))"

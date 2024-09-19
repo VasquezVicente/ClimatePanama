@@ -1,0 +1,7 @@
+# Introduction
+
+This books is meant to summarize all the code necessary to reproduce the study:
+
+**"Evaluation of global gridded climate products in reproducing spatial and temporal variation in precipitation in central Panama"**
+
+The study compares annual mean precipitation and january through april precipitation from precipitation gridded products and ground level data from STRI and ACP meteorological stations.

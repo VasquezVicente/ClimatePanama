@@ -1,0 +1,5 @@
+"0","precipitation<- precipitation_predicted %>%"
+"0","full_join(precipitation_data_subset, by=c(""site"",""year""))%>%"
+"0","mutate(gap_fill=if_else(is.na(annualPrecip),TRUE,FALSE),"
+"0","       annual=if_else(is.na(annualPrecip),predicted_annual,annualPrecip),"
+"0","       jfma=if_else(is.na(jfmaPrecip),predicted_jfma,jfmaPrecip))"

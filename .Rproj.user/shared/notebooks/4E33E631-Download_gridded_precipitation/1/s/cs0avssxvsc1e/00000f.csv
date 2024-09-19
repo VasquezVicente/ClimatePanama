@@ -1,0 +1,1 @@
+"0","plot(raster::raster(""../data_reanalysis/CHELSA EarthEnv/monthly/CHELSA_preccor_land_02_2016.tif""))"

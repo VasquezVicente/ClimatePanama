@@ -1,0 +1,7 @@
+"0","year_sequence<- seq(1970,2016)"
+"0","sites<- unique(precipitation_data_subset$site)"
+"0","precipitation_predicted<- expand.grid(year_sequence,sites)%>%rename(year=""Var1"",site=""Var2"")"
+"0",""
+"0","precipitation_predicted $predicted_annual<- predict(model_annual,newdata=precipitation_predicted)"
+"0","precipitation_predicted$predicted_jfma<- predict(model_jfma,newdata=precipitation_predicted)"
+"0",""

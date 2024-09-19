@@ -1,0 +1,10 @@
+# Ignore .tiff files
+*.tiff
+
+# Ignore the following directories and files
+data_reanalysis/
+elevation/
+
+
+
+

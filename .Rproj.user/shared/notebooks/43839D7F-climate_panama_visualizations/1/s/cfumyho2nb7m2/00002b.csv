@@ -1,0 +1,7 @@
+"0",""
+"0","#chp 0.05 degree original 1980-2009 "
+"0","chp<- list.files(""../data_reanalysis/CHPclim"",full.names=TRUE,pattern = "".tif"")"
+"0","chp<- chp[1:4]"
+"0","chp<-annual_pan(chp,extentMap)"
+"0","chp<-projectRaster(chp,chelsa_orig, method='ngb')"
+"0","plot(chp)"

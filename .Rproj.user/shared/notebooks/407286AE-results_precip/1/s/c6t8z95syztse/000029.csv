@@ -1,0 +1,8 @@
+"0","jfma_table<-results_jfma %>%mutate(Correlation = round(Correlation, 2), RMSE= round(RMSE,0),Bias=round(Bias,0),MAE=round(MAE,0)) %>% "
+"0","  rownames_to_column(var = ""rowname"") %>%"
+"0","  dplyr::select(-rowname) %>%"
+"0","  rename(""Gridded Climate Product"" = ""Source"") %>% rename(""Mean bias (mm)""=""Bias"")%>%"
+"0","  kbl(caption = ""Spatial variation among 31 sites in January-to-April precipitation"") %>%"
+"0","  kable_classic(full_width = F)"
+"0","jfma_table%>%save_kable(""../plots/spatial_jfma_variation.png"",density=900)"
+"0","jfma_table"

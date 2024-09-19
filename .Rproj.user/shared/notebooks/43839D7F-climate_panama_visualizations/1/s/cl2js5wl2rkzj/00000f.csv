@@ -1,0 +1,7 @@
+"0","annual_pan<-function(list,extent){"
+"0","  a<-lapply(list, raster)"
+"0","  b<-raster::stack(a)"
+"0","  c<-raster::calc(b,sum)"
+"0","  d<-raster::crop(c,extent)"
+"0","  return(d)"
+"0","}"

@@ -1,0 +1,5 @@
+"0",""
+"0","#GALETA AND GALETASTRI"
+"0","GALETA_subset<- precipitation_data%>% filter(site==""GALETA""|site==""GALETASTRI"")%>%"
+"0","filter(year>=1970 & year<=2016)"
+"0","ggplot(GALETA_subset, aes(x=year, y=annualPrecip, color=site))+geom_line()+theme_bw()+labs(x=""Year"", y=""Annual Precipitation (mm)"")"
