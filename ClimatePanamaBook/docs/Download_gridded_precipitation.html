@@ -325,19 +325,19 @@ div.csl-indent {
 <span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>download_terra<span class="ot">&lt;-</span><span class="cf">function</span>(dataset){</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>download_terra <span class="ot">&lt;-</span> <span class="cf">function</span>(dataset) {</span>
 <span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(dataset)) {</span>
 <span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>    destfile <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset<span class="sc">$</span>source[i], <span class="st">"/"</span>, dataset<span class="sc">$</span>filename[i])</span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="fu">paste0</span>(destfile,<span class="st">"_1.tif"</span>)) <span class="sc">==</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(<span class="fu">paste0</span>(destfile, <span class="st">"_01.tif"</span>))) {</span>
 <span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>      <span class="fu">download.file</span>(dataset<span class="sc">$</span>link[i], <span class="at">destfile =</span> destfile, <span class="at">method =</span> <span class="st">"curl"</span>)</span>
 <span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>      ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(destfile)</span>
 <span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>      ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
 <span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>      <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
 <span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlyr</span>(ras)) {</span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>        <span class="fu">writeRaster</span>(ras[[t]], <span class="at">filename =</span> <span class="fu">paste0</span>(destfile,<span class="st">"_"</span>,t, <span class="st">".tif"</span>), <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>        <span class="fu">writeRaster</span>(ras[[t]], <span class="at">filename =</span> <span class="fu">sprintf</span>(<span class="st">"%s_%02d.tif"</span>, destfile, t), <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>      }</span>
 <span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>      <span class="fu">unlink</span>(destfile)</span>
-<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>    }<span class="cf">else</span> {</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
 <span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span>(<span class="fu">paste0</span>(destfile, <span class="st">" already exists"</span>))</span>
 <span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>  }</span>
