@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>ClimatePanamaBook - 5&nbsp; Rain Gauges vs Gridded Precipitation Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./climate_panama_visualizations.html" rel="next">
+<link href="./Download_gridded_precipitation.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./results_precip.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Rain Gauges vs Gridded Precipitation Analysis</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">ClimatePanamaBook</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./stri_compile.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Gather STRI data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./acp_compile.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Gather ACP data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ground_data_wrangling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Ground data wrangling and cleaning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Download_gridded_precipitation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Download precipitation gridded products</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./results_precip.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Rain Gauges vs Gridded Precipitation Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./climate_panama_visualizations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Plots and Figures</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#library" id="toc-library" class="nav-link active" data-scroll-target="#library"><span class="header-section-number">5.1</span> Library</a></li>
+  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions"><span class="header-section-number">5.2</span> Functions</a></li>
+  <li><a href="#climatologies" id="toc-climatologies" class="nav-link" data-scroll-target="#climatologies"><span class="header-section-number">5.3</span> Climatologies</a></li>
+  <li><a href="#seasonal-variation12-month" id="toc-seasonal-variation12-month" class="nav-link" data-scroll-target="#seasonal-variation12-month"><span class="header-section-number">5.4</span> Seasonal variation(12-month)</a></li>
+  <li><a href="#interannual-variability" id="toc-interannual-variability" class="nav-link" data-scroll-target="#interannual-variability"><span class="header-section-number">5.5</span> Interannual variability</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Rain Gauges vs Gridded Precipitation Analysis</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="library" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="library"><span class="header-section-number">5.1</span> Library</h2>
+<p>We utilize the terra package for rasters <span class="citation" data-cites="terra1">(<a href="references.html#ref-terra1" role="doc-biblioref">Hijmans 2024</a>)</span>. The package KableExtra is for table visualizations<span class="citation" data-cites="kable">(<a href="references.html#ref-kable" role="doc-biblioref">Hao Zhu 2024</a>)</span>. The sp package is used for calculating distances <span class="citation" data-cites="spsp">(<a href="references.html#ref-spsp" role="doc-biblioref">Pebesma and Bivand 2005</a>)</span>. Packages purr and tiblle are for data wrangling <span class="citation" data-cites="pur">Müller and Wickham (<a href="references.html#ref-tib" role="doc-biblioref">2023</a>)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sp)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Read in files for the analysis</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"C:/Users/Vicente/repo/ClimatePanama/ClimatePanamaBook"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in the data</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data_ground<span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../tables/precipitation.csv"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>striStation<span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../tables/stri_met_stations.csv"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>acpStation<span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../data_ground/met_data/ACP_data/cleanedVV/ACP_met_stations.csv"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Global variables</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>extentMap  <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">ext</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">80.2</span>,<span class="sc">-</span><span class="fl">79.4</span>, <span class="fl">8.8</span>, <span class="fl">9.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="functions" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="functions"><span class="header-section-number">5.2</span> Functions</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>calculate_climatology<span class="ot">&lt;-</span> <span class="cf">function</span>(minyear,maxyear,data){</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    climatology<span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        dplyr<span class="sc">::</span><span class="fu">select</span>(year,site,annual,jfma)<span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">filter</span>(year<span class="sc">&gt;=</span>minyear<span class="sc">&amp;</span>year<span class="sc">&lt;=</span>maxyear)<span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">group_by</span>(site)<span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">summarize</span>(<span class="at">annual=</span><span class="fu">mean</span>(annual,<span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">jfma=</span><span class="fu">mean</span>(jfma,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(climatology)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>annual_pan<span class="ot">&lt;-</span><span class="cf">function</span>(list,extent){</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  b<span class="ot">&lt;-</span>terra<span class="sc">::</span><span class="fu">rast</span>(list)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  c<span class="ot">&lt;-</span>terra<span class="sc">::</span><span class="fu">app</span>(b,sum)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  d<span class="ot">&lt;-</span>terra<span class="sc">::</span><span class="fu">crop</span>(c,extent)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(d)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>jfma_pan <span class="ot">&lt;-</span> <span class="cf">function</span>(list, extent) {</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="fu">head</span>(list, <span class="dv">4</span>))</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  c <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">app</span>(b, sum)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(c, extent)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(d)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>find_nearest_non_na <span class="ot">&lt;-</span> <span class="cf">function</span>(raster_object, coordinate) {</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  non_na_cells <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="sc">!</span><span class="fu">is.na</span>(terra<span class="sc">::</span><span class="fu">values</span>(raster_object)))</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  non_na_coords <span class="ot">&lt;-</span> <span class="fu">xyFromCell</span>(raster_object, non_na_cells)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  dists <span class="ot">&lt;-</span> sp<span class="sc">::</span><span class="fu">spDists</span>(<span class="at">x =</span> <span class="fu">matrix</span>(coordinate, <span class="at">nrow =</span> <span class="dv">1</span>), <span class="at">y =</span> non_na_coords, <span class="at">longlat =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  nearest_cell <span class="ot">&lt;-</span> non_na_cells[<span class="fu">which.min</span>(dists)]</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(terra<span class="sc">::</span><span class="fu">values</span>(raster_object)[nearest_cell])</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>extract_land <span class="ot">&lt;-</span> <span class="cf">function</span>(list_object, coordinate) {</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">nrow</span>(coordinate))</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(coordinate))) {</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    extracted_value <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(list_object, coordinate[i, ], <span class="at">na.rm =</span> <span class="cn">FALSE</span>)[<span class="dv">1</span>,<span class="dv">2</span>]</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    result[i] <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(extracted_value), <span class="fu">find_nearest_non_na</span>(list_object, <span class="fu">as.matrix</span>(coordinate[i, ])), extracted_value)</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="co">#stats calculation</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>stats<span class="ot">&lt;-</span><span class="cf">function</span>(predicted,observed){</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>  correlation<span class="ot">&lt;-</span><span class="fu">cor.test</span>(observed,predicted)<span class="sc">$</span>estimate</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>  rmse<span class="ot">&lt;-</span><span class="fu">sqrt</span>(<span class="fu">mean</span>((predicted<span class="sc">-</span>observed)<span class="sc">^</span><span class="dv">2</span> , <span class="at">na.rm =</span> <span class="cn">TRUE</span> ) )</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>  bias<span class="ot">&lt;-</span> <span class="fu">mean</span>((predicted<span class="sc">-</span>observed),<span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>  mae<span class="ot">&lt;-</span>  <span class="fu">mean</span>(<span class="fu">abs</span>(predicted<span class="sc">-</span>observed), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>  done<span class="ot">&lt;-</span><span class="fu">c</span>(correlation,rmse,bias,mae)</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(done)</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>List of data sets, their temporal extents and the location of the climatology tiffs for each of them</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>datasets_info <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">start_year =</span> <span class="dv">1979</span>, <span class="at">end_year =</span> <span class="dv">2013</span>, <span class="at">dataset_name =</span> <span class="st">"CHELSA 1.2"</span>,<span class="at">column_name=</span><span class="st">"CHELSA1.2"</span>, <span class="at">temporal =</span> <span class="st">"1979-2013"</span>,<span class="at">path =</span> <span class="st">"../data_reanalysis/CHELSA 1.2/"</span>),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">start_year =</span> <span class="dv">1981</span>, <span class="at">end_year =</span> <span class="dv">2010</span>, <span class="at">dataset_name =</span> <span class="st">"CHELSA 2.1"</span>,<span class="at">column_name=</span><span class="st">"CHELSA2.1"</span>, <span class="at">temporal =</span> <span class="st">"1981-2010"</span>, <span class="at">path =</span> <span class="st">"../data_reanalysis/CHELSA 2.1/"</span>),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">start_year =</span> <span class="dv">2003</span>, <span class="at">end_year =</span> <span class="dv">2016</span>, <span class="at">dataset_name =</span> <span class="st">"CHELSA EarthEnv"</span>,<span class="at">column_name=</span><span class="st">"CHELSA_EarthEnv"</span>, <span class="at">temporal =</span> <span class="st">"2003-2016"</span>,<span class="at">path =</span> <span class="st">"../data_reanalysis/CHELSA EarthEnv/climatology"</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">start_year =</span> <span class="dv">1980</span>, <span class="at">end_year =</span> <span class="dv">2009</span>, <span class="at">dataset_name =</span> <span class="st">"CHPclim"</span>,<span class="at">column_name=</span><span class="st">"CHPclim"</span>, <span class="at">temporal =</span> <span class="st">"1980-2009"</span>, <span class="at">path =</span> <span class="st">"../data_reanalysis/CHPclim/"</span>),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">start_year =</span> <span class="dv">1970</span>, <span class="at">end_year =</span> <span class="dv">2000</span>, <span class="at">dataset_name =</span> <span class="st">"WorldClim 2.1"</span>,<span class="at">column_name=</span><span class="st">"WorldClim2.1"</span>, <span class="at">temporal =</span> <span class="st">"1970-2000"</span>, <span class="at">path =</span> <span class="st">"../data_reanalysis/WorldClim 2.1"</span>),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">start_year =</span> <span class="dv">1981</span>, <span class="at">end_year =</span> <span class="dv">2016</span>, <span class="at">dataset_name =</span> <span class="st">"CHIRPS 2.0"</span>,<span class="at">column_name=</span><span class="st">"CHIRPS2.0"</span>,<span class="at">temporal =</span> <span class="st">"1981-2016"</span>, <span class="at">path =</span> <span class="st">"../data_reanalysis/CHIRPS 2.0/climatology"</span>),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">start_year =</span> <span class="dv">1979</span>, <span class="at">end_year =</span> <span class="dv">2016</span>, <span class="at">dataset_name =</span> <span class="st">"CHELSA-W5E5v1.0"</span>,<span class="at">column_name=</span><span class="st">"CHELSAW5E5v1.0"</span>, <span class="at">temporal =</span> <span class="st">"1979-2016"</span>,<span class="at">path =</span> <span class="st">"../data_reanalysis/CHELSA-W5E5v1.0/climatology"</span>),</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">start_year =</span> <span class="dv">1981</span>, <span class="at">end_year =</span> <span class="dv">2010</span>, <span class="at">dataset_name =</span> <span class="st">"TerraClimate"</span>,<span class="at">column_name=</span><span class="st">"TerraClimate"</span>, <span class="at">temporal =</span> <span class="st">"1981-2010"</span>, <span class="at">path =</span> <span class="st">"../data_reanalysis/TerraClimate"</span>),</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">start_year =</span> <span class="dv">1979</span>, <span class="at">end_year =</span> <span class="dv">2013</span>, <span class="at">dataset_name =</span> <span class="st">"PBCOR CHELSA 1.2"</span>,<span class="at">column_name=</span><span class="st">"PBCOR_CHELSA1.2"</span>, <span class="at">temporal =</span> <span class="st">"1979-2013"</span>, <span class="at">path =</span> <span class="st">"../data_reanalysis/PBCOR/CHELSA 1.2 corrected"</span>),</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">start_year =</span> <span class="dv">1980</span>, <span class="at">end_year =</span> <span class="dv">2009</span>, <span class="at">dataset_name =</span> <span class="st">"PBCOR CHPclim"</span>,<span class="at">column_name=</span><span class="st">"PBCOR_CHPclim"</span>, <span class="at">temporal =</span> <span class="st">"1980-2009"</span>, <span class="at">path =</span> <span class="st">"../data_reanalysis/PBCOR/CHPclim corrected"</span>),</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">start_year =</span> <span class="dv">1970</span>, <span class="at">end_year =</span> <span class="dv">2000</span>, <span class="at">dataset_name =</span> <span class="st">"PBCOR WorldClim 2.1"</span>,<span class="at">column_name=</span><span class="st">"PBCOR_WorldClim2.1"</span>, <span class="at">temporal =</span> <span class="st">"1970-2000"</span>, <span class="at">path =</span> <span class="st">"../data_reanalysis/PBCOR/WorldClim corrected"</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="climatologies" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="climatologies"><span class="header-section-number">5.3</span> Climatologies</h2>
+<p>Loop through each dataset and calculate climatology</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>climatologies <span class="ot">&lt;-</span> datasets_info <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_df</span>(<span class="cf">function</span>(info) {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">calculate_climatology</span>(info<span class="sc">$</span>start_year, info<span class="sc">$</span>end_year, data_ground) <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">source =</span> info<span class="sc">$</span>dataset_name)}) <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(acpStation[, <span class="fu">c</span>(<span class="st">'site'</span>, <span class="st">'latitude'</span>, <span class="st">'longitude'</span>, <span class="st">'Elevation'</span>)], <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"site"</span> <span class="ot">=</span> <span class="st">"site"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(striStation[, <span class="fu">c</span>(<span class="st">'alias'</span>, <span class="st">'latitude'</span>, <span class="st">'longitude'</span>)], <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"site"</span> <span class="ot">=</span> <span class="st">"alias"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">latitude =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(latitude.x), latitude.y, latitude.x),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">longitude =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(longitude.x), longitude.y, longitude.x),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">longitude =</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">*</span> <span class="fu">abs</span>(longitude)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(site, latitude, longitude, source, annual, jfma, Elevation)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#extract the values at the coordinates for climatologies</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (source <span class="cf">in</span> datasets_info) {</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(source<span class="sc">$</span>path, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.tif$"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  annual_data <span class="ot">&lt;-</span> <span class="fu">annual_pan</span>(files, extentMap)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  climatologies[[source<span class="sc">$</span>dataset_name]] <span class="ot">&lt;-</span> <span class="fu">extract_land</span>(annual_data,climatologies[,<span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>])</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  jfma_data <span class="ot">=</span> <span class="fu">jfma_pan</span>(files, extentMap)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  column_name <span class="ot">=</span> <span class="fu">paste</span>(source<span class="sc">$</span>dataset_name, <span class="st">"_jfma"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  climatologies[[column_name]] <span class="ot">=</span> <span class="fu">extract_land</span>(jfma_data, climatologies[,<span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>])</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(climatologies,<span class="at">file=</span><span class="st">"../tables/climatologies.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Compute a results data frame</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Source =</span> <span class="fu">character</span>(),</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Correlation =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">RMSE =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Bias =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">MAE =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>results_jfma <span class="ot">&lt;-</span>results</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(datasets_info)) {</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  source <span class="ot">&lt;-</span> datasets_info[[i]]<span class="sc">$</span>dataset_name</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  predicted <span class="ot">&lt;-</span> climatologies[climatologies<span class="sc">$</span>source <span class="sc">==</span> source,][[source]]</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  observed <span class="ot">&lt;-</span> climatologies[climatologies<span class="sc">$</span>source <span class="sc">==</span> source,][[<span class="st">"annual"</span>]]</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  stats_result <span class="ot">&lt;-</span> <span class="fu">stats</span>(predicted, observed)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(results, <span class="fu">data.frame</span>(</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Source =</span> source,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Correlation =</span> stats_result[<span class="dv">1</span>],</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">RMSE =</span> stats_result[<span class="dv">2</span>],</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">Bias =</span> stats_result[<span class="dv">3</span>],</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">MAE =</span> stats_result[<span class="dv">4</span>],</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(datasets_info)) {</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  source <span class="ot">&lt;-</span> datasets_info[[i]]<span class="sc">$</span>dataset_name</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  column<span class="ot">=</span><span class="fu">paste0</span>(source,<span class="st">"_jfma"</span>)</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>  predicted <span class="ot">&lt;-</span> climatologies[climatologies<span class="sc">$</span>source <span class="sc">==</span> source,][[column]]</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>  observed <span class="ot">&lt;-</span> climatologies[climatologies<span class="sc">$</span>source <span class="sc">==</span> source,][[<span class="st">"jfma"</span>]]</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>  stats_result <span class="ot">&lt;-</span> <span class="fu">stats</span>(predicted, observed)</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  results_jfma <span class="ot">&lt;-</span> <span class="fu">rbind</span>(results_jfma, <span class="fu">data.frame</span>(</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">Source =</span> source,</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">Correlation =</span> stats_result[<span class="dv">1</span>],</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">RMSE =</span> stats_result[<span class="dv">2</span>],</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">Bias =</span> stats_result[<span class="dv">3</span>],</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">MAE =</span> stats_result[<span class="dv">4</span>],</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="co">#save both results as csv in tables folder</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(results, <span class="at">file=</span> <span class="st">"../tables/spatial_variation_annual.csv"</span>)</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(results_jfma, <span class="at">file=</span> <span class="st">"../tables/spatial_variation_jfma.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Tables for visualizations</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>annual_table<span class="ot">&lt;-</span>results <span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">Correlation =</span> <span class="fu">round</span>(Correlation, <span class="dv">2</span>), <span class="at">RMSE=</span> <span class="fu">round</span>(RMSE,<span class="dv">0</span>),<span class="at">Bias=</span><span class="fu">round</span>(Bias,<span class="dv">0</span>),<span class="at">MAE=</span><span class="fu">round</span>(MAE,<span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"rowname"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>rowname) <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"Gridded Climate Product"</span> <span class="ot">=</span> <span class="st">"Source"</span>) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="st">"Mean bias (mm)"</span><span class="ot">=</span><span class="st">"Bias"</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">"Spatial variation among 31 sites in total annual precipitation"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_classic</span>(<span class="at">full_width =</span> F)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>annual_table<span class="sc">%&gt;%</span><span class="fu">save_kable</span>(<span class="st">"../plots/spatial_annual_variation.png"</span>,<span class="at">density=</span><span class="dv">900</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>annual_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="lightable-classic table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Spatial variation among 31 sites in total annual precipitation</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Gridded Climate Product</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Correlation</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">RMSE</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Mean bias (mm)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">MAE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">CHELSA 1.2</td>
+<td style="text-align: right;">0.79</td>
+<td style="text-align: right;">337</td>
+<td style="text-align: right;">77</td>
+<td style="text-align: right;">267</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CHELSA 2.1</td>
+<td style="text-align: right;">0.86</td>
+<td style="text-align: right;">492</td>
+<td style="text-align: right;">404</td>
+<td style="text-align: right;">451</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CHELSA EarthEnv</td>
+<td style="text-align: right;">0.85</td>
+<td style="text-align: right;">317</td>
+<td style="text-align: right;">74</td>
+<td style="text-align: right;">259</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CHPclim</td>
+<td style="text-align: right;">0.85</td>
+<td style="text-align: right;">379</td>
+<td style="text-align: right;">255</td>
+<td style="text-align: right;">334</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">WorldClim 2.1</td>
+<td style="text-align: right;">0.64</td>
+<td style="text-align: right;">400</td>
+<td style="text-align: right;">-15</td>
+<td style="text-align: right;">329</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CHIRPS 2.0</td>
+<td style="text-align: right;">0.88</td>
+<td style="text-align: right;">276</td>
+<td style="text-align: right;">101</td>
+<td style="text-align: right;">227</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CHELSA-W5E5v1.0</td>
+<td style="text-align: right;">0.35</td>
+<td style="text-align: right;">493</td>
+<td style="text-align: right;">-8</td>
+<td style="text-align: right;">399</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TerraClimate</td>
+<td style="text-align: right;">0.78</td>
+<td style="text-align: right;">406</td>
+<td style="text-align: right;">-44</td>
+<td style="text-align: right;">339</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PBCOR CHELSA 1.2</td>
+<td style="text-align: right;">0.75</td>
+<td style="text-align: right;">372</td>
+<td style="text-align: right;">110</td>
+<td style="text-align: right;">303</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PBCOR CHPclim</td>
+<td style="text-align: right;">0.77</td>
+<td style="text-align: right;">548</td>
+<td style="text-align: right;">418</td>
+<td style="text-align: right;">466</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PBCOR WorldClim 2.1</td>
+<td style="text-align: right;">0.55</td>
+<td style="text-align: right;">420</td>
+<td style="text-align: right;">-11</td>
+<td style="text-align: right;">337</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>jfma_table<span class="ot">&lt;-</span>results_jfma <span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">Correlation =</span> <span class="fu">round</span>(Correlation, <span class="dv">2</span>), <span class="at">RMSE=</span> <span class="fu">round</span>(RMSE,<span class="dv">0</span>),<span class="at">Bias=</span><span class="fu">round</span>(Bias,<span class="dv">0</span>),<span class="at">MAE=</span><span class="fu">round</span>(MAE,<span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"rowname"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>rowname) <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"Gridded Climate Product"</span> <span class="ot">=</span> <span class="st">"Source"</span>) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="st">"Mean bias (mm)"</span><span class="ot">=</span><span class="st">"Bias"</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">"Spatial variation among 31 sites in January-to-April precipitation"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_classic</span>(<span class="at">full_width =</span> F)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>jfma_table<span class="sc">%&gt;%</span><span class="fu">save_kable</span>(<span class="st">"../plots/spatial_jfma_variation.png"</span>,<span class="at">density=</span><span class="dv">900</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>jfma_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="lightable-classic table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Spatial variation among 31 sites in January-to-April precipitation</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Gridded Climate Product</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Correlation</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">RMSE</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Mean bias (mm)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">MAE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">CHELSA 1.2</td>
+<td style="text-align: right;">0.62</td>
+<td style="text-align: right;">106</td>
+<td style="text-align: right;">-33</td>
+<td style="text-align: right;">62</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CHELSA 2.1</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">104</td>
+<td style="text-align: right;">-4</td>
+<td style="text-align: right;">69</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CHELSA EarthEnv</td>
+<td style="text-align: right;">0.66</td>
+<td style="text-align: right;">90</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">60</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CHPclim</td>
+<td style="text-align: right;">0.86</td>
+<td style="text-align: right;">90</td>
+<td style="text-align: right;">-45</td>
+<td style="text-align: right;">56</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">WorldClim 2.1</td>
+<td style="text-align: right;">0.46</td>
+<td style="text-align: right;">119</td>
+<td style="text-align: right;">-50</td>
+<td style="text-align: right;">83</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CHIRPS 2.0</td>
+<td style="text-align: right;">0.82</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">-21</td>
+<td style="text-align: right;">48</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CHELSA-W5E5v1.0</td>
+<td style="text-align: right;">0.14</td>
+<td style="text-align: right;">123</td>
+<td style="text-align: right;">-8</td>
+<td style="text-align: right;">82</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TerraClimate</td>
+<td style="text-align: right;">0.84</td>
+<td style="text-align: right;">110</td>
+<td style="text-align: right;">-63</td>
+<td style="text-align: right;">73</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PBCOR CHELSA 1.2</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">106</td>
+<td style="text-align: right;">-32</td>
+<td style="text-align: right;">64</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PBCOR CHPclim</td>
+<td style="text-align: right;">0.81</td>
+<td style="text-align: right;">87</td>
+<td style="text-align: right;">-32</td>
+<td style="text-align: right;">53</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PBCOR WorldClim 2.1</td>
+<td style="text-align: right;">0.32</td>
+<td style="text-align: right;">130</td>
+<td style="text-align: right;">-58</td>
+<td style="text-align: right;">93</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</section>
+<section id="seasonal-variation12-month" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="seasonal-variation12-month"><span class="header-section-number">5.4</span> Seasonal variation(12-month)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>month <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../tables/monthly_ground.csv"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sites <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../tables/dfprecip.csv"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Filter data based on conditions</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>acp38 <span class="ot">&lt;-</span> month <span class="sc">%&gt;%</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(site <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"AGUACLARA"</span>, <span class="st">"SANMIGUEL"</span>, <span class="st">"BCI"</span>, <span class="st">"PELUCA"</span>, <span class="st">"BCICLEAR"</span>, <span class="st">"GUACHA"</span>, <span class="st">"CASCADAS"</span>, <span class="st">"PEDROMIGUEL"</span>, <span class="st">"GAMBOA"</span>) <span class="sc">&amp;</span> </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>           Year <span class="sc">&gt;=</span> <span class="dv">1970</span> <span class="sc">&amp;</span> Year <span class="sc">&lt;=</span> <span class="dv">2016</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">monthlyPrecip =</span> <span class="fu">as.numeric</span>(monthlyPrecip))</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>acp38_full_extent <span class="ot">&lt;-</span> acp38 <span class="sc">%&gt;%</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(site, Month) <span class="sc">%&gt;%</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mon_mean =</span> <span class="fu">mean</span>(monthlyPrecip, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">temporal =</span> <span class="st">"1970-2016"</span>, <span class="at">dataset_name =</span> <span class="st">"Ground"</span>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate climatology of the ground data for every specific temporal extent</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>acp38_ag <span class="ot">&lt;-</span> <span class="fu">lapply</span>(datasets_info, <span class="cf">function</span>(dataset) {</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  acp38 <span class="sc">%&gt;%</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Year <span class="sc">&gt;=</span> dataset<span class="sc">$</span>start_year <span class="sc">&amp;</span> Year <span class="sc">&lt;=</span> dataset<span class="sc">$</span>end_year) <span class="sc">%&gt;%</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(site, Month) <span class="sc">%&gt;%</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">mon_mean =</span> <span class="fu">mean</span>(monthlyPrecip, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">temporal =</span> dataset<span class="sc">$</span>temporal, <span class="at">dataset_name =</span> dataset<span class="sc">$</span>dataset_name)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the two data frames</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>acp38_ag <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(acp38_ag, acp38_full_extent)</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate climatology of the ground data  for every specific temporal extent</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Match lat and long</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>acp38_ag<span class="sc">$</span>long_dd <span class="ot">&lt;-</span> sites<span class="sc">$</span>long_dd[<span class="fu">match</span>(acp38_ag<span class="sc">$</span>site, sites<span class="sc">$</span>site)]</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>acp38_ag<span class="sc">$</span>lat_dd <span class="ot">&lt;-</span> sites<span class="sc">$</span>lat_dd[<span class="fu">match</span>(acp38_ag<span class="sc">$</span>site, sites<span class="sc">$</span>site)]</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="do">## loop for extraction of values of raster reanalyis climatologies for specific sites and month.</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(datasets_info)) {</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>  files_list <span class="ot">&lt;-</span> <span class="fu">list.files</span>(datasets_info[[i]]<span class="sc">$</span>path, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.tif$"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>  raster_stack <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(files_list)</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>  acp38_ag[[datasets_info[[i]]<span class="sc">$</span>column_name]] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>) {</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>    acp38_ag[acp38_ag<span class="sc">$</span>Month <span class="sc">==</span> j, datasets_info[[i]]<span class="sc">$</span>column_name] <span class="ot">&lt;-</span> <span class="fu">extract_land</span>(raster_stack[[j]], acp38_ag[acp38_ag<span class="sc">$</span>Month <span class="sc">==</span> j, <span class="fu">c</span>(<span class="st">"long_dd"</span>, <span class="st">"lat_dd"</span>)])</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(acp38_ag,<span class="st">"../tables/acp38_ag.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After extracting values, we can run some statistics</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sites_unique <span class="ot">&lt;-</span> <span class="fu">unique</span>(acp38_ag<span class="sc">$</span>site)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>all_correlations <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="at">site =</span> <span class="fu">character</span>(),</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">dataset=</span><span class="fu">character</span>(),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">Correlation =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                                <span class="at">RMSE =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                                <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#loop over the dataset and each of the sites for calculating the correlation and the rmse</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_along</span>(datasets_info)){</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(datasets_info[[j]]<span class="sc">$</span>dataset_name)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(sites_unique))  {</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    temporal_range <span class="ot">&lt;-</span> datasets_info[[j]]<span class="sc">$</span>temporal</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    name <span class="ot">&lt;-</span> datasets_info[[j]]<span class="sc">$</span>dataset_name</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    col_name <span class="ot">&lt;-</span> datasets_info[[j]]<span class="sc">$</span>column_name</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    site_data <span class="ot">&lt;-</span> acp38_ag[acp38_ag<span class="sc">$</span>site <span class="sc">==</span> sites_unique[i] <span class="sc">&amp;</span> acp38_ag<span class="sc">$</span>temporal <span class="sc">==</span> temporal_range <span class="sc">&amp;</span> acp38_ag<span class="sc">$</span>dataset_name<span class="sc">==</span>name, ]</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    cor_test_result <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(site_data<span class="sc">$</span>mon_mean, <span class="fu">unlist</span>(site_data[,col_name]))<span class="sc">$</span>estimate</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    rmse<span class="ot">&lt;-</span><span class="fu">sqrt</span>(<span class="fu">mean</span>(<span class="fu">unlist</span>(site_data[,col_name])<span class="sc">-</span>site_data<span class="sc">$</span>mon_mean)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    new_row <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">site =</span> sites_unique[i], <span class="at">dataset =</span> name, <span class="at">Correlation =</span> cor_test_result, <span class="at">RMSE =</span> rmse)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    all_correlations <span class="ot">&lt;-</span> <span class="fu">rbind</span>(all_correlations, new_row)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "CHELSA 1.2"
+[1] "CHELSA 2.1"
+[1] "CHELSA EarthEnv"
+[1] "CHPclim"
+[1] "WorldClim 2.1"
+[1] "CHIRPS 2.0"
+[1] "CHELSA-W5E5v1.0"
+[1] "TerraClimate"
+[1] "PBCOR CHELSA 1.2"
+[1] "PBCOR CHPclim"
+[1] "PBCOR WorldClim 2.1"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>all_averages<span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">datset=</span><span class="fu">character</span>(),</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Correlation=</span> <span class="fu">numeric</span>(),</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">RMSE=</span><span class="fu">numeric</span>())</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>datasets<span class="ot">&lt;-</span> <span class="fu">unique</span>(all_correlations<span class="sc">$</span>dataset)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(datasets)){</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  dataset_name<span class="ot">=</span>datasets[i]</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  mean_correlation<span class="ot">=</span> <span class="fu">mean</span>(all_correlations[all_correlations<span class="sc">$</span>dataset<span class="sc">==</span>dataset_name,]<span class="sc">$</span>Correlation)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  mean_rsme<span class="ot">=</span> <span class="fu">mean</span>(all_correlations[all_correlations<span class="sc">$</span>dataset<span class="sc">==</span>dataset_name,]<span class="sc">$</span>RMSE)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  new_row<span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">dataset=</span>dataset_name,<span class="at">Correlation=</span>mean_correlation,<span class="at">RMSE=</span>mean_rsme)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  all_averages<span class="ot">=</span> <span class="fu">rbind</span>(all_averages,new_row)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(all_averages, <span class="at">file=</span> <span class="st">"../tables/seasonal_variation.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Plot the statistics in a table</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>seasonality_table<span class="ot">&lt;-</span>all_averages<span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">Correlation =</span> <span class="fu">round</span>(Correlation, <span class="dv">2</span>), <span class="at">RMSE=</span> <span class="fu">round</span>(RMSE,<span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"rowname"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>rowname) <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"Gridded Climate Product"</span> <span class="ot">=</span> <span class="st">"dataset"</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">"Seasonal variation within 9 sites"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_classic</span>(<span class="at">full_width =</span> F)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>seasonality_table<span class="sc">%&gt;%</span><span class="fu">save_kable</span>(<span class="st">"../plots/seasonal_variation.png"</span>,<span class="at">density=</span><span class="dv">900</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>seasonality_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="lightable-classic table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Seasonal variation within 9 sites</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Gridded Climate Product</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Correlation</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">RMSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">CHELSA 1.2</td>
+<td style="text-align: right;">0.97</td>
+<td style="text-align: right;">31</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CHELSA 2.1</td>
+<td style="text-align: right;">0.97</td>
+<td style="text-align: right;">42</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CHELSA EarthEnv</td>
+<td style="text-align: right;">0.94</td>
+<td style="text-align: right;">24</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CHPclim</td>
+<td style="text-align: right;">0.96</td>
+<td style="text-align: right;">29</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">WorldClim 2.1</td>
+<td style="text-align: right;">0.95</td>
+<td style="text-align: right;">34</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CHIRPS 2.0</td>
+<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">23</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CHELSA-W5E5v1.0</td>
+<td style="text-align: right;">0.97</td>
+<td style="text-align: right;">42</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TerraClimate</td>
+<td style="text-align: right;">0.93</td>
+<td style="text-align: right;">33</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PBCOR CHELSA 1.2</td>
+<td style="text-align: right;">0.97</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PBCOR CHPclim</td>
+<td style="text-align: right;">0.96</td>
+<td style="text-align: right;">36</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PBCOR WorldClim 2.1</td>
+<td style="text-align: right;">0.96</td>
+<td style="text-align: right;">36</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</section>
+<section id="interannual-variability" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="interannual-variability"><span class="header-section-number">5.5</span> Interannual variability</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a list which contains the temporal extent and location of files </span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>datasets_yearly <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"CHELSA 1.2"</span>,<span class="at">column_name=</span><span class="st">"CHELSA1.2"</span>, <span class="at">temporal =</span> <span class="st">"1979-2013"</span>,<span class="at">path =</span> <span class="st">"../data_reanalysis/CHELSA 1.2/yearly"</span>),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"CHELSA 2.1"</span>,<span class="at">column_name=</span><span class="st">"CHELSA2.1"</span>, <span class="at">temporal =</span> <span class="st">"1981-2010"</span>, <span class="at">path =</span> <span class="st">"../data_reanalysis/CHELSA 2.1/yearly"</span>),</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"CHELSA EarthEnv"</span>,<span class="at">column_name=</span><span class="st">"CHELSA_EarthEnv"</span>, <span class="at">temporal =</span> <span class="st">"2003-2016"</span>,<span class="at">path =</span> <span class="st">"../data_reanalysis/CHELSA EarthEnv/yearly"</span>),</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"CHIRPS 2.0"</span>,<span class="at">column_name=</span><span class="st">"CHIRPS2.0"</span>,<span class="at">temporal =</span> <span class="st">"1981-2016"</span>, <span class="at">path =</span> <span class="st">"../data_reanalysis/CHIRPS 2.0/yearly"</span>),</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"CHELSA-W5E5v1.0"</span>,<span class="at">column_name=</span><span class="st">"CHELSAW5E5v1.0"</span>, <span class="at">temporal =</span> <span class="st">"1979-2016"</span>,<span class="at">path =</span> <span class="st">"../data_reanalysis/CHELSA-W5E5v1.0/yearly"</span>),</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"TerraClimate"</span>,<span class="at">column_name=</span><span class="st">"TerraClimate"</span>, <span class="at">temporal =</span> <span class="st">"1979-2016"</span>, <span class="at">path =</span> <span class="st">"../data_reanalysis/TerraClimate/yearly"</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Group by year and extract for each spatial point</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>acp38_year <span class="ot">&lt;-</span> <span class="fu">lapply</span>(datasets_yearly, <span class="cf">function</span>(dataset) {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  acp38 <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Year,site)<span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">annual_precip=</span><span class="fu">sum</span>(monthlyPrecip))<span class="sc">%&gt;%</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">long_dd=</span>sites<span class="sc">$</span>long_dd[<span class="fu">match</span>(site, sites<span class="sc">$</span>site)])<span class="sc">%&gt;%</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">lat_dd=</span>sites<span class="sc">$</span>lat_dd[<span class="fu">match</span>(site,sites<span class="sc">$</span>site)])<span class="sc">%&gt;%</span> </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">temporal =</span> dataset<span class="sc">$</span>temporal, <span class="at">dataset_name =</span> dataset<span class="sc">$</span>dataset_name)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>})<span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_along</span>(datasets_yearly)){</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(datasets_yearly[[j]]<span class="sc">$</span>dataset_name)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    files_list <span class="ot">&lt;-</span> <span class="fu">list.files</span>(datasets_yearly[[j]]<span class="sc">$</span>path, <span class="at">pattern =</span> <span class="st">".tif"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    raster_stack<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(files_list)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    acp38_year[[datasets_yearly[[j]]<span class="sc">$</span>column_name]] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">unique</span>(acp38_year<span class="sc">$</span>Year)) {</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">any</span>(<span class="fu">grepl</span>(i,<span class="fu">names</span>(raster_stack)))) {</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>        layer_index<span class="ot">&lt;-</span><span class="fu">grep</span>(i, <span class="fu">names</span>(raster_stack)) </span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>        raster_layer <span class="ot">&lt;-</span> raster_stack[[layer_index]]</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>        acp38_year[acp38_year<span class="sc">$</span>Year<span class="sc">==</span><span class="fu">as.integer</span>(i),datasets_yearly[[j]]<span class="sc">$</span>column_name]<span class="ot">&lt;-</span> <span class="fu">extract_land</span>(raster_layer,acp38_year[acp38_year<span class="sc">$</span>Year<span class="sc">==</span><span class="fu">as.integer</span>(i),<span class="fu">c</span>(<span class="st">"long_dd"</span>,<span class="st">"lat_dd"</span>)])</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Calculate the statistics for interannual variability per site and compute averages across 9 sites</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>sites_unique_year <span class="ot">&lt;-</span> <span class="fu">unique</span>(acp38_year<span class="sc">$</span>site)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>all_correlations_year <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="at">site =</span> <span class="fu">character</span>(),</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">dataset=</span><span class="fu">character</span>(),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">Correlation =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                                <span class="at">RMSE =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                                <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_along</span>(datasets_yearly)){</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(datasets_yearly[[j]]<span class="sc">$</span>dataset_name)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(sites_unique_year))  {</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    temporal_range <span class="ot">&lt;-</span> datasets_yearly[[j]]<span class="sc">$</span>temporal</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    name <span class="ot">&lt;-</span> datasets_yearly[[j]]<span class="sc">$</span>dataset_name</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    col_name <span class="ot">&lt;-</span> datasets_yearly[[j]]<span class="sc">$</span>column_name</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    site_data <span class="ot">&lt;-</span> acp38_year[acp38_year<span class="sc">$</span>site <span class="sc">==</span> sites_unique_year[i] <span class="sc">&amp;</span> acp38_year<span class="sc">$</span>temporal <span class="sc">==</span> temporal_range <span class="sc">&amp;</span> acp38_year<span class="sc">$</span>dataset_name<span class="sc">==</span>name,]</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    cor_test_result <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(<span class="fu">as.numeric</span>(site_data<span class="sc">$</span>annual_precip), <span class="fu">as.numeric</span>(<span class="fu">unlist</span>(site_data[, col_name])), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>estimate</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((<span class="fu">as.numeric</span>(<span class="fu">unlist</span>(site_data[, col_name])) <span class="sc">-</span> site_data<span class="sc">$</span>annual_precip)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    new_row <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">site =</span> sites_unique_year[i], <span class="at">dataset =</span> name, <span class="at">Correlation =</span> cor_test_result, <span class="at">RMSE =</span> rmse)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    all_correlations_year <span class="ot">&lt;-</span> <span class="fu">rbind</span>(all_correlations_year, new_row)</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>summary_table <span class="ot">&lt;-</span> all_correlations_year <span class="sc">%&gt;%</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(dataset) <span class="sc">%&gt;%</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Correlation =</span> <span class="fu">mean</span>(Correlation, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">RMSE =</span> <span class="fu">mean</span>(RMSE, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>interannual_table <span class="ot">&lt;-</span> summary_table <span class="sc">%&gt;%</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Correlation =</span> <span class="fu">round</span>(Correlation, <span class="dv">2</span>), <span class="at">RMSE =</span> <span class="fu">round</span>(RMSE, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"Mean Correlation"</span> <span class="ot">=</span> Correlation, <span class="st">"Mean RMSE"</span> <span class="ot">=</span> RMSE) <span class="sc">%&gt;%</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"Dataset"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">"Summary of Correlation and RMSE by Dataset"</span>) </span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>interannual_table<span class="sc">%&gt;%</span> <span class="fu">kable_classic</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)<span class="sc">%&gt;%</span><span class="fu">save_kable</span>(<span class="st">"../plots/interannual_table.png"</span>,<span class="at">density=</span><span class="dv">900</span>)</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(summary_table, <span class="at">file=</span> <span class="st">"../tables/interannual_variation.csv"</span>)</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(acp38_year, <span class="at">file =</span> <span class="st">"../tables/acp38_year.csv"</span>)</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>interannual_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-kable" class="csl-entry" role="listitem">
+Hao Zhu, Timothy Tsai, Thomas Travison. 2024. <em>kableExtra: Construct Complex Tables with ’Kable’ and Pipe Syntax</em>. <a href="https://doi.org/10.32614/CRAN.package.kableExtra">https://doi.org/10.32614/CRAN.package.kableExtra</a>.
+</div>
+<div id="ref-terra1" class="csl-entry" role="listitem">
+Hijmans, Robert J. 2024. <em>Terra: Spatial Data Analysis</em>. <a href="https://github.com/rspatial/terra">https://github.com/rspatial/terra</a>.
+</div>
+<div id="ref-tib" class="csl-entry" role="listitem">
+Müller, Kirill, and Hadley Wickham. 2023. <em>Tibble: Simple Data Frames</em>.
+</div>
+<div id="ref-spsp" class="csl-entry" role="listitem">
+Pebesma, Edzer J., and Roger Bivand. 2005. <span>“Classes and Methods for Spatial Data in <span>R</span>.”</span> <em>R News</em> 5 (2): 9–13. <a href="https://CRAN.R-project.org/doc/Rnews/">https://CRAN.R-project.org/doc/Rnews/</a>.
+</div>
+<div id="ref-pur" class="csl-entry" role="listitem">
+Wickham, Hadley, and Lionel Henry. 2023. <em>Purrr: Functional Programming Tools</em>. <a href="https://purrr.tidyverse.org/">https://purrr.tidyverse.org/</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./Download_gridded_precipitation.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Download precipitation gridded products</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./climate_panama_visualizations.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Plots and Figures</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
