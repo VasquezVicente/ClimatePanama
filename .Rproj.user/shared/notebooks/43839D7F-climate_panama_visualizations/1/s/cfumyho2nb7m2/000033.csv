@@ -1,7 +1,0 @@
-"0",""
-"0",""
-"0","#Chelsa earthenv 2003-2016"
-"0","chelsaearthenv<-list.files(""../data_reanalysis/CHELSA EarthEnv/climatology"",full.names = TRUE,pattern = "".tif"")"
-"0","chelsaearthenv<-chelsaearthenv[1:4]"
-"0","chelsaearthenv<-annual_pan(chelsaearthenv,extentMap)"
-"0","plot(chelsaearthenv)"

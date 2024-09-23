@@ -54,7 +54,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -193,17 +212,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#libraries" id="toc-libraries" class="nav-link active" data-scroll-target="#libraries"><span class="header-section-number">1.1</span> Libraries</a></li>
   <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data"><span class="header-section-number">1.2</span> Data</a></li>
-  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions"><span class="header-section-number">1.3</span> Functions</a></li>
-  <li><a href="#loop-over-sites-with-a-regular-format-or-only-having-a-single-csv-file." id="toc-loop-over-sites-with-a-regular-format-or-only-having-a-single-csv-file." class="nav-link" data-scroll-target="#loop-over-sites-with-a-regular-format-or-only-having-a-single-csv-file."><span class="header-section-number">1.4</span> Loop over sites with a <strong>regular format</strong> or only having a single csv file.</a></li>
-  <li><a href="#the-following-stations-do-not-have-a-regular-format" id="toc-the-following-stations-do-not-have-a-regular-format" class="nav-link" data-scroll-target="#the-following-stations-do-not-have-a-regular-format"><span class="header-section-number">1.5</span> The following stations <strong>do not have a regular format</strong></a>
+  <li><a href="#download-data-from-sites-with-regular-format" id="toc-download-data-from-sites-with-regular-format" class="nav-link" data-scroll-target="#download-data-from-sites-with-regular-format"><span class="header-section-number">1.3</span> Download data from sites with <strong>regular format</strong></a></li>
+  <li><a href="#download-data-from-sites-with-non-regular-format" id="toc-download-data-from-sites-with-non-regular-format" class="nav-link" data-scroll-target="#download-data-from-sites-with-non-regular-format"><span class="header-section-number">1.4</span> Download data from sites with <strong>non-regular format</strong></a>
   <ul class="collapse">
-  <li><a href="#galeta" id="toc-galeta" class="nav-link" data-scroll-target="#galeta"><span class="header-section-number">1.5.1</span> Galeta</a></li>
-  <li><a href="#san-blas" id="toc-san-blas" class="nav-link" data-scroll-target="#san-blas"><span class="header-section-number">1.5.2</span> San blas</a></li>
-  <li><a href="#agua-saluda-celestino-tower" id="toc-agua-saluda-celestino-tower" class="nav-link" data-scroll-target="#agua-saluda-celestino-tower"><span class="header-section-number">1.5.3</span> Agua saluda Celestino tower</a></li>
+  <li><a href="#galeta-station-special-case" id="toc-galeta-station-special-case" class="nav-link" data-scroll-target="#galeta-station-special-case"><span class="header-section-number">1.4.1</span> Galeta station special case</a></li>
+  <li><a href="#san-blas-station-special-case" id="toc-san-blas-station-special-case" class="nav-link" data-scroll-target="#san-blas-station-special-case"><span class="header-section-number">1.4.2</span> San Blas station special case</a></li>
+  <li><a href="#agua-salud-station-special-case" id="toc-agua-salud-station-special-case" class="nav-link" data-scroll-target="#agua-salud-station-special-case"><span class="header-section-number">1.4.3</span> Agua salud station special case</a></li>
   </ul></li>
-  <li><a href="#combine-all-the-downloaded-sites" id="toc-combine-all-the-downloaded-sites" class="nav-link" data-scroll-target="#combine-all-the-downloaded-sites"><span class="header-section-number">1.6</span> Combine all the downloaded sites</a></li>
-  <li><a href="#remove-all-content-from-the-folder" id="toc-remove-all-content-from-the-folder" class="nav-link" data-scroll-target="#remove-all-content-from-the-folder"><span class="header-section-number">1.7</span> remove all content from the folder</a></li>
-  <li><a href="#write-the-stri_monthltprecip-file" id="toc-write-the-stri_monthltprecip-file" class="nav-link" data-scroll-target="#write-the-stri_monthltprecip-file"><span class="header-section-number">2</span> Write the STRI_monthltPrecip file</a></li>
+  <li><a href="#combine-all-the-downloaded-sites" id="toc-combine-all-the-downloaded-sites" class="nav-link" data-scroll-target="#combine-all-the-downloaded-sites"><span class="header-section-number">1.5</span> Combine all the downloaded sites</a></li>
   </ul>
 </nav>
     </div>
@@ -229,15 +245,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="libraries" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="libraries"><span class="header-section-number">1.1</span> Libraries</h2>
+<p>The packages we utilize are dplyr<span class="citation" data-cites="dplyr112">(<a href="references.html#ref-dplyr112" role="doc-biblioref">Wickham et al. 2023</a>)</span> and tidyr<span class="citation" data-cites="ti">(<a href="references.html#ref-ti" role="doc-biblioref">Wickham, Vaughan, and Girlich 2024</a>)</span> for data wrangling, ggplot2<span class="citation" data-cites="ggplotbook">(<a href="references.html#ref-ggplotbook" role="doc-biblioref">Wickham 2016</a>)</span> for data visualization and readxl<span class="citation" data-cites="xlfile">(<a href="references.html#ref-xlfile" role="doc-biblioref">Wickham and Bryan 2023</a>)</span> for reading excel files.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"C:/Users/Vicente/repo/ClimatePanama/ClimatePanamaBook"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="data" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="data"><span class="header-section-number">1.2</span> Data</h2>
-<p>The stri_met_stations.csv contains links and metadata for all sites listed in https://biogeodb.stri.si.edu/physical_monitoring/</p>
+<p>The stri_met_stations.csv contains links and metadata for all sites listed in <a href="https://biogeodb.stri.si.edu/physical_monitoring/" class="uri">https://biogeodb.stri.si.edu/physical_monitoring/</a></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>DIRTOMET<span class="ot">&lt;-</span><span class="st">"../tables/stri_met_stations.csv"</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>met_stations<span class="ot">&lt;-</span> <span class="fu">read.csv</span>(DIRTOMET)</span>
@@ -249,9 +268,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 [11] "SHERMAN"   </code></pre>
 </div>
 </div>
-</section>
-<section id="functions" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="functions"><span class="header-section-number">1.3</span> Functions</h2>
 <p>The following function calculates monthly precipitation given the standard format of the STRI data, by default it only includes values label as “good”</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>monthly_precip<span class="ot">&lt;-</span> <span class="cf">function</span>(file, <span class="at">include=</span>(<span class="st">"good"</span>),site_name){</span>
@@ -265,7 +281,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(monthly_precip)</span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The download_met function download the file , unzips it and then erases the zip file</p>
+<p>The download_met function download the file , unzips it and then erases the zip file.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>download_met<span class="ot">&lt;-</span> <span class="cf">function</span>(site,csv){</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    link<span class="ot">&lt;-</span>csv[csv<span class="sc">$</span>alias<span class="sc">==</span>site,<span class="st">'link'</span>]</span>
@@ -276,29 +292,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="loop-over-sites-with-a-regular-format-or-only-having-a-single-csv-file." class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="loop-over-sites-with-a-regular-format-or-only-having-a-single-csv-file."><span class="header-section-number">1.4</span> Loop over sites with a <strong>regular format</strong> or only having a single csv file.</h2>
+<section id="download-data-from-sites-with-regular-format" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="download-data-from-sites-with-regular-format"><span class="header-section-number">1.3</span> Download data from sites with <strong>regular format</strong></h2>
+<p>This sites only have a single csv file. Data sets provided by the Physical Monitoring Program of the Smithsonian Tropical Research Institute<span class="citation" data-cites="citationstri">(<a href="references.html#ref-citationstri" role="doc-biblioref">Smithsonian Tropical Research Institute 2023</a>)</span>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sites <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"PCULEBRA"</span>, <span class="st">"FORTUNA"</span>, <span class="st">"PNM"</span>, <span class="st">"SHERMAN"</span>, <span class="st">"AVA"</span>, <span class="st">"BCICLEAR"</span>, <span class="st">"BCIELECT"</span>, <span class="st">"BOCAS"</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (site <span class="cf">in</span> sites) {</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">download_met</span>(site, met_stations)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  files_in_site <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="fu">paste0</span>(<span class="st">"../data_ground/met_data/STRI_data/"</span>, met_stations[met_stations<span class="sc">$</span>alias <span class="sc">==</span> site, <span class="st">'alias'</span>]),</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                              <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">pattern =</span> <span class="st">".csv"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  This_site <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>(<span class="fu">monthly_precip</span>(files_in_site[<span class="dv">1</span>], <span class="at">include =</span> <span class="fu">c</span>(<span class="st">"good"</span>, <span class="st">"adjusted"</span>), <span class="at">site_name =</span> met_stations[met_stations<span class="sc">$</span>alias <span class="sc">==</span> site, <span class="st">'alias'</span>]),</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">error =</span> <span class="cf">function</span>(e) <span class="cn">NULL</span>)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(This_site)) {</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write.csv</span>(This_site, <span class="fu">paste0</span>(<span class="st">'../data_ground/met_data/STRI_data/'</span>, met_stations[met_stations<span class="sc">$</span>alias <span class="sc">==</span> site, <span class="st">'alias'</span>], <span class="st">'.csv'</span>))</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rm</span>(This_site)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  site_dir <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"../data_ground/met_data/STRI_data/"</span>, met_stations[met_stations<span class="sc">$</span>alias <span class="sc">==</span> site, <span class="st">'alias'</span>])</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(site_dir)) {</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">download_met</span>(site, met_stations)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  files_in_site <span class="ot">&lt;-</span> <span class="fu">list.files</span>(site_dir, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">pattern =</span> <span class="st">".csv"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  This_site <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>(<span class="fu">monthly_precip</span>(files_in_site[<span class="dv">1</span>], <span class="at">include =</span> <span class="fu">c</span>(<span class="st">"good"</span>, <span class="st">"adjusted"</span>), <span class="at">site_name =</span> met_stations[met_stations<span class="sc">$</span>alias <span class="sc">==</span> site, <span class="st">'alias'</span>]),</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                        <span class="at">error =</span> <span class="cf">function</span>(e) <span class="cn">NULL</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(This_site)) {</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write.csv</span>(This_site, <span class="fu">paste0</span>(site_dir, <span class="st">'.csv'</span>))</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rm</span>(This_site)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="the-following-stations-do-not-have-a-regular-format" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="the-following-stations-do-not-have-a-regular-format"><span class="header-section-number">1.5</span> The following stations <strong>do not have a regular format</strong></h2>
-<section id="galeta" class="level3" data-number="1.5.1">
-<h3 data-number="1.5.1" class="anchored" data-anchor-id="galeta"><span class="header-section-number">1.5.1</span> Galeta</h3>
+<section id="download-data-from-sites-with-non-regular-format" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="download-data-from-sites-with-non-regular-format"><span class="header-section-number">1.4</span> Download data from sites with <strong>non-regular format</strong></h2>
+<section id="galeta-station-special-case" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="galeta-station-special-case"><span class="header-section-number">1.4.1</span> Galeta station special case</h3>
 <p>GALETASTRI and GALETALAB share the same values in the first years, then in 2002 the values are different GALETALAB stops in 2007.</p>
 <p>We accept the adjusted values for GALETASTRI which is the tower station, the metadata inform us that the ACP close-by station Limon bay was used for the gap filling.</p>
 <div class="cell">
@@ -329,8 +350,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">remove</span>(GALETALAB)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="san-blas" class="level3" data-number="1.5.2">
-<h3 data-number="1.5.2" class="anchored" data-anchor-id="san-blas"><span class="header-section-number">1.5.2</span> San blas</h3>
+<section id="san-blas-station-special-case" class="level3" data-number="1.4.2">
+<h3 data-number="1.4.2" class="anchored" data-anchor-id="san-blas-station-special-case"><span class="header-section-number">1.4.2</span> San Blas station special case</h3>
 <p>The san blas station does not follow the standard format and only provides with the summaries.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>site<span class="ot">=</span> <span class="st">"SANBLAS"</span></span>
@@ -351,8 +372,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="agua-saluda-celestino-tower" class="level3" data-number="1.5.3">
-<h3 data-number="1.5.3" class="anchored" data-anchor-id="agua-saluda-celestino-tower"><span class="header-section-number">1.5.3</span> Agua saluda Celestino tower</h3>
+<section id="agua-salud-station-special-case" class="level3" data-number="1.4.3">
+<h3 data-number="1.4.3" class="anchored" data-anchor-id="agua-salud-station-special-case"><span class="header-section-number">1.4.3</span> Agua salud station special case</h3>
 <p>This site has 2 sensors within meters of each other</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>site<span class="ot">=</span> <span class="st">"CELESTINO"</span></span>
@@ -384,8 +405,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 </section>
-<section id="combine-all-the-downloaded-sites" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="combine-all-the-downloaded-sites"><span class="header-section-number">1.6</span> Combine all the downloaded sites</h2>
+<section id="combine-all-the-downloaded-sites" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="combine-all-the-downloaded-sites"><span class="header-section-number">1.5</span> Combine all the downloaded sites</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>all <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (site <span class="cf">in</span> all_stations) {</span>
@@ -397,22 +418,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>all<span class="ot">&lt;-</span> all<span class="sc">%&gt;%</span><span class="fu">select</span>(month_year, monthly_precip, site)<span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">month_year =</span> <span class="fu">as.Date</span>(month_year))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="remove-all-content-from-the-folder" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="remove-all-content-from-the-folder"><span class="header-section-number">1.7</span> remove all content from the folder</h2>
+<p>Write the STRI_monthltPrecip file</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>directory_path <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">'../data_ground/met_data/STRI_data/'</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unlink</span>(directory_path, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(directory_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="write-the-stri_monthltprecip-file" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Write the STRI_monthltPrecip file</h1>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(all, <span class="fu">paste0</span>(<span class="st">'../data_ground/met_data/STRI_data/'</span>, <span class="st">"STRI_monthlyPrecip"</span>, <span class="st">'.csv'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(all, <span class="fu">paste0</span>(<span class="st">'../data_ground/met_data/STRI_data/'</span>, <span class="st">"STRI_monthlyPrecip"</span>, <span class="st">'.csv'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-citationstri" class="csl-entry" role="listitem">
+Smithsonian Tropical Research Institute, Steve Paton. 2023. <em>Data Sets Provided by the Physical Monitoring Program of the Smithsonian Tropical Research Institute.</em>
+</div>
+<div id="ref-ggplotbook" class="csl-entry" role="listitem">
+Wickham, Hadley. 2016. <em>Ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
+</div>
+<div id="ref-xlfile" class="csl-entry" role="listitem">
+Wickham, Hadley, and Jennifer Bryan. 2023. <em>Readxl: Read Excel Files</em>.
+</div>
+<div id="ref-dplyr112" class="csl-entry" role="listitem">
+Wickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis Vaughan. 2023. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://dplyr.tidyverse.org">https://dplyr.tidyverse.org</a>.
+</div>
+<div id="ref-ti" class="csl-entry" role="listitem">
+Wickham, Hadley, Davis Vaughan, and Maximilian Girlich. 2024. <em>Tidyr: Tidy Messy Data</em>. <a href="https://tidyr.tidyverse.org">https://tidyr.tidyverse.org</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->

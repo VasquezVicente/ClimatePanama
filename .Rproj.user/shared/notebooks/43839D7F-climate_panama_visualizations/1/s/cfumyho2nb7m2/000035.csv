@@ -1,7 +1,0 @@
-"0",""
-"0","#Pbcorworldclim"
-"0","pbcor_worldclim<-list.files(""../data_reanalysis/PBCOR/WorldClim corrected"",full.names = TRUE,pattern = "".tif"")"
-"0","pbcor_worldclim<-pbcor_worldclim[1:4]"
-"0","pbcor_worldclim<-annual_pan(pbcor_worldclim,extentMap)"
-"0","pbcor_worldclim<-projectRaster(pbcor_worldclim,chelsa_orig,method=""ngb"")"
-"0","plot(pbcor_worldclim)"

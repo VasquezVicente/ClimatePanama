@@ -1,6 +1,0 @@
-"0",""
-"0","#terra"
-"0","terra<- list.files(""../data_reanalysis/TerraClimate"",full.names = TRUE,pattern = "".tif"")"
-"0","terra<-annual_pan(terra,extentMap)"
-"0","terra<-projectRaster(terra,chelsa_orig,method = 'ngb')"
-"0","plot(terra)"

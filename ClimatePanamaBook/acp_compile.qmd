@@ -1,17 +1,21 @@
 ---
 title: "Gather ACP data"
+bibliography: references.bib
 ---
 
 ## Libraries
 
+The packages we utilize are dplyr[@dplyr112] and tidyr[@ti] for data wrangling, ggplot2[@ggplotbook] for data visualization and readxl[@xlfile] for reading excel files. 
+
 ```{r}
 #| message: false
-library(tidyverse)
+library(dplyr)
 library(ggplot2)
 library(readxl)
+library(tidyr)
 ```
 
-### Function to transform from degrees to decimal
+Function to transform from degrees to decimal
 
 ```{r}
 convert_dms_to_dd <- function(dms) {
@@ -23,21 +27,21 @@ convert_dms_to_dd <- function(dms) {
 }
 ```
 
-## Directories and links
+Directories and links
 
 ```{r}
 DIRTOACP<- "../data_ground/met_data/ACP_data/cleanedVV"
 link<- 'https://smithsonian.figshare.com/ndownloader/files/41529324'
 ```
 
-Download the file
+Download the data files.Data sets provided by the Meteorological and Hydrological Branch of the Panama Canal Authority [@paton_monthly_2022].
 
 ```{r}
 download.file(link,destfile ="../data_ground/met_data/ACP_data/cleanedVV/Monthly_Rain_ACP_Vertical.xlsx", mode = "wb")
 
 ```
 
-## Read the data
+Read the data
 
 ```{r}
 ACP_data<-read_excel("../data_ground/met_data/ACP_data/cleanedVV/Monthly_Rain_ACP_Vertical.xlsx",sheet = 4)
@@ -60,8 +64,7 @@ ACP_data <- ACP_data %>%
   select(month_year, monthly_precip, site)
 ```
 
-## Clean MET stations data frame
-
+Clean MET stations data frame
 There is a series of mutate steps that consolidates the site names between the data sheet and the metadata sheets.
 
 ```{r}
@@ -97,7 +100,7 @@ ACP_met_stations <- bind_rows(ACP_met_stations, new_row)
 ACP_met_stations<- ACP_met_stations%>%filter(site!="DEACTIVATEDSTATIONS")%>%filter(ACP_name!="Pedro Miguel (LAKE)")
 ```
 
-## Test that we have not missed any stations
+Test that we have not missed any stations
 
 ```{r}
 if (length(setdiff(unique(ACP_data$site), unique(ACP_met_stations$site)))>0){
@@ -107,7 +110,7 @@ if (length(setdiff(unique(ACP_data$site), unique(ACP_met_stations$site)))>0){
 }
 ```
 
-## Save the data for later use
+Save the data for later use
 
 ```{r}
 write.csv(ACP_data,'../data_ground/met_data/ACP_data/cleanedVV/ACP_data.csv')

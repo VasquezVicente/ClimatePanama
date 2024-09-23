@@ -1,31 +1,34 @@
 ---
 title: "Download precipitation gridded products"
-format: html
-editor: visual
+bibliography: references.bib
 ---
 
 ## About
 
-The following code downloads, crops and calculates climatologies, monthly and yearly timeseries of 11 precipitation products. Careful consideration must be taken given that the downloads can take hours. The final dataset only weights 250 mb and it can be requested to the author to avoid the extensive download. If you only need one of the products, you should skip to that section.
+The following code downloads, crops, and calculates climatologies, as well as monthly and yearly time series for 11 precipitation products. Be aware that downloading the full datasets can take several hours. Once the data are cropped and processed into climatologies, and monthly and yearly time series, the final dataset is approximately 250 MB. For convenience, a compressed, cropped version is available. Please contact vasquezvicente@ufl.edu for access.
 
 ## Libraries
 
+We utilize the terra package for cropping, stacking and calculating rasters [@terra1]. The ncdf4 package is used to read NC files[@nc]. 
 ```{r}
 #| warning: false
-library(raster)
+#| message: false
+library(terra)
 library(ncdf4)
-library(tidyverse)
+library(dplyr)
+library(tidyr)
 ```
 
 ## Requirements
 
+We have gather all the permanent links directly to each of the repositories and are available in the csv. We utilize the curl method for downloads but you might need to use another method depending on your machine. 
+
 ```{r}
 dir.create("../data_reanalysis", showWarnings = FALSE)
-extentMap  <- raster::extent(c(-80.2,-79.4, 8.8, 9.5))
+extentMap  <- terra::ext(c(-80.2,-79.4, 8.8, 9.5))
 options(download.file.method = "curl")
 options(timeout = 1080000)
 
-# This table contains all the permalinks neccesary for download
 links<-read.csv("../tables/reanalysis_links.csv", header = TRUE, sep = ",") 
 ```
 
@@ -46,9 +49,9 @@ download_chelsa<-function(dataset){
   if (file.exists(destfile) == FALSE) {
     print(paste0("downloading ", dataset$filename[i]))
     download.file(dataset$link[i], destfile = destfile, method = "curl")
-    ras <- raster::raster(destfile)
-    ras <- raster::crop(ras, extentMap)
-    writeRaster(ras, filename = destfile, format = "GTiff", overwrite = TRUE)
+    ras <- terra::rast(destfile)
+    ras <- terra::crop(ras, extentMap)
+    writeRaster(ras, filename = destfile, overwrite = TRUE)
   }else{
     print(paste0("file ", dataset$filename[i], " already exists"))
     }
@@ -60,10 +63,10 @@ download_chelsa2<-function(dataset){
   if (file.exists(destfile) == FALSE) {
     print(paste0("downloading ", dataset$filename[i]))
     download.file(dataset$link[i], destfile = destfile, method = "curl")
-    ras <- raster::raster(destfile)
-    ras <- raster::crop(ras, extentMap)
-    ras <- raster::calc(ras, fun = function(x) { x * 0.1 })
-    writeRaster(ras, filename = destfile, format = "GTiff", overwrite = TRUE)
+    ras <- terra::rast(destfile)
+    ras <- terra::crop(ras, extentMap)
+    ras <- terra::app(ras, fun = function(x) { x * 0.1 })
+    writeRaster(ras, filename = destfile, overwrite = TRUE)
   }else{
     print(paste0("file ", dataset$filename[i], " already exists"))
     }
@@ -77,27 +80,27 @@ download_chp<-function(dataset){
       download.file(dataset$link[i], destfile = destfile, method = "curl")
       R.utils::gunzip(destfile, remove = TRUE)
       destfile=gsub(".gz","",destfile)
-      ras <- raster::raster(destfile)
-      ras <- raster::crop(ras, extentMap)
-      writeRaster(ras, filename = destfile, format = "GTiff", overwrite = TRUE)
+      ras <- terra::rast(destfile)
+      ras <- terra::crop(ras, extentMap)
+      writeRaster(ras, filename = destfile, overwrite = TRUE)
     }else {
       print(paste0(destfile2, " already exists"))
     }
   }
 }
-download_terra<-function(dataset){
+download_terra <- function(dataset) {
   for (i in 1:nrow(dataset)) {
     destfile <- paste0("../data_reanalysis/", dataset$source[i], "/", dataset$filename[i])
-    if (file.exists(paste0(destfile,"_1.tif")) == FALSE) {
+    if (!file.exists(paste0(destfile, "_01.tif"))) {
       download.file(dataset$link[i], destfile = destfile, method = "curl")
-      ras <- raster::stack(destfile)
-      ras <- raster::crop(ras, extentMap)
+      ras <- terra::rast(destfile)
+      ras <- terra::crop(ras, extentMap)
       Sys.sleep(1)
-      for (t in 1:nlayers(ras)) {
-        writeRaster(ras[[t]], filename = paste0(destfile,"_",t, ".tif"), format = "GTiff", overwrite = TRUE)
+      for (t in 1:nlyr(ras)) {
+        writeRaster(ras[[t]], filename = sprintf("%s_%02d.tif", destfile, t), overwrite = TRUE)
       }
       unlink(destfile)
-    }else {
+    } else {
       print(paste0(destfile, " already exists"))
     }
   }
@@ -109,23 +112,23 @@ download_pbcor<-function(dataset){
       download.file(dataset$link[i], destfile = destfile, method = "libcurl")
       unzip(destfile, exdir = dirname(destfile))
       data<-list.files(dirname(destfile),pattern = ".nc")
-      raschelsa<- raster::stack(paste0(dirname(destfile),"/",data[1]))
-      raschelsa<- raster::crop(raschelsa, extentMap)
-      for (t in 1:nlayers(raschelsa)) {
+      raschelsa<- terra::rast(paste0(dirname(destfile),"/",data[1]))
+      raschelsa<- terra::crop(raschelsa, extentMap)
+      for (t in 1:nlyr(raschelsa)) {
         print("writting")
-        writeRaster(raschelsa[[t]], filename = paste0("../data_reanalysis/","_",t, ".tif"), format = "GTiff", overwrite = TRUE)
+        writeRaster(raschelsa[[t]], filename = paste0("../data_reanalysis/","_",t, ".tif"), overwrite = TRUE)
       }
-      raschp<- raster::stack(paste0(dirname(destfile),"/",data[2]))
-      raschp<- raster::crop(raschp, extentMap)
-      for (t in 1:nlayers(raschp)) {
+      raschp<- terra::rast(paste0(dirname(destfile),"/",data[2]))
+      raschp<- terra::crop(raschp, extentMap)
+      for (t in 1:nlyr(raschp)) {
         print("writting")
-        writeRaster(raschp[[t]], filename = paste0(destfile,"_",t, ".tif"), format = "GTiff", overwrite = TRUE)
+        writeRaster(raschp[[t]], filename = paste0(destfile,"_",t, ".tif"), overwrite = TRUE)
       }
-      rasworl<- raster::stack(paste0(dirname(destfile),"/",data[3]))
-      rasworl<- raster::crop(rasworl, extentMap)
-      for (t in 1:nlayers(rasworl)) {
+      rasworl<- terra::rast(paste0(dirname(destfile),"/",data[3]))
+      rasworl<- terra::crop(rasworl, extentMap)
+      for (t in 1:nlyr(rasworl)) {
         print("writting")
-        writeRaster(rasworl[[t]], filename = paste0(destfile,"_",t, ".tif"), format = "GTiff", overwrite = TRUE)
+        writeRaster(rasworl[[t]], filename = paste0(destfile,"_",t, ".tif"), overwrite = TRUE)
       }
       unlink(paste0(dirname(destfile),"/",data[1]))
       unlink(paste0(dirname(destfile),"/",data[2]))
@@ -140,6 +143,10 @@ download_pbcor<-function(dataset){
 ```
 
 ## Download regular climatologies
+
+CHELSA 1.2 timeseries and climatologies, as well as the version 2.1 [@karger_data_2018]. CHPclim v1.0 climatology[@funk_global_2015].
+CHIRPS v2.0 climatology and timeseries[@funk_climate_2015b].
+TerraClimate climatology and timeseries [@abatzoglou_terraclimate_2018]
 
 ```{r}
 #| output: false
@@ -169,7 +176,7 @@ checkdir(dataset_terra$source[1])
 download_terra(dataset_terra)
 ```
 
-### Calculate CHIRPS V2 Climatology
+Calculate CHIRPS V2 Climatology
 
 ```{r}
 #| output: false
@@ -186,19 +193,19 @@ if (file.exists("../data_reanalysis/CHIRPS 2.0/climatology")==FALSE){
   dir.create("../data_reanalysis/CHIRPS 2.0/climatology", showWarnings = FALSE)
   for (m in unique(chirps$month)){
     print(paste0("Processing ", m))
-    ras <- raster::stack(chirps[chirps$month == m, ]$chirps)
+    ras <- terra::rast(chirps[chirps$month == m, ]$chirps)
     print(paste0("Stacked ", m))
-    ras <- raster::calc(ras, mean)
+    ras <- terra::app(ras, mean)
     print(paste0("Calculated ", m))
     output_file <- paste0("../data_reanalysis/CHIRPS 2.0/climatology/CHIRPS_2.0_", m, ".tif")
-    raster::writeRaster(ras, filename = output_file, format = "GTiff", overwrite = TRUE)
+    terra::writeRaster(ras, filename = output_file, overwrite = TRUE)
   }
 }else{
   print("climatology already proccessed")
 }
 ```
 
-### Calculate CHIRPS V2 yearly timeseries
+Calculate CHIRPS V2 yearly timeseries
 
 ```{r}
 #| output: false
@@ -206,21 +213,21 @@ if (file.exists("../data_reanalysis/CHIRPS 2.0/yearly")==FALSE){
   dir.create("../data_reanalysis/CHIRPS 2.0/yearly")
   for (y in unique(chirps$year)){
   print(paste0("Processing ", y))
-  ras <- raster::stack(chirps[chirps$year == y, ]$chirps)
+  ras <- terra::rast(chirps[chirps$year == y, ]$chirps)
   print(paste0("Stacked ", y))
-  ras <- raster::calc(ras, sum)
+  ras <- terra::app(ras, sum)
   print(paste0("Calculated ", y))
   output_file <- paste0("../data_reanalysis/CHIRPS 2.0/yearly/CHIRPS_2.0_", y, ".tif")
-  raster::writeRaster(ras, filename = output_file, format = "GTiff", overwrite = TRUE)
+  terra::writeRaster(ras, filename = output_file, overwrite = TRUE)
 }
 }else{
   print("yearly timseries already proccessed")
 }
 ```
 
-## Worldclim v2 download
+## Download non-regular precipitation products
 
-Worldclim comes as a zip file and requires a different download method "libcurl". It also include some metadata files.
+Worldclim 2.1 comes as a zip file and requires a different download method "libcurl". It also include some metadata files [@fick_worldclim_2017].
 
 ```{r}
 #| output: false
@@ -233,9 +240,9 @@ if (file.exists(destfile)==FALSE){
   unzip(paste0("data_reanalysis/", dataset_worlclim$source[1], "/", dataset_worlclim$filename[1]), exdir = paste0("data_reanalysis/",      dataset_worlclim$source[1]))
   data<-list.files(paste0("data_reanalysis/", dataset_worlclim$source[1], "/"),pattern = ".tif",full.names = TRUE)
   for (t in 1:length(data)) {
-    ras<- raster::raster(data[t])
-    ras<- raster::crop(ras, extentMap)
-    writeRaster(ras, filename = data[t], format = "GTiff", overwrite = TRUE)
+    ras<- terra::rast(data[t])
+    ras<- terra::crop(ras, extentMap)
+    writeRaster(ras, filename = data[t], overwrite = TRUE)
   }
   unlink(paste0("data_reanalysis/", dataset_worlclim$source[1], "/", dataset_worlclim$filename[1]))
   unlink(paste0("data_reanalysis/", dataset_worlclim$source[1], "/readme.txt"))
@@ -244,25 +251,25 @@ if (file.exists(destfile)==FALSE){
 }
 ```
 
-## PBCOR correction factors
+PBCOR correction factors
 
-This correction factors are applied to the already downloaded products CHELSA 1.2, CHP and Worldlclim. We resample the higuest resolution products to match the PBCOR resolution.
+This correction factors are applied to the already downloaded products CHELSA 1.2, CHP and Worldlclim. We resample the higuest resolution products to match the PBCOR resolution [@beck_bias_2020].
 
 ```{r}
 #| output: false
 dataset_pbcor <- links %>% filter(source == "PBCOR" & type == "correction factors")
 checkdir(dataset_pbcor$source[1])
 process_data<- function(source,nc_file, orig_raster,outputfolder) {
-  stacked<- raster::stack(paste0("../data_reanalysis/", dataset_pbcor$source[1], "/",nc_file))
-  cropped<- raster::crop(stacked, extentMap)
+  stacked<- terra::rast(paste0("../data_reanalysis/", dataset_pbcor$source[1], "/",nc_file))
+  cropped<- terra::crop(stacked, extentMap)
   orig<- list.files(paste0("../data_reanalysis/",orig_raster),pattern = ".tif",full.names = TRUE)
   rasorig<- lapply(orig,raster)
   dir.create(paste0("../data_reanalysis/",source,"/",outputfolder), showWarnings = FALSE)
-    for (t in 1:nlayers(cropped)) {
+    for (t in 1:nlyr(cropped)) {
       print("writting")
-      chelsa_resampled<- raster::projectRaster(rasorig[[t]],cropped[[t]],method = "ngb")
+      chelsa_resampled<- terra::projectRaster(rasorig[[t]],cropped[[t]],method = "ngb")
       correctedfactor<- cropped[[t]]*chelsa_resampled
-      writeRaster(correctedfactor, filename = paste0("../data_reanalysis/",source,"/",outputfolder,"/",sub("//.nc$","",nc_file),"_",t, ".tif"), format = "GTiff", overwrite = TRUE)
+      writeRaster(correctedfactor, filename = paste0("../data_reanalysis/",source,"/",outputfolder,"/",sub("//.nc$","",nc_file),"_",t, ".tif"), overwrite = TRUE)
     }
 }
 if (dir.exists("../data_reanalysis/PBCOR/CHELSA 1.2 corrected") == FALSE) {
@@ -284,7 +291,7 @@ unlink(paste0("../data_reanalysis/", dataset_pbcor$source[1], "/readme.txt"))
 
 ## Download CHELSA EarthEnv daily timeseries
 
-Be aware that this loop can take hours
+The daily timeseries can take hours to download. We take a daily timeseries and calculated it into a monthly timeseries that is used to get a climatology [@karger_global_2021].
 
 ```{r}
 #| output: false
@@ -300,10 +307,10 @@ for (i in 1:nrow(dataset_earthenv)) {
     unlink(paste0("../data_reanalysis/", dataset_earthenv$source[1], "/", dataset_earthenv$filename[1]))
     data<-list.files(paste0("../data_reanalysis/", dataset_earthenv$source[1],"/",gsub("//.zip$", "", dataset_earthenv$filename[i])),pattern = ".tif",full.names = TRUE)
     for (t in 1:length(data)) {
-      ras<- raster::raster(data[t])
-      ras<- raster::crop(ras, extentMap)
-      ras<-raster::calc(ras, fun=function(x){x/100})
-      writeRaster(ras, filename = data[t], format = "GTiff", overwrite = TRUE)
+      ras<- terra::rast(data[t])
+      ras<- terra::crop(ras, extentMap)
+      ras<-terra::app(ras, fun=function(x){x/100})
+      writeRaster(ras, filename = data[t], overwrite = TRUE)
     }
   }else {
      print("already exists")
@@ -311,7 +318,7 @@ for (i in 1:nrow(dataset_earthenv)) {
 }
 ```
 
-### CHELSA EarthEnv from daily to monthly
+CHELSA EarthEnv from daily to monthly.
 
 ```{r}
 #| output: false
@@ -321,20 +328,20 @@ dir.create("../data_reanalysis/CHELSA EarthEnv/monthly", showWarnings = FALSE)
 for (subdir in 2:length(envearth)){
   print(paste0("processing ",envearth[subdir]))
   data<-list.files(envearth[subdir],pattern = ".tif",full.names = TRUE)
-  ras<- raster::stack(data)
-  ras<- raster::calc(ras,sum)
-  writeRaster(ras, filename = paste0("../data_reanalysis/CHELSA EarthEnv/monthly/",gsub(".zip", "", strsplit(envearth[[subdir]], "/")[[1]][4]),".tif"), format = "GTiff", overwrite = TRUE)
+  ras<- terra::rast(data)
+  ras<- terra::app(ras,sum)
+  writeRaster(ras, filename = paste0("../data_reanalysis/CHELSA EarthEnv/monthly/",gsub(".zip", "", strsplit(envearth[[subdir]], "/")[[1]][4]),".tif"), overwrite = TRUE)
 }}else{
   print("already proccessed into monthly timeseries")
 }
 ```
 
-### CHELSA EarthEnv from monthly to yearly
+CHELSA EarthEnv from monthly to yearly
 
 February of 2016 is not usable, thus we exclude year 2016.
 
 ```{r}
-plot(raster::raster("../data_reanalysis/CHELSA EarthEnv/monthly/CHELSA_preccor_land_02_2016.tif"))
+plot(terra::rast("../data_reanalysis/CHELSA EarthEnv/monthly/CHELSA_preccor_land_02_2016.tif"))
 files <- list.files("../data_reanalysis/CHELSA EarthEnv/monthly", pattern = ".tif", full.names = TRUE)
 data <- data.frame(files)
 years <- vector("character", length(files))
@@ -350,25 +357,25 @@ if (dir.exists("../data_reanalysis/CHELSA EarthEnv/yearly")==FALSE){
   dir.create("../data_reanalysis/CHELSA EarthEnv/yearly", showWarnings = FALSE)
   for (year in years){
     print(paste0("processing ",year))
-    ras<- raster::stack(data[data$year==year,]$files)
-    ras<- raster::calc(ras,sum)
-    writeRaster(ras, filename = paste0("/..data_reanalysis/CHELSA EarthEnv/yearly/","CHELSA_EarthEnv_",year,".tif"), format = "GTiff", overwrite = TRUE)
+    ras<- terra::rast(data[data$year==year,]$files)
+    ras<- terra::app(ras,sum)
+    writeRaster(ras, filename = paste0("/..data_reanalysis/CHELSA EarthEnv/yearly/","CHELSA_EarthEnv_",year,".tif"), overwrite = TRUE)
   }
 }else{
   print("Yearly data already processed")
 }
 ```
 
-### Calculate climatology for CHELSA EarthEnv fromn 2003 to 2015
+Calculate climatology for CHELSA EarthEnv fromn 2003 to 2015
 
 ```{r}
 if (dir.exists("../data_reanalysis/CHELSA EarthEnv/climatology")==FALSE){
   dir.create("../data_reanalysis/CHELSA EarthEnv/climatology", showWarnings = FALSE)
   for (i in 1:length(unique(data$month))){
     print(paste0("processing ",unique(data$month)[i]))
-    ras<- raster::stack(data[data$month==unique(data$month)[i],]$files)
-    ras <- raster::calc(ras, function(x) { mean(x, na.rm = TRUE) })
-    writeRaster(ras, filename = paste0("../data_reanalysis/CHELSA EarthEnv/climatology/","CHELSA_EarthEnv_",unique(data$month)[i],".tif"), format = "GTiff", overwrite = TRUE)
+    ras<- terra::rast(data[data$month==unique(data$month)[i],]$files)
+    ras <- terra::app(ras, function(x) { mean(x, na.rm = TRUE) })
+    writeRaster(ras, filename = paste0("../data_reanalysis/CHELSA EarthEnv/climatology/","CHELSA_EarthEnv_",unique(data$month)[i],".tif"), overwrite = TRUE)
   }
 }else{
   print("Climatologies are already calculated")
@@ -377,7 +384,7 @@ if (dir.exists("../data_reanalysis/CHELSA EarthEnv/climatology")==FALSE){
 
 ## Download CHELSA W5E5 daily timeseries
 
-Be aware that this download can take hours.
+This is a daily timeseries and can take hour to complete the download [@karger_chelsa-w5e5_2022]. 
 
 ```{r}
 #| output: false
@@ -386,11 +393,11 @@ checkdir(dataset_chelsa_e5e5$source[1])
 for (i in 1:nrow(dataset_chelsa_e5e5)) {
   if (file.exists(paste0("../data_reanalysis/", dataset_chelsa_e5e5$source[1],"/",sub("//.nc$", "", dataset_chelsa_e5e5$filename[i]),"_",1,".tif")) == FALSE) {
     download.file(dataset_chelsa_e5e5$link[i], destfile = paste0("../data_reanalysis/", dataset_chelsa_e5e5$source[1], "/", dataset_chelsa_e5e5$filename[i]), method = "curl")
-    ras<-raster::stack(paste0("../data_reanalysis/", dataset_chelsa_e5e5$source[1], "/", dataset_chelsa_e5e5$filename[i]))
-    ras<- raster::crop(ras, extentMap)
-    ras<-raster::calc(ras, fun=function(x){x*86400})
-    for (t in 1:nlayers(ras)) {
-      writeRaster(ras[[t]], filename = paste0("../data_reanalysis/", dataset_chelsa_e5e5$source[1],"/",sub("//.nc$", "", dataset_chelsa_e5e5$filename[i]),"_",t,".tif"), format = "GTiff", overwrite = TRUE)
+    ras<-terra::rast(paste0("../data_reanalysis/", dataset_chelsa_e5e5$source[1], "/", dataset_chelsa_e5e5$filename[i]))
+    ras<- terra::crop(ras, extentMap)
+    ras<-terra::app(ras, fun=function(x){x*86400})
+    for (t in 1:nlyr(ras)) {
+      writeRaster(ras[[t]], filename = paste0("../data_reanalysis/", dataset_chelsa_e5e5$source[1],"/",sub("//.nc$", "", dataset_chelsa_e5e5$filename[i]),"_",t,".tif"), overwrite = TRUE)
     }
     unlink(paste0("../data_reanalysis/", dataset_chelsa_e5e5$source[1], "/", dataset_chelsa_e5e5$filename[i]))
   }else {
@@ -399,7 +406,7 @@ for (i in 1:nrow(dataset_chelsa_e5e5)) {
 }
 ```
 
-### CHELSA W5E5 to monthly timeseries
+CHELSA W5E5 to monthly timeseries
 
 ```{r}
 #| output: false
@@ -421,13 +428,13 @@ for (y in unique(chelsae5$year)) {
   for (m in unique(chelsae5$month)) {
     print(paste0("Processing ", y, "_", m))
     chelsae5[chelsae5$year == y & chelsae5$month == m, ]$chelsae5
-    ras <- raster::stack(chelsae5[chelsae5$year == y & chelsae5$month == m, ]$chelsae5)
+    ras <- terra::rast(chelsae5[chelsae5$year == y & chelsae5$month == m, ]$chelsae5)
     print(paste0("Stacked ", y, "_", m)	)
-    ras <- raster::calc(ras, sum)
+    ras <- terra::app(ras, sum)
     print(paste0("Calculated ", y, "_", m))
     output_file <- paste0("../data_reanalysis/CHELSA-W5E5v1.0/monthly/CHELSA-W5E5v1.0_", y, "_", m, ".tif")
     
-    raster::writeRaster(ras, filename = output_file, format = "GTiff", overwrite = TRUE)
+    terra::writeRaster(ras, filename = output_file, overwrite = TRUE)
   }
 }
 }else{
@@ -435,7 +442,7 @@ for (y in unique(chelsae5$year)) {
 }
 ```
 
-### CHELSA W5E5 from monthly to yearly timeseries
+CHELSA W5E5 from monthly to yearly timeseries
 
 ```{r}
 #| output: false
@@ -443,19 +450,19 @@ if (file.exists("../data_reanalysis/CHELSA-W5E5v1.0/yearly")==FALSE){
   dir.create("../data_reanalysis/CHELSA-W5E5v1.0/yearly", showWarnings = FALSE)
   for (y in unique(chelsae5$year)){
     print(paste0("Processing ", y))
-    ras <- raster::stack(chelsae5[chelsae5$year == y, ]$chelsae5)
+    ras <- terra::rast(chelsae5[chelsae5$year == y, ]$chelsae5)
     print(paste0("Stacked ", y))
-    ras <- raster::calc(ras, sum)
+    ras <- terra::app(ras, sum)
     print(paste0("Calculated ", y))
     output_file <- paste0("../data_reanalysis/CHELSA-W5E5v1.0/yearly/CHELSA-W5E5v1.0_", y, ".tif")
-    raster::writeRaster(ras, filename = output_file, format = "GTiff", overwrite = TRUE)
+    terra::writeRaster(ras, filename = output_file, overwrite = TRUE)
   }
 }else{
   print("yearly timeseries have been processed")
 }
 ```
 
-### CHELSA W5E5 climatology calculated
+CHELSA W5E5 climatology calculated
 
 ```{r}
 #| output: false
@@ -472,12 +479,12 @@ if (file.exists("../data_reanalysis/CHELSA-W5E5v1.0/climatology")==FALSE){
   dir.create("../data_reanalysis/CHELSA-W5E5v1.0/climatology", showWarnings = FALSE)
   for (m in unique(monthly_files$month)){
     print(paste0("Processing ", m))
-    ras <- raster::stack(monthly_files[monthly_files$month == m, ]$monthly_files)
+    ras <- terra::rast(monthly_files[monthly_files$month == m, ]$monthly_files)
     print(paste0("Stacked ", m))
-    ras <- raster::calc(ras, mean)
+    ras <- terra::app(ras, mean)
     print(paste0("Calculated ", m))
     output_file <- paste0("../data_reanalysis/CHELSA-W5E5v1.0/climatology/CHELSA-W5E5v1.0_", m, ".tif")
-    raster::writeRaster(ras, filename = output_file, format = "GTiff", overwrite = TRUE)
+    terra::writeRaster(ras, filename = output_file, overwrite = TRUE)
   }
 }else{
   print("climatology already calculated")
@@ -494,9 +501,9 @@ dir.create(paste0("../data_reanalysis/", dataset_chelsa12$source[1],"/monthly"),
 for (i in 1:nrow(dataset_chelsa12)){
   if (file.exists(paste0("../data_reanalysis/", dataset_chelsa12$source[1],"/monthly/",dataset_chelsa12$filename[i])) == FALSE) {
     download.file(dataset_chelsa12$link[i], destfile = paste0("../data_reanalysis/", dataset_chelsa12$source[1], "/monthly/", dataset_chelsa12$filename[i]), method = "curl")
-    ras<-raster::raster(paste0("../data_reanalysis/", dataset_chelsa12$source[1], "/monthly/", dataset_chelsa12$filename[i]))
-    ras<- raster::crop(ras, extentMap)
-    writeRaster(ras, filename = paste0("../data_reanalysis/", dataset_chelsa12$source[1], "/monthly/", dataset_chelsa12$filename[i]), format = "GTiff", overwrite = TRUE)
+    ras<-terra::rast(paste0("../data_reanalysis/", dataset_chelsa12$source[1], "/monthly/", dataset_chelsa12$filename[i]))
+    ras<- terra::crop(ras, extentMap)
+    writeRaster(ras, filename = paste0("../data_reanalysis/", dataset_chelsa12$source[1], "/monthly/", dataset_chelsa12$filename[i]), overwrite = TRUE)
     }
   else {
     print("already exists")
@@ -504,7 +511,7 @@ for (i in 1:nrow(dataset_chelsa12)){
 }
 ```
 
-### Calculate CHELSA 1.2 yearly timeseries
+Calculate CHELSA 1.2 yearly timeseries
 
 ```{r}
 #| output: false
@@ -521,19 +528,19 @@ if (file.exists("../data_reanalysis/CHELSA 1.2/yearly")==FALSE){
 dir.create("../data_reanalysis/CHELSA 1.2/yearly", showWarnings = FALSE)
 for (y in unique(chelsa12$year)){
   print(paste0("Processing ", y))
-  ras <- raster::stack(chelsa12[chelsa12$year == y, ]$files)
+  ras <- terra::rast(chelsa12[chelsa12$year == y, ]$files)
   print(paste0("Stacked ", y))
-  ras <- raster::calc(ras, sum)
+  ras <- terra::app(ras, sum)
   print(paste0("Calculated ", y))
   output_file <- paste0("../data_reanalysis/CHELSA 1.2/yearly/CHELSA_1.2_", y, ".tif")
-  raster::writeRaster(ras, filename = output_file, format = "GTiff", overwrite = TRUE)
+  terra::writeRaster(ras, filename = output_file, overwrite = TRUE)
 }
 }else {
    print("yearly timeseries already processed")
 }
 ```
 
-## Download CHELSA 2.1 monthly timeseries
+## Download CHELSA 2.1 monthly timeseries 
 
 ```{r}
 #| output: false
@@ -543,9 +550,9 @@ dir.create(paste0("../data_reanalysis/", dataset_chelsa21$source[1],"/monthly"),
 for (i in 1:nrow(dataset_chelsa21)){
   if (file.exists(paste0("../data_reanalysis/", dataset_chelsa21$source[1],"/monthly/",dataset_chelsa21$filename[i])) == FALSE) {
     download.file(dataset_chelsa21$link[i], destfile = paste0("../data_reanalysis/", dataset_chelsa21$source[1], "/monthly/", dataset_chelsa21$filename[i]), method = "curl")
-    ras<-raster::raster(paste0("../data_reanalysis/", dataset_chelsa21$source[1], "/monthly/", dataset_chelsa21$filename[i]))
-    ras<- raster::crop(ras, extentMap)
-    writeRaster(ras, filename = paste0("../data_reanalysis/", dataset_chelsa21$source[1], "/monthly/", dataset_chelsa21$filename[i]), format = "GTiff", overwrite = TRUE)
+    ras<-terra::rast(paste0("../data_reanalysis/", dataset_chelsa21$source[1], "/monthly/", dataset_chelsa21$filename[i]))
+    ras<- terra::crop(ras, extentMap)
+    writeRaster(ras, filename = paste0("../data_reanalysis/", dataset_chelsa21$source[1], "/monthly/", dataset_chelsa21$filename[i]), overwrite = TRUE)
     }
   else {
     print("already exists")
@@ -553,7 +560,7 @@ for (i in 1:nrow(dataset_chelsa21)){
 }
 ```
 
-### Calculate CHELSA 2.1 yearly timeseries
+Calculate CHELSA 2.1 yearly timeseries
 
 ```{r}
 #| output: false
@@ -570,19 +577,21 @@ if (file.exists("../data_reanalysis/CHELSA 2.1/yearly")==FALSE){
 dir.create("../data_reanalysis/CHELSA 2.1/yearly", showWarnings = FALSE)
 for (y in unique(chelsa21$year)){
   print(paste0("Processing ", y))
-  ras <- raster::stack(chelsa21[chelsa21$year == y, ]$files)
+  ras <- terra::rast(chelsa21[chelsa21$year == y, ]$files)
   print(paste0("Stacked ", y))
-  ras <- raster::calc(ras, sum)
+  ras <- terra::app(ras, sum)
   print(paste0("Calculated ", y))
   output_file <- paste0("../data_reanalysis/CHELSA 2.1/yearly/CHELSA_2.1_", y, ".tif")
-  raster::writeRaster(ras, filename = output_file, format = "GTiff", overwrite = TRUE)
+  terra::writeRaster(ras, filename = output_file, overwrite = TRUE)
 }
 }else {
    print("yearly timeseries already processed")
 }
 ```
 
-## Download Terra climate monthly timeseries
+## Download TerraClimate monthly timeseries
+
+[@abatzoglou_terraclimate_2018].
 
 ```{r}
 #| output: false
@@ -593,11 +602,11 @@ for (i in 1:nrow(dataset_terra)){
   tif_files <- paste0("../data_reanalysis/", dataset_terra$source[1],"/monthly/",dataset_terra$filename[i],"_", sprintf("%02d", 1:12), ".tif")
   if (!all(file.exists(tif_files))) {
     download.file(dataset_terra$link[i], destfile = paste0("../data_reanalysis/", dataset_terra$source[1], "/monthly/", dataset_terra$filename[i]), method = "curl")
-    ras<-raster::stack(paste0("../data_reanalysis/", dataset_terra$source[1], "/monthly/", dataset_terra$filename[i]))
-    ras<- raster::crop(ras, extentMap)
-    for (t in 1:nlayers(ras)) {
+    ras<-terra::rast(paste0("../data_reanalysis/", dataset_terra$source[1], "/monthly/", dataset_terra$filename[i]))
+    ras<- terra::crop(ras, extentMap)
+    for (t in 1:nlyr(ras)) {
       t_formatted <- sprintf("%02d", t)
-      writeRaster(ras[[t]], filename = paste0("../data_reanalysis/", dataset_terra$source[1],"/monthly/",dataset_terra$filename[i],"_",t_formatted,".tif"), format = "GTiff", overwrite = TRUE)
+      writeRaster(ras[[t]], filename = paste0("../data_reanalysis/", dataset_terra$source[1],"/monthly/",dataset_terra$filename[i],"_",t_formatted,".tif"), overwrite = TRUE)
     }
     unlink(paste0("../data_reanalysis/", dataset_terra$source[1], "/monthly/", dataset_terra$filename[i]))
   } else {
@@ -607,7 +616,7 @@ for (i in 1:nrow(dataset_terra)){
 
 ```
 
-### Calculate yearly timeseries
+Calculate yearly timeseries of TerraClimate.
 
 ```{r}
 #| output: false
@@ -623,12 +632,12 @@ if (file.exists("../data_reanalysis/TerraClimate/yearly")==FALSE){
   dir.create("../data_reanalysis/TerraClimate/yearly", showWarnings = FALSE)
   for (y in unique(year)){
     print(paste0("Processing ", y))
-    ras <- raster::stack(files[year == y])
+    ras <- terra::rast(files[year == y])
     print(paste0("Stacked ", y))
-    ras <- raster::calc(ras, sum)
+    ras <- terra::app(ras, sum)
     print(paste0("Calculated ", y))
     output_file <- paste0("../data_reanalysis/TerraClimate/yearly/TerraClimate_", y, ".tif")
-    raster::writeRaster(ras, filename = output_file, format = "GTiff", overwrite = TRUE)
+    terra::writeRaster(ras, filename = output_file, overwrite = TRUE)
   }
 }else{
   print("Yearly timeseries already processed")

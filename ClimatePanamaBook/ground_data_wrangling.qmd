@@ -1,23 +1,25 @@
 ---
 title: "Ground data wrangling and cleaning"
+bibliography: references.bib
 ---
 ## About
 
-The script imports the monthly precipitation summaries from meteorological stations managed by the ACP (Autoridad del canal de Panama) and STRI (Smitsonian Tropical Research institute). It calculates the response variables used in the Climate Panama project: annual mean precipitation and january-april precipitation. Data visualization is used to determine the group of sites that meet the minimum criteria.We fit a linear mixed model with random effects for year and fixed effect for site across the complete set of years. The code filters the timeseries for a period between 1970-2016 and ensures that no site is repeated. We keep all the real values and gap fill with the predicted values from the models.
+We use the term "ground data" to refer to rain gauge observations collected from meteorological stations managed by the Smithsonian Tropical Research Institute and the Panama Canal Authority (Autoridad del Canal de Panamá). First, we merged both datasets and addressed key questions to establish criteria for selecting the stations to be included in the analysis. We then calculated annual precipitation and January-to-April precipitation, the latter serving as a proxy for dry season precipitation. Data visualization was used to identify the sites that meet the minimum criteria. We used the lmer4 package to fit a linear mixed model, using year as a random effect and site as a fixed effect across the full time period. The time series was filtered for the 1970-2016 period, ensuring no site was duplicated. We retained all actual values and gap-filled missing data using the predicted values from the model.
 
 ## Libraries
 
 ```{r}
 #| warning: false
 #| message: false
-library(tidyverse)
+library(dplyr)
+library(tidyr)
 library(ggplot2)
 library(lme4)
 ```
 
 ## The data
 
-The github repository contains a folder with all the ground data.
+The github repository contains a version of the data that has been cleaned and calculated into monthly values.Data provided by the Meteorological and Hydrological Branch of the Panama Canal Authority and the Physical Monitoring Program of the Smithsonian Tropical Research Institute.
 
 ```{r}
 ACP_DATA<- "../data_ground/met_data/ACP_data/cleanedVV/ACP_data.csv"
@@ -82,6 +84,7 @@ ggplot(nyears, aes(x = longterm_mean_annual, y = nyears)) +
   labs(x = "Mean annual precipitation", y = "Number of Years")
 ggsave("plots/meanannual_v_nyears.jpg", width = 10, height = 6, dpi = 300)
 ```
+Comment: we can clearly see a group of sites that has 30 or more years of data. Also, we recognize the presence of 3 sites with very high mean annual precipitation falling out of scope of our paper.
 
 ## QAQC for sites
 
@@ -109,7 +112,7 @@ geom_line()+theme_bw()+labs(x="Year", y="Annual Precipitation (mm)")
 
 ```
 
-*The metadata indicates that both BCICLEAR and BCIELECT are both different sensor. BCICLEAR is an standard rain gauge that is emptied manually by technicians. On the other hand, BCIELECT is a tipping bucket showing 356 mm less annual mean precipitation. Finally, the BCI station managed by the Panama canal authority is placed on the Gatun lake shore. We will keep the three sites*
+*The metadata indicates that both BCICLEAR and BCIELECT are both different sensor. BCICLEAR is an standard rain gauge that is emptied manually by technicians. On the other hand, BCIELECT is a electronic tipping bucket showing 356 mm less annual mean precipitation. Finally, the BCI station managed by the Panama canal authority is placed on the Gatun lake shore. We will keep the three sites*
 
 The GALETA station appears on the ACP monthly summary and it is also listed in the STRI datasets, here given the name of GALETASTRI. Are this different sensors? or repeated sets of data.
 
@@ -145,8 +148,9 @@ precipitation_data_30<- merge(precipitation_data_subset, nyears, by.x= "site", b
 precipitation_data_subset<- precipitation_data_30%>% filter(nyears>=30)
 unique(precipitation_data_subset$site)
 ```
+## Gap fill the timeseries 1970-2016
 
-Use the *lme4* package to fit a linear mixed model with random effects for year and fixed effects for site for each of the response variable (annual precipitation and january through april precipitation). Note that we have created the model using all the avaliable years.
+Use the *lme4* package to fit a linear mixed model with random effects for year and fixed effects for site for annual precipitation and January to April precipitation [@lm]. Note that we have created the model using all the avaliable years.
 
 ```{r}
 model_annual<- lmer(annualPrecip~ site +(1|year), data=precipitation_data_subset)

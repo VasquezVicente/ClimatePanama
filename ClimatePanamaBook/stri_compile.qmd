@@ -1,19 +1,25 @@
 ---
 title: "Gather STRI data"
+bibliography: references.bib
 ---
+
 ## Libraries
+
+The packages we utilize are dplyr[@dplyr112] and tidyr[@ti] for data wrangling, ggplot2[@ggplotbook] for data visualization and readxl[@xlfile] for reading excel files. 
 
 ```{r}
 #| warning: false
 #| message: false
-library(tidyverse)
+setwd("C:/Users/Vicente/repo/ClimatePanama/ClimatePanamaBook")
+library(dplyr)
 library(ggplot2)
 library(readxl)
+library(tidyr)
 ```
 
 ## Data
 
-The stri_met_stations.csv contains links and metadata for all sites listed in https://biogeodb.stri.si.edu/physical_monitoring/
+The stri_met_stations.csv contains links and metadata for all sites listed in <https://biogeodb.stri.si.edu/physical_monitoring/>
 
 ```{r}
 DIRTOMET<-"../tables/stri_met_stations.csv"
@@ -21,9 +27,6 @@ met_stations<- read.csv(DIRTOMET)
 all_stations<-unique(met_stations$alias)
 print(all_stations)
 ```
-
-## Functions
-
 The following function calculates monthly precipitation given the standard format of the STRI data, by default it only includes values label as "good"
 
 ```{r}
@@ -39,7 +42,7 @@ monthly_precip<- function(file, include=("good"),site_name){
 }
 ```
 
-The download_met function download the file , unzips it and then erases the zip file
+The download_met function download the file , unzips it and then erases the zip file.
 
 ```{r}
 download_met<- function(site,csv){
@@ -51,29 +54,35 @@ download_met<- function(site,csv){
 }
 ```
 
-## Loop over sites with a **regular format** or only having a single csv file.
+## Download data from sites with **regular format** 
+
+This sites only have a single csv file. Data sets provided by the Physical Monitoring Program of the Smithsonian Tropical Research Institute[@citationstri].
 
 ```{r}
 #| message: false
 sites <- c("PCULEBRA", "FORTUNA", "PNM", "SHERMAN", "AVA", "BCICLEAR", "BCIELECT", "BOCAS")
 for (site in sites) {
-  download_met(site, met_stations)
-  files_in_site <- list.files(paste0("../data_ground/met_data/STRI_data/", met_stations[met_stations$alias == site, 'alias']),
-                              recursive = TRUE, pattern = ".csv", full.names = TRUE)
+  site_dir <- paste0("../data_ground/met_data/STRI_data/", met_stations[met_stations$alias == site, 'alias'])
+  
+  if (!dir.exists(site_dir)) {
+    download_met(site, met_stations)
+  }
+  
+  files_in_site <- list.files(site_dir, recursive = TRUE, pattern = ".csv", full.names = TRUE)
  
   This_site <- tryCatch(monthly_precip(files_in_site[1], include = c("good", "adjusted"), site_name = met_stations[met_stations$alias == site, 'alias']),
                         error = function(e) NULL)
   
   if (!is.null(This_site)) {
-    write.csv(This_site, paste0('../data_ground/met_data/STRI_data/', met_stations[met_stations$alias == site, 'alias'], '.csv'))
+    write.csv(This_site, paste0(site_dir, '.csv'))
   }
   rm(This_site)
 }
 ```
 
-## The following stations **do not have a regular format**
+## Download data from sites with **non-regular format**
 
-### Galeta
+### Galeta station special case 
 
 GALETASTRI and GALETALAB share the same values in the first years, then in 2002 the values are different GALETALAB stops in 2007.
 
@@ -110,7 +119,7 @@ if (exists('GALETALAB')) {
 remove(GALETALAB)
 ```
 
-### San blas
+### San Blas station special case
 
 The san blas station does not follow the standard format and only provides with the summaries.
 
@@ -131,7 +140,7 @@ remove(SANBLAS)
 file.remove(paste0("../data_ground/met_data/STRI_data/",met_stations[met_stations$alias==site,'alias'],".xlsx"))
 ```
 
-### Agua saluda Celestino tower
+### Agua salud station special case
 
 This site has 2 sensors within meters of each other
 
@@ -177,17 +186,8 @@ for (site in all_stations) {
 all<- all%>%select(month_year, monthly_precip, site)%>%mutate(month_year = as.Date(month_year))
 ```
 
-## remove all content from the folder
-
-```{r}
-directory_path <- paste0('../data_ground/met_data/STRI_data/')
-unlink(directory_path, recursive = TRUE)
-dir.create(directory_path)
-```
-
-# Write the STRI_monthltPrecip file
+Write the STRI_monthltPrecip file
 
 ```{r}
 write.csv(all, paste0('../data_ground/met_data/STRI_data/', "STRI_monthlyPrecip", '.csv'))
-
 ```

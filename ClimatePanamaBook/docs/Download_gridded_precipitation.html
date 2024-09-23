@@ -54,7 +54,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -64,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./climate_panama_visualizations.html" rel="next">
+<link href="./results_precip.html" rel="next">
 <link href="./ground_data_wrangling.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -165,8 +184,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./results_precip.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Rain Gauges vs Gridded Precipitation Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./climate_panama_visualizations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Plots and Figures</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Plots and Figures</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -189,37 +214,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#libraries" id="toc-libraries" class="nav-link" data-scroll-target="#libraries"><span class="header-section-number">4.2</span> Libraries</a></li>
   <li><a href="#requirements" id="toc-requirements" class="nav-link" data-scroll-target="#requirements"><span class="header-section-number">4.3</span> Requirements</a></li>
   <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions"><span class="header-section-number">4.4</span> Functions</a></li>
-  <li><a href="#download-regular-climatologies" id="toc-download-regular-climatologies" class="nav-link" data-scroll-target="#download-regular-climatologies"><span class="header-section-number">4.5</span> Download regular climatologies</a>
-  <ul class="collapse">
-  <li><a href="#calculate-chirps-v2-climatology" id="toc-calculate-chirps-v2-climatology" class="nav-link" data-scroll-target="#calculate-chirps-v2-climatology"><span class="header-section-number">4.5.1</span> Calculate CHIRPS V2 Climatology</a></li>
-  <li><a href="#calculate-chirps-v2-yearly-timeseries" id="toc-calculate-chirps-v2-yearly-timeseries" class="nav-link" data-scroll-target="#calculate-chirps-v2-yearly-timeseries"><span class="header-section-number">4.5.2</span> Calculate CHIRPS V2 yearly timeseries</a></li>
-  </ul></li>
-  <li><a href="#worldclim-v2-download" id="toc-worldclim-v2-download" class="nav-link" data-scroll-target="#worldclim-v2-download"><span class="header-section-number">4.6</span> Worldclim v2 download</a></li>
-  <li><a href="#pbcor-correction-factors" id="toc-pbcor-correction-factors" class="nav-link" data-scroll-target="#pbcor-correction-factors"><span class="header-section-number">4.7</span> PBCOR correction factors</a></li>
-  <li><a href="#download-chelsa-earthenv-daily-timeseries" id="toc-download-chelsa-earthenv-daily-timeseries" class="nav-link" data-scroll-target="#download-chelsa-earthenv-daily-timeseries"><span class="header-section-number">4.8</span> Download CHELSA EarthEnv daily timeseries</a>
-  <ul class="collapse">
-  <li><a href="#chelsa-earthenv-from-daily-to-monthly" id="toc-chelsa-earthenv-from-daily-to-monthly" class="nav-link" data-scroll-target="#chelsa-earthenv-from-daily-to-monthly"><span class="header-section-number">4.8.1</span> CHELSA EarthEnv from daily to monthly</a></li>
-  <li><a href="#chelsa-earthenv-from-monthly-to-yearly" id="toc-chelsa-earthenv-from-monthly-to-yearly" class="nav-link" data-scroll-target="#chelsa-earthenv-from-monthly-to-yearly"><span class="header-section-number">4.8.2</span> CHELSA EarthEnv from monthly to yearly</a></li>
-  <li><a href="#calculate-climatology-for-chelsa-earthenv-fromn-2003-to-2015" id="toc-calculate-climatology-for-chelsa-earthenv-fromn-2003-to-2015" class="nav-link" data-scroll-target="#calculate-climatology-for-chelsa-earthenv-fromn-2003-to-2015"><span class="header-section-number">4.8.3</span> Calculate climatology for CHELSA EarthEnv fromn 2003 to 2015</a></li>
-  </ul></li>
-  <li><a href="#download-chelsa-w5e5-daily-timeseries" id="toc-download-chelsa-w5e5-daily-timeseries" class="nav-link" data-scroll-target="#download-chelsa-w5e5-daily-timeseries"><span class="header-section-number">4.9</span> Download CHELSA W5E5 daily timeseries</a>
-  <ul class="collapse">
-  <li><a href="#chelsa-w5e5-to-monthly-timeseries" id="toc-chelsa-w5e5-to-monthly-timeseries" class="nav-link" data-scroll-target="#chelsa-w5e5-to-monthly-timeseries"><span class="header-section-number">4.9.1</span> CHELSA W5E5 to monthly timeseries</a></li>
-  <li><a href="#chelsa-w5e5-from-monthly-to-yearly-timeseries" id="toc-chelsa-w5e5-from-monthly-to-yearly-timeseries" class="nav-link" data-scroll-target="#chelsa-w5e5-from-monthly-to-yearly-timeseries"><span class="header-section-number">4.9.2</span> CHELSA W5E5 from monthly to yearly timeseries</a></li>
-  <li><a href="#chelsa-w5e5-climatology-calculated" id="toc-chelsa-w5e5-climatology-calculated" class="nav-link" data-scroll-target="#chelsa-w5e5-climatology-calculated"><span class="header-section-number">4.9.3</span> CHELSA W5E5 climatology calculated</a></li>
-  </ul></li>
-  <li><a href="#download-chelsa-1.2-monthly-timeseries" id="toc-download-chelsa-1.2-monthly-timeseries" class="nav-link" data-scroll-target="#download-chelsa-1.2-monthly-timeseries"><span class="header-section-number">4.10</span> Download CHELSA 1.2 monthly timeseries</a>
-  <ul class="collapse">
-  <li><a href="#calculate-chelsa-1.2-yearly-timeseries" id="toc-calculate-chelsa-1.2-yearly-timeseries" class="nav-link" data-scroll-target="#calculate-chelsa-1.2-yearly-timeseries"><span class="header-section-number">4.10.1</span> Calculate CHELSA 1.2 yearly timeseries</a></li>
-  </ul></li>
-  <li><a href="#download-chelsa-2.1-monthly-timeseries" id="toc-download-chelsa-2.1-monthly-timeseries" class="nav-link" data-scroll-target="#download-chelsa-2.1-monthly-timeseries"><span class="header-section-number">4.11</span> Download CHELSA 2.1 monthly timeseries</a>
-  <ul class="collapse">
-  <li><a href="#calculate-chelsa-2.1-yearly-timeseries" id="toc-calculate-chelsa-2.1-yearly-timeseries" class="nav-link" data-scroll-target="#calculate-chelsa-2.1-yearly-timeseries"><span class="header-section-number">4.11.1</span> Calculate CHELSA 2.1 yearly timeseries</a></li>
-  </ul></li>
-  <li><a href="#download-terra-climate-monthly-timeseries" id="toc-download-terra-climate-monthly-timeseries" class="nav-link" data-scroll-target="#download-terra-climate-monthly-timeseries"><span class="header-section-number">4.12</span> Download Terra climate monthly timeseries</a>
-  <ul class="collapse">
-  <li><a href="#calculate-yearly-timeseries" id="toc-calculate-yearly-timeseries" class="nav-link" data-scroll-target="#calculate-yearly-timeseries"><span class="header-section-number">4.12.1</span> Calculate yearly timeseries</a></li>
-  </ul></li>
+  <li><a href="#download-regular-climatologies" id="toc-download-regular-climatologies" class="nav-link" data-scroll-target="#download-regular-climatologies"><span class="header-section-number">4.5</span> Download regular climatologies</a></li>
+  <li><a href="#download-non-regular-precipitation-products" id="toc-download-non-regular-precipitation-products" class="nav-link" data-scroll-target="#download-non-regular-precipitation-products"><span class="header-section-number">4.6</span> Download non-regular precipitation products</a></li>
+  <li><a href="#download-chelsa-earthenv-daily-timeseries" id="toc-download-chelsa-earthenv-daily-timeseries" class="nav-link" data-scroll-target="#download-chelsa-earthenv-daily-timeseries"><span class="header-section-number">4.7</span> Download CHELSA EarthEnv daily timeseries</a></li>
+  <li><a href="#download-chelsa-w5e5-daily-timeseries" id="toc-download-chelsa-w5e5-daily-timeseries" class="nav-link" data-scroll-target="#download-chelsa-w5e5-daily-timeseries"><span class="header-section-number">4.8</span> Download CHELSA W5E5 daily timeseries</a></li>
+  <li><a href="#download-chelsa-1.2-monthly-timeseries" id="toc-download-chelsa-1.2-monthly-timeseries" class="nav-link" data-scroll-target="#download-chelsa-1.2-monthly-timeseries"><span class="header-section-number">4.9</span> Download CHELSA 1.2 monthly timeseries</a></li>
+  <li><a href="#download-chelsa-2.1-monthly-timeseries" id="toc-download-chelsa-2.1-monthly-timeseries" class="nav-link" data-scroll-target="#download-chelsa-2.1-monthly-timeseries"><span class="header-section-number">4.10</span> Download CHELSA 2.1 monthly timeseries</a></li>
+  <li><a href="#download-terraclimate-monthly-timeseries" id="toc-download-terraclimate-monthly-timeseries" class="nav-link" data-scroll-target="#download-terraclimate-monthly-timeseries"><span class="header-section-number">4.11</span> Download TerraClimate monthly timeseries</a></li>
   </ul>
 </nav>
     </div>
@@ -245,26 +246,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="about" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="about"><span class="header-section-number">4.1</span> About</h2>
-<p>The following code downloads, crops and calculates climatologies, monthly and yearly timeseries of 11 precipitation products. Careful consideration must be taken given that the downloads can take hours. The final dataset only weights 250 mb and it can be requested to the author to avoid the extensive download. If you only need one of the products, you should skip to that section.</p>
+<p>The following code downloads, crops, and calculates climatologies, as well as monthly and yearly time series for 11 precipitation products. Be aware that downloading the full datasets can take several hours. Once the data are cropped and processed into climatologies, and monthly and yearly time series, the final dataset is approximately 250 MB. For convenience, a compressed, cropped version is available. Please contact vasquezvicente@ufl.edu for access.</p>
 </section>
 <section id="libraries" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="libraries"><span class="header-section-number">4.2</span> Libraries</h2>
+<p>We utilize the terra package for cropping, stacking and calculating rasters <span class="citation" data-cites="terra1">(<a href="references.html#ref-terra1" role="doc-biblioref">Hijmans 2024</a>)</span>. The ncdf4 package is used to read NC files<span class="citation" data-cites="nc">(<a href="references.html#ref-nc" role="doc-biblioref">Pierce 2024</a>)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(raster)</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ncdf4)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="requirements" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="requirements"><span class="header-section-number">4.3</span> Requirements</h2>
+<p>We have gather all the permanent links directly to each of the repositories and are available in the csv. We utilize the curl method for downloads but you might need to use another method depending on your machine.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"../data_reanalysis"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>extentMap  <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">extent</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">80.2</span>,<span class="sc">-</span><span class="fl">79.4</span>, <span class="fl">8.8</span>, <span class="fl">9.5</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>extentMap  <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">ext</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">80.2</span>,<span class="sc">-</span><span class="fl">79.4</span>, <span class="fl">8.8</span>, <span class="fl">9.5</span>))</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">download.file.method =</span> <span class="st">"curl"</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">timeout =</span> <span class="dv">1080000</span>)</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># This table contains all the permalinks neccesary for download</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>links<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"../tables/reanalysis_links.csv"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">","</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>links<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"../tables/reanalysis_links.csv"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">","</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="functions" class="level2" data-number="4.4">
@@ -283,9 +286,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">file.exists</span>(destfile) <span class="sc">==</span> <span class="cn">FALSE</span>) {</span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"downloading "</span>, dataset<span class="sc">$</span>filename[i]))</span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">download.file</span>(dataset<span class="sc">$</span>link[i], <span class="at">destfile =</span> destfile, <span class="at">method =</span> <span class="st">"curl"</span>)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">raster</span>(destfile)</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> destfile, <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(destfile)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> destfile, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"file "</span>, dataset<span class="sc">$</span>filename[i], <span class="st">" already exists"</span>))</span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    }</span>
@@ -297,10 +300,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">file.exists</span>(destfile) <span class="sc">==</span> <span class="cn">FALSE</span>) {</span>
 <span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"downloading "</span>, dataset<span class="sc">$</span>filename[i]))</span>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">download.file</span>(dataset<span class="sc">$</span>link[i], <span class="at">destfile =</span> destfile, <span class="at">method =</span> <span class="st">"curl"</span>)</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">raster</span>(destfile)</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">calc</span>(ras, <span class="at">fun =</span> <span class="cf">function</span>(x) { x <span class="sc">*</span> <span class="fl">0.1</span> })</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> destfile, <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(destfile)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">app</span>(ras, <span class="at">fun =</span> <span class="cf">function</span>(x) { x <span class="sc">*</span> <span class="fl">0.1</span> })</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> destfile, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"file "</span>, dataset<span class="sc">$</span>filename[i], <span class="st">" already exists"</span>))</span>
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    }</span>
@@ -314,9 +317,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">download.file</span>(dataset<span class="sc">$</span>link[i], <span class="at">destfile =</span> destfile, <span class="at">method =</span> <span class="st">"curl"</span>)</span>
 <span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>      R.utils<span class="sc">::</span><span class="fu">gunzip</span>(destfile, <span class="at">remove =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>      destfile<span class="ot">=</span><span class="fu">gsub</span>(<span class="st">".gz"</span>,<span class="st">""</span>,destfile)</span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>      ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">raster</span>(destfile)</span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>      ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> destfile, <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>      ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(destfile)</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>      ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> destfile, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    }<span class="cf">else</span> {</span>
 <span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span>(<span class="fu">paste0</span>(destfile2, <span class="st">" already exists"</span>))</span>
 <span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    }</span>
@@ -327,11 +330,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>    destfile <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset<span class="sc">$</span>source[i], <span class="st">"/"</span>, dataset<span class="sc">$</span>filename[i])</span>
 <span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="fu">paste0</span>(destfile,<span class="st">"_1.tif"</span>)) <span class="sc">==</span> <span class="cn">FALSE</span>) {</span>
 <span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>      <span class="fu">download.file</span>(dataset<span class="sc">$</span>link[i], <span class="at">destfile =</span> destfile, <span class="at">method =</span> <span class="st">"curl"</span>)</span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>      ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(destfile)</span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>      ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>      ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(destfile)</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>      ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
 <span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>      <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlayers</span>(ras)) {</span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>        <span class="fu">writeRaster</span>(ras[[t]], <span class="at">filename =</span> <span class="fu">paste0</span>(destfile,<span class="st">"_"</span>,t, <span class="st">".tif"</span>), <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlyr</span>(ras)) {</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>        <span class="fu">writeRaster</span>(ras[[t]], <span class="at">filename =</span> <span class="fu">paste0</span>(destfile,<span class="st">"_"</span>,t, <span class="st">".tif"</span>), <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>      }</span>
 <span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>      <span class="fu">unlink</span>(destfile)</span>
 <span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>    }<span class="cf">else</span> {</span>
@@ -346,23 +349,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>      <span class="fu">download.file</span>(dataset<span class="sc">$</span>link[i], <span class="at">destfile =</span> destfile, <span class="at">method =</span> <span class="st">"libcurl"</span>)</span>
 <span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>      <span class="fu">unzip</span>(destfile, <span class="at">exdir =</span> <span class="fu">dirname</span>(destfile))</span>
 <span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>      data<span class="ot">&lt;-</span><span class="fu">list.files</span>(<span class="fu">dirname</span>(destfile),<span class="at">pattern =</span> <span class="st">".nc"</span>)</span>
-<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>      raschelsa<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(<span class="fu">paste0</span>(<span class="fu">dirname</span>(destfile),<span class="st">"/"</span>,data[<span class="dv">1</span>]))</span>
-<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>      raschelsa<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">crop</span>(raschelsa, extentMap)</span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlayers</span>(raschelsa)) {</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>      raschelsa<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="fu">paste0</span>(<span class="fu">dirname</span>(destfile),<span class="st">"/"</span>,data[<span class="dv">1</span>]))</span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>      raschelsa<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(raschelsa, extentMap)</span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlyr</span>(raschelsa)) {</span>
 <span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>        <span class="fu">print</span>(<span class="st">"writting"</span>)</span>
-<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>        <span class="fu">writeRaster</span>(raschelsa[[t]], <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>,<span class="st">"_"</span>,t, <span class="st">".tif"</span>), <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>        <span class="fu">writeRaster</span>(raschelsa[[t]], <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>,<span class="st">"_"</span>,t, <span class="st">".tif"</span>), <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>      raschp<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(<span class="fu">paste0</span>(<span class="fu">dirname</span>(destfile),<span class="st">"/"</span>,data[<span class="dv">2</span>]))</span>
-<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>      raschp<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">crop</span>(raschp, extentMap)</span>
-<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlayers</span>(raschp)) {</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>      raschp<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="fu">paste0</span>(<span class="fu">dirname</span>(destfile),<span class="st">"/"</span>,data[<span class="dv">2</span>]))</span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>      raschp<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(raschp, extentMap)</span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlyr</span>(raschp)) {</span>
 <span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>        <span class="fu">print</span>(<span class="st">"writting"</span>)</span>
-<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>        <span class="fu">writeRaster</span>(raschp[[t]], <span class="at">filename =</span> <span class="fu">paste0</span>(destfile,<span class="st">"_"</span>,t, <span class="st">".tif"</span>), <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>        <span class="fu">writeRaster</span>(raschp[[t]], <span class="at">filename =</span> <span class="fu">paste0</span>(destfile,<span class="st">"_"</span>,t, <span class="st">".tif"</span>), <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>      rasworl<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(<span class="fu">paste0</span>(<span class="fu">dirname</span>(destfile),<span class="st">"/"</span>,data[<span class="dv">3</span>]))</span>
-<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>      rasworl<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">crop</span>(rasworl, extentMap)</span>
-<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlayers</span>(rasworl)) {</span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>      rasworl<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="fu">paste0</span>(<span class="fu">dirname</span>(destfile),<span class="st">"/"</span>,data[<span class="dv">3</span>]))</span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>      rasworl<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(rasworl, extentMap)</span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlyr</span>(rasworl)) {</span>
 <span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a>        <span class="fu">print</span>(<span class="st">"writting"</span>)</span>
-<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>        <span class="fu">writeRaster</span>(rasworl[[t]], <span class="at">filename =</span> <span class="fu">paste0</span>(destfile,<span class="st">"_"</span>,t, <span class="st">".tif"</span>), <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>        <span class="fu">writeRaster</span>(rasworl[[t]], <span class="at">filename =</span> <span class="fu">paste0</span>(destfile,<span class="st">"_"</span>,t, <span class="st">".tif"</span>), <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>      }</span>
 <span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a>      <span class="fu">unlink</span>(<span class="fu">paste0</span>(<span class="fu">dirname</span>(destfile),<span class="st">"/"</span>,data[<span class="dv">1</span>]))</span>
 <span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a>      <span class="fu">unlink</span>(<span class="fu">paste0</span>(<span class="fu">dirname</span>(destfile),<span class="st">"/"</span>,data[<span class="dv">2</span>]))</span>
@@ -378,6 +381,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="download-regular-climatologies" class="level2" data-number="4.5">
 <h2 data-number="4.5" class="anchored" data-anchor-id="download-regular-climatologies"><span class="header-section-number">4.5</span> Download regular climatologies</h2>
+<p>CHELSA 1.2 timeseries and climatologies, as well as the version 2.1 <span class="citation" data-cites="karger_data_2018">(<a href="references.html#ref-karger_data_2018" role="doc-biblioref">Dirk N. Karger et al. 2018</a>)</span>. CHPclim v1.0 climatology<span class="citation" data-cites="funk_global_2015">(<a href="references.html#ref-funk_global_2015" role="doc-biblioref">C. Funk et al. 2015</a>)</span>. CHIRPS v2.0 climatology and timeseries<span class="citation" data-cites="funk_climate_2015b">(<a href="references.html#ref-funk_climate_2015b" role="doc-biblioref">Chris Funk et al. 2015</a>)</span>. TerraClimate climatology and timeseries <span class="citation" data-cites="abatzoglou_terraclimate_2018">(<a href="references.html#ref-abatzoglou_terraclimate_2018" role="doc-biblioref">Abatzoglou et al. 2018</a>)</span></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#CHELSA 1.2 climatology</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>dataset_chelsa1 <span class="ot">&lt;-</span> links <span class="sc">%&gt;%</span> <span class="fu">filter</span>(source <span class="sc">==</span> <span class="st">"CHELSA 1.2"</span> <span class="sc">&amp;</span> type <span class="sc">==</span> <span class="st">"climatology"</span>) </span>
@@ -404,8 +408,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="fu">checkdir</span>(dataset_terra<span class="sc">$</span>source[<span class="dv">1</span>])</span>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="fu">download_terra</span>(dataset_terra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="calculate-chirps-v2-climatology" class="level3" data-number="4.5.1">
-<h3 data-number="4.5.1" class="anchored" data-anchor-id="calculate-chirps-v2-climatology"><span class="header-section-number">4.5.1</span> Calculate CHIRPS V2 Climatology</h3>
+<p>Calculate CHIRPS V2 Climatology</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>chirps<span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">"../data_reanalysis/CHIRPS 2.0"</span>, <span class="at">pattern=</span><span class="st">".tif"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>month <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(chirps))</span>
@@ -420,41 +423,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(<span class="st">"../data_reanalysis/CHIRPS 2.0/climatology"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (m <span class="cf">in</span> <span class="fu">unique</span>(chirps<span class="sc">$</span>month)){</span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Processing "</span>, m))</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(chirps[chirps<span class="sc">$</span>month <span class="sc">==</span> m, ]<span class="sc">$</span>chirps)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(chirps[chirps<span class="sc">$</span>month <span class="sc">==</span> m, ]<span class="sc">$</span>chirps)</span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Stacked "</span>, m))</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">calc</span>(ras, mean)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">app</span>(ras, mean)</span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Calculated "</span>, m))</span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    output_file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/CHIRPS 2.0/climatology/CHIRPS_2.0_"</span>, m, <span class="st">".tif"</span>)</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    raster<span class="sc">::</span><span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> output_file, <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    terra<span class="sc">::</span><span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> output_file, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>}<span class="cf">else</span>{</span>
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"climatology already proccessed"</span>)</span>
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="calculate-chirps-v2-yearly-timeseries" class="level3" data-number="4.5.2">
-<h3 data-number="4.5.2" class="anchored" data-anchor-id="calculate-chirps-v2-yearly-timeseries"><span class="header-section-number">4.5.2</span> Calculate CHIRPS V2 yearly timeseries</h3>
+<p>Calculate CHIRPS V2 yearly timeseries</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"../data_reanalysis/CHIRPS 2.0/yearly"</span>)<span class="sc">==</span><span class="cn">FALSE</span>){</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(<span class="st">"../data_reanalysis/CHIRPS 2.0/yearly"</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (y <span class="cf">in</span> <span class="fu">unique</span>(chirps<span class="sc">$</span>year)){</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Processing "</span>, y))</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(chirps[chirps<span class="sc">$</span>year <span class="sc">==</span> y, ]<span class="sc">$</span>chirps)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(chirps[chirps<span class="sc">$</span>year <span class="sc">==</span> y, ]<span class="sc">$</span>chirps)</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Stacked "</span>, y))</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">calc</span>(ras, sum)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">app</span>(ras, sum)</span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Calculated "</span>, y))</span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  output_file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/CHIRPS 2.0/yearly/CHIRPS_2.0_"</span>, y, <span class="st">".tif"</span>)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  raster<span class="sc">::</span><span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> output_file, <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> output_file, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>}<span class="cf">else</span>{</span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"yearly timseries already proccessed"</span>)</span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-</section>
-<section id="worldclim-v2-download" class="level2" data-number="4.6">
-<h2 data-number="4.6" class="anchored" data-anchor-id="worldclim-v2-download"><span class="header-section-number">4.6</span> Worldclim v2 download</h2>
-<p>Worldclim comes as a zip file and requires a different download method “libcurl”. It also include some metadata files.</p>
+<section id="download-non-regular-precipitation-products" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="download-non-regular-precipitation-products"><span class="header-section-number">4.6</span> Download non-regular precipitation products</h2>
+<p>Worldclim 2.1 comes as a zip file and requires a different download method “libcurl”. It also include some metadata files <span class="citation" data-cites="fick_worldclim_2017">(<a href="references.html#ref-fick_worldclim_2017" role="doc-biblioref">Fick and Hijmans 2017</a>)</span>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dataset_worlclim <span class="ot">&lt;-</span> links <span class="sc">%&gt;%</span> <span class="fu">filter</span>(source <span class="sc">==</span> <span class="st">"WorldClim 2.1"</span> <span class="sc">&amp;</span> type <span class="sc">==</span> <span class="st">"climatology"</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">checkdir</span>(dataset_worlclim<span class="sc">$</span>source[<span class="dv">1</span>])</span>
@@ -465,9 +465,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unzip</span>(<span class="fu">paste0</span>(<span class="st">"data_reanalysis/"</span>, dataset_worlclim<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/"</span>, dataset_worlclim<span class="sc">$</span>filename[<span class="dv">1</span>]), <span class="at">exdir =</span> <span class="fu">paste0</span>(<span class="st">"data_reanalysis/"</span>,      dataset_worlclim<span class="sc">$</span>source[<span class="dv">1</span>]))</span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  data<span class="ot">&lt;-</span><span class="fu">list.files</span>(<span class="fu">paste0</span>(<span class="st">"data_reanalysis/"</span>, dataset_worlclim<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/"</span>),<span class="at">pattern =</span> <span class="st">".tif"</span>,<span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(data)) {</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">raster</span>(data[t])</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> data[t], <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(data[t])</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> data[t], <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unlink</span>(<span class="fu">paste0</span>(<span class="st">"data_reanalysis/"</span>, dataset_worlclim<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/"</span>, dataset_worlclim<span class="sc">$</span>filename[<span class="dv">1</span>]))</span>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unlink</span>(<span class="fu">paste0</span>(<span class="st">"data_reanalysis/"</span>, dataset_worlclim<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/readme.txt"</span>))</span>
@@ -475,24 +475,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"Files already exist"</span>)</span>
 <span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="pbcor-correction-factors" class="level2" data-number="4.7">
-<h2 data-number="4.7" class="anchored" data-anchor-id="pbcor-correction-factors"><span class="header-section-number">4.7</span> PBCOR correction factors</h2>
-<p>This correction factors are applied to the already downloaded products CHELSA 1.2, CHP and Worldlclim. We resample the higuest resolution products to match the PBCOR resolution.</p>
+<p>PBCOR correction factors</p>
+<p>This correction factors are applied to the already downloaded products CHELSA 1.2, CHP and Worldlclim. We resample the higuest resolution products to match the PBCOR resolution <span class="citation" data-cites="beck_bias_2020">(<a href="references.html#ref-beck_bias_2020" role="doc-biblioref">Beck et al. 2020</a>)</span>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dataset_pbcor <span class="ot">&lt;-</span> links <span class="sc">%&gt;%</span> <span class="fu">filter</span>(source <span class="sc">==</span> <span class="st">"PBCOR"</span> <span class="sc">&amp;</span> type <span class="sc">==</span> <span class="st">"correction factors"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">checkdir</span>(dataset_pbcor<span class="sc">$</span>source[<span class="dv">1</span>])</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>process_data<span class="ot">&lt;-</span> <span class="cf">function</span>(source,nc_file, orig_raster,outputfolder) {</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  stacked<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_pbcor<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/"</span>,nc_file))</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  cropped<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">crop</span>(stacked, extentMap)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  stacked<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_pbcor<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/"</span>,nc_file))</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  cropped<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(stacked, extentMap)</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  orig<span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>,orig_raster),<span class="at">pattern =</span> <span class="st">".tif"</span>,<span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  rasorig<span class="ot">&lt;-</span> <span class="fu">lapply</span>(orig,raster)</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>,source,<span class="st">"/"</span>,outputfolder), <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlayers</span>(cropped)) {</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlyr</span>(cropped)) {</span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span>(<span class="st">"writting"</span>)</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>      chelsa_resampled<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">projectRaster</span>(rasorig[[t]],cropped[[t]],<span class="at">method =</span> <span class="st">"ngb"</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>      chelsa_resampled<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">projectRaster</span>(rasorig[[t]],cropped[[t]],<span class="at">method =</span> <span class="st">"ngb"</span>)</span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>      correctedfactor<span class="ot">&lt;-</span> cropped[[t]]<span class="sc">*</span>chelsa_resampled</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">writeRaster</span>(correctedfactor, <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>,source,<span class="st">"/"</span>,outputfolder,<span class="st">"/"</span>,<span class="fu">sub</span>(<span class="st">"//.nc$"</span>,<span class="st">""</span>,nc_file),<span class="st">"_"</span>,t, <span class="st">".tif"</span>), <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">writeRaster</span>(correctedfactor, <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>,source,<span class="st">"/"</span>,outputfolder,<span class="st">"/"</span>,<span class="fu">sub</span>(<span class="st">"//.nc$"</span>,<span class="st">""</span>,nc_file),<span class="st">"_"</span>,t, <span class="st">".tif"</span>), <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">dir.exists</span>(<span class="st">"../data_reanalysis/PBCOR/CHELSA 1.2 corrected"</span>) <span class="sc">==</span> <span class="cn">FALSE</span>) {</span>
@@ -512,9 +510,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="download-chelsa-earthenv-daily-timeseries" class="level2" data-number="4.8">
-<h2 data-number="4.8" class="anchored" data-anchor-id="download-chelsa-earthenv-daily-timeseries"><span class="header-section-number">4.8</span> Download CHELSA EarthEnv daily timeseries</h2>
-<p>Be aware that this loop can take hours</p>
+<section id="download-chelsa-earthenv-daily-timeseries" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="download-chelsa-earthenv-daily-timeseries"><span class="header-section-number">4.7</span> Download CHELSA EarthEnv daily timeseries</h2>
+<p>The daily timeseries can take hours to download. We take a daily timeseries and calculated it into a monthly timeseries that is used to get a climatology <span class="citation" data-cites="karger_global_2021">(<a href="references.html#ref-karger_global_2021" role="doc-biblioref">Dirk Nikolaus Karger et al. 2021</a>)</span>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dataset_earthenv <span class="ot">&lt;-</span> links <span class="sc">%&gt;%</span> <span class="fu">filter</span>(source <span class="sc">==</span> <span class="st">"CHELSA EarthEnv"</span> <span class="sc">&amp;</span> type <span class="sc">==</span> <span class="st">"timeseries"</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">checkdir</span>(dataset_earthenv<span class="sc">$</span>source[<span class="dv">1</span>])</span>
@@ -528,18 +526,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unlink</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_earthenv<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/"</span>, dataset_earthenv<span class="sc">$</span>filename[<span class="dv">1</span>]))</span>
 <span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    data<span class="ot">&lt;-</span><span class="fu">list.files</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_earthenv<span class="sc">$</span>source[<span class="dv">1</span>],<span class="st">"/"</span>,<span class="fu">gsub</span>(<span class="st">"//.zip$"</span>, <span class="st">""</span>, dataset_earthenv<span class="sc">$</span>filename[i])),<span class="at">pattern =</span> <span class="st">".tif"</span>,<span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(data)) {</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>      ras<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">raster</span>(data[t])</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>      ras<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>      ras<span class="ot">&lt;-</span>raster<span class="sc">::</span><span class="fu">calc</span>(ras, <span class="at">fun=</span><span class="cf">function</span>(x){x<span class="sc">/</span><span class="dv">100</span>})</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> data[t], <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>      ras<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(data[t])</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>      ras<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>      ras<span class="ot">&lt;-</span>terra<span class="sc">::</span><span class="fu">app</span>(ras, <span class="at">fun=</span><span class="cf">function</span>(x){x<span class="sc">/</span><span class="dv">100</span>})</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> data[t], <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  }<span class="cf">else</span> {</span>
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>     <span class="fu">print</span>(<span class="st">"already exists"</span>)</span>
 <span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="chelsa-earthenv-from-daily-to-monthly" class="level3" data-number="4.8.1">
-<h3 data-number="4.8.1" class="anchored" data-anchor-id="chelsa-earthenv-from-daily-to-monthly"><span class="header-section-number">4.8.1</span> CHELSA EarthEnv from daily to monthly</h3>
+<p>CHELSA EarthEnv from daily to monthly.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>envearth<span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">"../data_reanalysis/CHELSA EarthEnv"</span>,<span class="at">full.names =</span> <span class="cn">TRUE</span>, <span class="at">pattern=</span><span class="st">'.zip'</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">dir.exists</span>(<span class="st">"../data_reanalysis/CHELSA EarthEnv/monthly"</span>)<span class="sc">==</span><span class="cn">FALSE</span>){</span>
@@ -547,19 +544,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (subdir <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span><span class="fu">length</span>(envearth)){</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"processing "</span>,envearth[subdir]))</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  data<span class="ot">&lt;-</span><span class="fu">list.files</span>(envearth[subdir],<span class="at">pattern =</span> <span class="st">".tif"</span>,<span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  ras<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(data)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  ras<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">calc</span>(ras,sum)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/CHELSA EarthEnv/monthly/"</span>,<span class="fu">gsub</span>(<span class="st">".zip"</span>, <span class="st">""</span>, <span class="fu">strsplit</span>(envearth[[subdir]], <span class="st">"/"</span>)[[<span class="dv">1</span>]][<span class="dv">4</span>]),<span class="st">".tif"</span>), <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  ras<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(data)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  ras<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">app</span>(ras,sum)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/CHELSA EarthEnv/monthly/"</span>,<span class="fu">gsub</span>(<span class="st">".zip"</span>, <span class="st">""</span>, <span class="fu">strsplit</span>(envearth[[subdir]], <span class="st">"/"</span>)[[<span class="dv">1</span>]][<span class="dv">4</span>]),<span class="st">".tif"</span>), <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>}}<span class="cf">else</span>{</span>
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"already proccessed into monthly timeseries"</span>)</span>
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="chelsa-earthenv-from-monthly-to-yearly" class="level3" data-number="4.8.2">
-<h3 data-number="4.8.2" class="anchored" data-anchor-id="chelsa-earthenv-from-monthly-to-yearly"><span class="header-section-number">4.8.2</span> CHELSA EarthEnv from monthly to yearly</h3>
+<p>CHELSA EarthEnv from monthly to yearly</p>
 <p>February of 2016 is not usable, thus we exclude year 2016.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(raster<span class="sc">::</span><span class="fu">raster</span>(<span class="st">"../data_reanalysis/CHELSA EarthEnv/monthly/CHELSA_preccor_land_02_2016.tif"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(terra<span class="sc">::</span><span class="fu">rast</span>(<span class="st">"../data_reanalysis/CHELSA EarthEnv/monthly/CHELSA_preccor_land_02_2016.tif"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Download_gridded_precipitation_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -578,9 +573,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(<span class="st">"../data_reanalysis/CHELSA EarthEnv/yearly"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (year <span class="cf">in</span> years){</span>
 <span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"processing "</span>,year))</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(data[data<span class="sc">$</span>year<span class="sc">==</span>year,]<span class="sc">$</span>files)</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">calc</span>(ras,sum)</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"/..data_reanalysis/CHELSA EarthEnv/yearly/"</span>,<span class="st">"CHELSA_EarthEnv_"</span>,year,<span class="st">".tif"</span>), <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(data[data<span class="sc">$</span>year<span class="sc">==</span>year,]<span class="sc">$</span>files)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">app</span>(ras,sum)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"/..data_reanalysis/CHELSA EarthEnv/yearly/"</span>,<span class="st">"CHELSA_EarthEnv_"</span>,year,<span class="st">".tif"</span>), <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>}<span class="cf">else</span>{</span>
 <span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"Yearly data already processed"</span>)</span>
@@ -589,17 +584,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[1] "Yearly data already processed"</code></pre>
 </div>
 </div>
-</section>
-<section id="calculate-climatology-for-chelsa-earthenv-fromn-2003-to-2015" class="level3" data-number="4.8.3">
-<h3 data-number="4.8.3" class="anchored" data-anchor-id="calculate-climatology-for-chelsa-earthenv-fromn-2003-to-2015"><span class="header-section-number">4.8.3</span> Calculate climatology for CHELSA EarthEnv fromn 2003 to 2015</h3>
+<p>Calculate climatology for CHELSA EarthEnv fromn 2003 to 2015</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">dir.exists</span>(<span class="st">"../data_reanalysis/CHELSA EarthEnv/climatology"</span>)<span class="sc">==</span><span class="cn">FALSE</span>){</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(<span class="st">"../data_reanalysis/CHELSA EarthEnv/climatology"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">unique</span>(data<span class="sc">$</span>month))){</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"processing "</span>,<span class="fu">unique</span>(data<span class="sc">$</span>month)[i]))</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(data[data<span class="sc">$</span>month<span class="sc">==</span><span class="fu">unique</span>(data<span class="sc">$</span>month)[i],]<span class="sc">$</span>files)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">calc</span>(ras, <span class="cf">function</span>(x) { <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) })</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/CHELSA EarthEnv/climatology/"</span>,<span class="st">"CHELSA_EarthEnv_"</span>,<span class="fu">unique</span>(data<span class="sc">$</span>month)[i],<span class="st">".tif"</span>), <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(data[data<span class="sc">$</span>month<span class="sc">==</span><span class="fu">unique</span>(data<span class="sc">$</span>month)[i],]<span class="sc">$</span>files)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">app</span>(ras, <span class="cf">function</span>(x) { <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) })</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/CHELSA EarthEnv/climatology/"</span>,<span class="st">"CHELSA_EarthEnv_"</span>,<span class="fu">unique</span>(data<span class="sc">$</span>month)[i],<span class="st">".tif"</span>), <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>}<span class="cf">else</span>{</span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"Climatologies are already calculated"</span>)</span>
@@ -609,21 +602,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-</section>
-<section id="download-chelsa-w5e5-daily-timeseries" class="level2" data-number="4.9">
-<h2 data-number="4.9" class="anchored" data-anchor-id="download-chelsa-w5e5-daily-timeseries"><span class="header-section-number">4.9</span> Download CHELSA W5E5 daily timeseries</h2>
-<p>Be aware that this download can take hours.</p>
+<section id="download-chelsa-w5e5-daily-timeseries" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="download-chelsa-w5e5-daily-timeseries"><span class="header-section-number">4.8</span> Download CHELSA W5E5 daily timeseries</h2>
+<p>This is a daily timeseries and can take hour to complete the download <span class="citation" data-cites="karger_chelsa-w5e5_2022">(<a href="references.html#ref-karger_chelsa-w5e5_2022" role="doc-biblioref">Dirk N. Karger et al. 2022</a>)</span>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dataset_chelsa_e5e5 <span class="ot">&lt;-</span> links <span class="sc">%&gt;%</span> <span class="fu">filter</span>(source <span class="sc">==</span> <span class="st">"CHELSA-W5E5v1.0"</span> <span class="sc">&amp;</span> type <span class="sc">==</span> <span class="st">"timeseries"</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">checkdir</span>(dataset_chelsa_e5e5<span class="sc">$</span>source[<span class="dv">1</span>])</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(dataset_chelsa_e5e5)) {</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa_e5e5<span class="sc">$</span>source[<span class="dv">1</span>],<span class="st">"/"</span>,<span class="fu">sub</span>(<span class="st">"//.nc$"</span>, <span class="st">""</span>, dataset_chelsa_e5e5<span class="sc">$</span>filename[i]),<span class="st">"_"</span>,<span class="dv">1</span>,<span class="st">".tif"</span>)) <span class="sc">==</span> <span class="cn">FALSE</span>) {</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">download.file</span>(dataset_chelsa_e5e5<span class="sc">$</span>link[i], <span class="at">destfile =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa_e5e5<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/"</span>, dataset_chelsa_e5e5<span class="sc">$</span>filename[i]), <span class="at">method =</span> <span class="st">"curl"</span>)</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span>raster<span class="sc">::</span><span class="fu">stack</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa_e5e5<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/"</span>, dataset_chelsa_e5e5<span class="sc">$</span>filename[i]))</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span>raster<span class="sc">::</span><span class="fu">calc</span>(ras, <span class="at">fun=</span><span class="cf">function</span>(x){x<span class="sc">*</span><span class="dv">86400</span>})</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlayers</span>(ras)) {</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">writeRaster</span>(ras[[t]], <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa_e5e5<span class="sc">$</span>source[<span class="dv">1</span>],<span class="st">"/"</span>,<span class="fu">sub</span>(<span class="st">"//.nc$"</span>, <span class="st">""</span>, dataset_chelsa_e5e5<span class="sc">$</span>filename[i]),<span class="st">"_"</span>,t,<span class="st">".tif"</span>), <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span>terra<span class="sc">::</span><span class="fu">rast</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa_e5e5<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/"</span>, dataset_chelsa_e5e5<span class="sc">$</span>filename[i]))</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span>terra<span class="sc">::</span><span class="fu">app</span>(ras, <span class="at">fun=</span><span class="cf">function</span>(x){x<span class="sc">*</span><span class="dv">86400</span>})</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlyr</span>(ras)) {</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">writeRaster</span>(ras[[t]], <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa_e5e5<span class="sc">$</span>source[<span class="dv">1</span>],<span class="st">"/"</span>,<span class="fu">sub</span>(<span class="st">"//.nc$"</span>, <span class="st">""</span>, dataset_chelsa_e5e5<span class="sc">$</span>filename[i]),<span class="st">"_"</span>,t,<span class="st">".tif"</span>), <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unlink</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa_e5e5<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/"</span>, dataset_chelsa_e5e5<span class="sc">$</span>filename[i]))</span>
 <span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  }<span class="cf">else</span> {</span>
@@ -631,8 +623,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="chelsa-w5e5-to-monthly-timeseries" class="level3" data-number="4.9.1">
-<h3 data-number="4.9.1" class="anchored" data-anchor-id="chelsa-w5e5-to-monthly-timeseries"><span class="header-section-number">4.9.1</span> CHELSA W5E5 to monthly timeseries</h3>
+<p>CHELSA W5E5 to monthly timeseries</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>chelsae5 <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">"../data_reanalysis/CHELSA-W5E5v1.0"</span>, <span class="at">pattern=</span><span class="st">".tif"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>day <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(chelsae5))</span>
@@ -652,41 +643,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (m <span class="cf">in</span> <span class="fu">unique</span>(chelsae5<span class="sc">$</span>month)) {</span>
 <span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Processing "</span>, y, <span class="st">"_"</span>, m))</span>
 <span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    chelsae5[chelsae5<span class="sc">$</span>year <span class="sc">==</span> y <span class="sc">&amp;</span> chelsae5<span class="sc">$</span>month <span class="sc">==</span> m, ]<span class="sc">$</span>chelsae5</span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(chelsae5[chelsae5<span class="sc">$</span>year <span class="sc">==</span> y <span class="sc">&amp;</span> chelsae5<span class="sc">$</span>month <span class="sc">==</span> m, ]<span class="sc">$</span>chelsae5)</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(chelsae5[chelsae5<span class="sc">$</span>year <span class="sc">==</span> y <span class="sc">&amp;</span> chelsae5<span class="sc">$</span>month <span class="sc">==</span> m, ]<span class="sc">$</span>chelsae5)</span>
 <span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Stacked "</span>, y, <span class="st">"_"</span>, m) )</span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">calc</span>(ras, sum)</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">app</span>(ras, sum)</span>
 <span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Calculated "</span>, y, <span class="st">"_"</span>, m))</span>
 <span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>    output_file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/CHELSA-W5E5v1.0/monthly/CHELSA-W5E5v1.0_"</span>, y, <span class="st">"_"</span>, m, <span class="st">".tif"</span>)</span>
 <span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    raster<span class="sc">::</span><span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> output_file, <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    terra<span class="sc">::</span><span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> output_file, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>}<span class="cf">else</span>{</span>
 <span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"Monthly timeseries already processed"</span>)</span>
 <span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="chelsa-w5e5-from-monthly-to-yearly-timeseries" class="level3" data-number="4.9.2">
-<h3 data-number="4.9.2" class="anchored" data-anchor-id="chelsa-w5e5-from-monthly-to-yearly-timeseries"><span class="header-section-number">4.9.2</span> CHELSA W5E5 from monthly to yearly timeseries</h3>
+<p>CHELSA W5E5 from monthly to yearly timeseries</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"../data_reanalysis/CHELSA-W5E5v1.0/yearly"</span>)<span class="sc">==</span><span class="cn">FALSE</span>){</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(<span class="st">"../data_reanalysis/CHELSA-W5E5v1.0/yearly"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (y <span class="cf">in</span> <span class="fu">unique</span>(chelsae5<span class="sc">$</span>year)){</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Processing "</span>, y))</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(chelsae5[chelsae5<span class="sc">$</span>year <span class="sc">==</span> y, ]<span class="sc">$</span>chelsae5)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(chelsae5[chelsae5<span class="sc">$</span>year <span class="sc">==</span> y, ]<span class="sc">$</span>chelsae5)</span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Stacked "</span>, y))</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">calc</span>(ras, sum)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">app</span>(ras, sum)</span>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Calculated "</span>, y))</span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    output_file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/CHELSA-W5E5v1.0/yearly/CHELSA-W5E5v1.0_"</span>, y, <span class="st">".tif"</span>)</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    raster<span class="sc">::</span><span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> output_file, <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    terra<span class="sc">::</span><span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> output_file, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>}<span class="cf">else</span>{</span>
 <span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"yearly timeseries have been processed"</span>)</span>
 <span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="chelsa-w5e5-climatology-calculated" class="level3" data-number="4.9.3">
-<h3 data-number="4.9.3" class="anchored" data-anchor-id="chelsa-w5e5-climatology-calculated"><span class="header-section-number">4.9.3</span> CHELSA W5E5 climatology calculated</h3>
+<p>CHELSA W5E5 climatology calculated</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>monthly_files<span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">"../data_reanalysis/CHELSA-W5E5v1.0/monthly"</span>, <span class="at">pattern=</span><span class="st">".tif"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>month <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(monthly_files))</span>
@@ -701,21 +688,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(<span class="st">"../data_reanalysis/CHELSA-W5E5v1.0/climatology"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (m <span class="cf">in</span> <span class="fu">unique</span>(monthly_files<span class="sc">$</span>month)){</span>
 <span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Processing "</span>, m))</span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(monthly_files[monthly_files<span class="sc">$</span>month <span class="sc">==</span> m, ]<span class="sc">$</span>monthly_files)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(monthly_files[monthly_files<span class="sc">$</span>month <span class="sc">==</span> m, ]<span class="sc">$</span>monthly_files)</span>
 <span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Stacked "</span>, m))</span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">calc</span>(ras, mean)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">app</span>(ras, mean)</span>
 <span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Calculated "</span>, m))</span>
 <span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    output_file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/CHELSA-W5E5v1.0/climatology/CHELSA-W5E5v1.0_"</span>, m, <span class="st">".tif"</span>)</span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    raster<span class="sc">::</span><span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> output_file, <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    terra<span class="sc">::</span><span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> output_file, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>}<span class="cf">else</span>{</span>
 <span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"climatology already calculated"</span>)</span>
 <span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-</section>
-<section id="download-chelsa-1.2-monthly-timeseries" class="level2" data-number="4.10">
-<h2 data-number="4.10" class="anchored" data-anchor-id="download-chelsa-1.2-monthly-timeseries"><span class="header-section-number">4.10</span> Download CHELSA 1.2 monthly timeseries</h2>
+<section id="download-chelsa-1.2-monthly-timeseries" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="download-chelsa-1.2-monthly-timeseries"><span class="header-section-number">4.9</span> Download CHELSA 1.2 monthly timeseries</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dataset_chelsa12 <span class="ot">&lt;-</span> links <span class="sc">%&gt;%</span> <span class="fu">filter</span>(source <span class="sc">==</span> <span class="st">"CHELSA 1.2"</span> <span class="sc">&amp;</span> type <span class="sc">==</span> <span class="st">"timeseries"</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">checkdir</span>(dataset_chelsa12<span class="sc">$</span>source[<span class="dv">1</span>])</span>
@@ -723,17 +709,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(dataset_chelsa12)){</span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa12<span class="sc">$</span>source[<span class="dv">1</span>],<span class="st">"/monthly/"</span>,dataset_chelsa12<span class="sc">$</span>filename[i])) <span class="sc">==</span> <span class="cn">FALSE</span>) {</span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">download.file</span>(dataset_chelsa12<span class="sc">$</span>link[i], <span class="at">destfile =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa12<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/monthly/"</span>, dataset_chelsa12<span class="sc">$</span>filename[i]), <span class="at">method =</span> <span class="st">"curl"</span>)</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span>raster<span class="sc">::</span><span class="fu">raster</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa12<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/monthly/"</span>, dataset_chelsa12<span class="sc">$</span>filename[i]))</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa12<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/monthly/"</span>, dataset_chelsa12<span class="sc">$</span>filename[i]), <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span>terra<span class="sc">::</span><span class="fu">rast</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa12<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/monthly/"</span>, dataset_chelsa12<span class="sc">$</span>filename[i]))</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa12<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/monthly/"</span>, dataset_chelsa12<span class="sc">$</span>filename[i]), <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> {</span>
 <span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">"already exists"</span>)</span>
 <span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="calculate-chelsa-1.2-yearly-timeseries" class="level3" data-number="4.10.1">
-<h3 data-number="4.10.1" class="anchored" data-anchor-id="calculate-chelsa-1.2-yearly-timeseries"><span class="header-section-number">4.10.1</span> Calculate CHELSA 1.2 yearly timeseries</h3>
+<p>Calculate CHELSA 1.2 yearly timeseries</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>files<span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">"../data_reanalysis/CHELSA 1.2/monthly"</span>,<span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>month<span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(files))</span>
@@ -748,21 +733,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"../data_reanalysis/CHELSA 1.2/yearly"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (y <span class="cf">in</span> <span class="fu">unique</span>(chelsa12<span class="sc">$</span>year)){</span>
 <span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Processing "</span>, y))</span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(chelsa12[chelsa12<span class="sc">$</span>year <span class="sc">==</span> y, ]<span class="sc">$</span>files)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(chelsa12[chelsa12<span class="sc">$</span>year <span class="sc">==</span> y, ]<span class="sc">$</span>files)</span>
 <span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Stacked "</span>, y))</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">calc</span>(ras, sum)</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">app</span>(ras, sum)</span>
 <span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Calculated "</span>, y))</span>
 <span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>  output_file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/CHELSA 1.2/yearly/CHELSA_1.2_"</span>, y, <span class="st">".tif"</span>)</span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>  raster<span class="sc">::</span><span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> output_file, <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> output_file, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>}<span class="cf">else</span> {</span>
 <span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>   <span class="fu">print</span>(<span class="st">"yearly timeseries already processed"</span>)</span>
 <span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-</section>
-<section id="download-chelsa-2.1-monthly-timeseries" class="level2" data-number="4.11">
-<h2 data-number="4.11" class="anchored" data-anchor-id="download-chelsa-2.1-monthly-timeseries"><span class="header-section-number">4.11</span> Download CHELSA 2.1 monthly timeseries</h2>
+<section id="download-chelsa-2.1-monthly-timeseries" class="level2" data-number="4.10">
+<h2 data-number="4.10" class="anchored" data-anchor-id="download-chelsa-2.1-monthly-timeseries"><span class="header-section-number">4.10</span> Download CHELSA 2.1 monthly timeseries</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>dataset_chelsa21 <span class="ot">&lt;-</span> links <span class="sc">%&gt;%</span> <span class="fu">filter</span>(source <span class="sc">==</span> <span class="st">"CHELSA 2.1"</span> <span class="sc">&amp;</span> type <span class="sc">==</span> <span class="st">"timeseries"</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">checkdir</span>(dataset_chelsa21<span class="sc">$</span>source[<span class="dv">1</span>])</span>
@@ -770,17 +754,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(dataset_chelsa21)){</span>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa21<span class="sc">$</span>source[<span class="dv">1</span>],<span class="st">"/monthly/"</span>,dataset_chelsa21<span class="sc">$</span>filename[i])) <span class="sc">==</span> <span class="cn">FALSE</span>) {</span>
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">download.file</span>(dataset_chelsa21<span class="sc">$</span>link[i], <span class="at">destfile =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa21<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/monthly/"</span>, dataset_chelsa21<span class="sc">$</span>filename[i]), <span class="at">method =</span> <span class="st">"curl"</span>)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span>raster<span class="sc">::</span><span class="fu">raster</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa21<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/monthly/"</span>, dataset_chelsa21<span class="sc">$</span>filename[i]))</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa21<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/monthly/"</span>, dataset_chelsa21<span class="sc">$</span>filename[i]), <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span>terra<span class="sc">::</span><span class="fu">rast</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa21<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/monthly/"</span>, dataset_chelsa21<span class="sc">$</span>filename[i]))</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_chelsa21<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/monthly/"</span>, dataset_chelsa21<span class="sc">$</span>filename[i]), <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> {</span>
 <span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">"already exists"</span>)</span>
 <span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="calculate-chelsa-2.1-yearly-timeseries" class="level3" data-number="4.11.1">
-<h3 data-number="4.11.1" class="anchored" data-anchor-id="calculate-chelsa-2.1-yearly-timeseries"><span class="header-section-number">4.11.1</span> Calculate CHELSA 2.1 yearly timeseries</h3>
+<p>Calculate CHELSA 2.1 yearly timeseries</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>files<span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">"../data_reanalysis/CHELSA 2.1/monthly"</span>,<span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>month<span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(files))</span>
@@ -795,21 +778,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"../data_reanalysis/CHELSA 2.1/yearly"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (y <span class="cf">in</span> <span class="fu">unique</span>(chelsa21<span class="sc">$</span>year)){</span>
 <span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Processing "</span>, y))</span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(chelsa21[chelsa21<span class="sc">$</span>year <span class="sc">==</span> y, ]<span class="sc">$</span>files)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(chelsa21[chelsa21<span class="sc">$</span>year <span class="sc">==</span> y, ]<span class="sc">$</span>files)</span>
 <span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Stacked "</span>, y))</span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">calc</span>(ras, sum)</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">app</span>(ras, sum)</span>
 <span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Calculated "</span>, y))</span>
 <span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>  output_file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/CHELSA 2.1/yearly/CHELSA_2.1_"</span>, y, <span class="st">".tif"</span>)</span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>  raster<span class="sc">::</span><span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> output_file, <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> output_file, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>}<span class="cf">else</span> {</span>
 <span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>   <span class="fu">print</span>(<span class="st">"yearly timeseries already processed"</span>)</span>
 <span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-</section>
-<section id="download-terra-climate-monthly-timeseries" class="level2" data-number="4.12">
-<h2 data-number="4.12" class="anchored" data-anchor-id="download-terra-climate-monthly-timeseries"><span class="header-section-number">4.12</span> Download Terra climate monthly timeseries</h2>
+<section id="download-terraclimate-monthly-timeseries" class="level2" data-number="4.11">
+<h2 data-number="4.11" class="anchored" data-anchor-id="download-terraclimate-monthly-timeseries"><span class="header-section-number">4.11</span> Download TerraClimate monthly timeseries</h2>
+<p><span class="citation" data-cites="abatzoglou_terraclimate_2018">(<a href="references.html#ref-abatzoglou_terraclimate_2018" role="doc-biblioref">Abatzoglou et al. 2018</a>)</span>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dataset_terra <span class="ot">&lt;-</span> links <span class="sc">%&gt;%</span> <span class="fu">filter</span>(source <span class="sc">==</span> <span class="st">"TerraClimate"</span> <span class="sc">&amp;</span> type <span class="sc">==</span> <span class="st">"timeseries"</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">checkdir</span>(dataset_terra<span class="sc">$</span>source[<span class="dv">1</span>])</span>
@@ -818,11 +801,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  tif_files <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_terra<span class="sc">$</span>source[<span class="dv">1</span>],<span class="st">"/monthly/"</span>,dataset_terra<span class="sc">$</span>filename[i],<span class="st">"_"</span>, <span class="fu">sprintf</span>(<span class="st">"%02d"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>), <span class="st">".tif"</span>)</span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">all</span>(<span class="fu">file.exists</span>(tif_files))) {</span>
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">download.file</span>(dataset_terra<span class="sc">$</span>link[i], <span class="at">destfile =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_terra<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/monthly/"</span>, dataset_terra<span class="sc">$</span>filename[i]), <span class="at">method =</span> <span class="st">"curl"</span>)</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span>raster<span class="sc">::</span><span class="fu">stack</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_terra<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/monthly/"</span>, dataset_terra<span class="sc">$</span>filename[i]))</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlayers</span>(ras)) {</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span>terra<span class="sc">::</span><span class="fu">rast</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_terra<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/monthly/"</span>, dataset_terra<span class="sc">$</span>filename[i]))</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    ras<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras, extentMap)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlyr</span>(ras)) {</span>
 <span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>      t_formatted <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">"%02d"</span>, t)</span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">writeRaster</span>(ras[[t]], <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_terra<span class="sc">$</span>source[<span class="dv">1</span>],<span class="st">"/monthly/"</span>,dataset_terra<span class="sc">$</span>filename[i],<span class="st">"_"</span>,t_formatted,<span class="st">".tif"</span>), <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">writeRaster</span>(ras[[t]], <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_terra<span class="sc">$</span>source[<span class="dv">1</span>],<span class="st">"/monthly/"</span>,dataset_terra<span class="sc">$</span>filename[i],<span class="st">"_"</span>,t_formatted,<span class="st">".tif"</span>), <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unlink</span>(<span class="fu">paste0</span>(<span class="st">"../data_reanalysis/"</span>, dataset_terra<span class="sc">$</span>source[<span class="dv">1</span>], <span class="st">"/monthly/"</span>, dataset_terra<span class="sc">$</span>filename[i]))</span>
 <span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
@@ -830,8 +813,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="calculate-yearly-timeseries" class="level3" data-number="4.12.1">
-<h3 data-number="4.12.1" class="anchored" data-anchor-id="calculate-yearly-timeseries"><span class="header-section-number">4.12.1</span> Calculate yearly timeseries</h3>
+<p>Calculate yearly timeseries of TerraClimate.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>files<span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">"../data_reanalysis/TerraClimate/monthly"</span>,<span class="at">pattern =</span> <span class="st">".tif"</span>,<span class="at">full.names =</span> <span class="cn">TRUE</span>)    </span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>year<span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(files))</span>
@@ -845,12 +827,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(<span class="st">"../data_reanalysis/TerraClimate/yearly"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (y <span class="cf">in</span> <span class="fu">unique</span>(year)){</span>
 <span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Processing "</span>, y))</span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(files[year <span class="sc">==</span> y])</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(files[year <span class="sc">==</span> y])</span>
 <span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Stacked "</span>, y))</span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">calc</span>(ras, sum)</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">app</span>(ras, sum)</span>
 <span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Calculated "</span>, y))</span>
 <span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    output_file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"../data_reanalysis/TerraClimate/yearly/TerraClimate_"</span>, y, <span class="st">".tif"</span>)</span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>    raster<span class="sc">::</span><span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> output_file, <span class="at">format =</span> <span class="st">"GTiff"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>    terra<span class="sc">::</span><span class="fu">writeRaster</span>(ras, <span class="at">filename =</span> output_file, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>}<span class="cf">else</span>{</span>
 <span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"Yearly timeseries already processed"</span>)</span>
@@ -858,7 +840,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 
 
-</section>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-abatzoglou_terraclimate_2018" class="csl-entry" role="listitem">
+Abatzoglou, John T., Solomon Z. Dobrowski, Sean A. Parks, and Katherine C. Hegewisch. 2018. <span>“<span>TerraClimate</span>, a High-Resolution Global Dataset of Monthly Climate and Climatic Water Balance from 1958–2015.”</span> <em>Scientific Data</em> 5 (1): 170191. <a href="https://doi.org/10.1038/sdata.2017.191">https://doi.org/10.1038/sdata.2017.191</a>.
+</div>
+<div id="ref-beck_bias_2020" class="csl-entry" role="listitem">
+Beck, Hylke E., Eric F. Wood, Tim R. McVicar, Mauricio Zambrano-Bigiarini, Camila Alvarez-Garreton, Oscar M. Baez-Villanueva, Justin Sheffield, and Dirk N. Karger. 2020. <span>“Bias Correction of Global High-Resolution Precipitation Climatologies Using Streamflow Observations from 9372 Catchments.”</span> <em>Journal of Climate</em> 33 (4): 1299–1315. <a href="https://doi.org/10.1175/JCLI-D-19-0332.1">https://doi.org/10.1175/JCLI-D-19-0332.1</a>.
+</div>
+<div id="ref-fick_worldclim_2017" class="csl-entry" role="listitem">
+Fick, Stephen E., and Robert J. Hijmans. 2017. <span>“<span>WorldClim</span> 2: New 1‐km Spatial Resolution Climate Surfaces for Global Land Areas.”</span> <em>International Journal of Climatology</em> 37 (12): 4302–15. <a href="https://doi.org/10.1002/joc.5086">https://doi.org/10.1002/joc.5086</a>.
+</div>
+<div id="ref-funk_climate_2015b" class="csl-entry" role="listitem">
+Funk, Chris, Pete Peterson, Martin Landsfeld, Diego Pedreros, James Verdin, Shraddhanand Shukla, Gregory Husak, et al. 2015. <span>“The Climate Hazards Infrared Precipitation with Stations—a New Environmental Record for Monitoring Extremes.”</span> <em>Scientific Data</em> 2 (1): 150066. <a href="https://doi.org/10.1038/sdata.2015.66">https://doi.org/10.1038/sdata.2015.66</a>.
+</div>
+<div id="ref-funk_global_2015" class="csl-entry" role="listitem">
+Funk, C., A. Verdin, J. Michaelsen, P. Peterson, D. Pedreros, and G. Husak. 2015. <span>“A Global Satellite Assisted Precipitation Climatology.”</span> Preprint. Data, Algorithms,; Models. <a href="https://doi.org/10.5194/essdd-8-401-2015">https://doi.org/10.5194/essdd-8-401-2015</a>.
+</div>
+<div id="ref-terra1" class="csl-entry" role="listitem">
+Hijmans, Robert J. 2024. <em>Terra: Spatial Data Analysis</em>. <a href="https://github.com/rspatial/terra">https://github.com/rspatial/terra</a>.
+</div>
+<div id="ref-karger_data_2018" class="csl-entry" role="listitem">
+Karger, Dirk N., Olaf Conrad, Jürgen Böhner, Tobias Kawohl, Holger Kreft, Rodrigo W. Soria-Auza, Niklaus E. Zimmermann, H. Peter Linder, and Michael Kessler. 2018. <span>“Data from: Climatologies at High Resolution for the Earth’s Land Surface Areas.”</span> Dryad. <a href="https://doi.org/10.5061/DRYAD.KD1D4">https://doi.org/10.5061/DRYAD.KD1D4</a>.
+</div>
+<div id="ref-karger_global_2021" class="csl-entry" role="listitem">
+Karger, Dirk Nikolaus, Adam M. Wilson, Colin Mahony, Niklaus E. Zimmermann, and Walter Jetz. 2021. <span>“Global Daily 1 Km Land Surface Precipitation Based on Cloud Cover-Informed Downscaling.”</span> <em>Scientific Data</em> 8 (1): 307. <a href="https://doi.org/10.1038/s41597-021-01084-6">https://doi.org/10.1038/s41597-021-01084-6</a>.
+</div>
+<div id="ref-karger_chelsa-w5e5_2022" class="csl-entry" role="listitem">
+Karger, Dirk N., Stefan Lange, Chantal Hari, Christopher P. O. Reyer, and Niklaus E. Zimmermann. 2022. <span>“<span>CHELSA</span>-W5E5 V1.0: W5E5 V1.0 Downscaled with <span>CHELSA</span> V2.0.”</span> <span>ISIMIP</span> Repository. <a href="https://doi.org/10.48364/ISIMIP.836809.1">https://doi.org/10.48364/ISIMIP.836809.1</a>.
+</div>
+<div id="ref-nc" class="csl-entry" role="listitem">
+Pierce, David. 2024. <em>Ncdf4: Interface to Unidata netCDF (Version 4 or Earlier) Format Data Files</em>. <a href="https://CRAN.R-project.org/package=ncdf4">https://CRAN.R-project.org/package=ncdf4</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
@@ -1102,8 +1115,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./climate_panama_visualizations.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Plots and Figures</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./results_precip.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Rain Gauges vs Gridded Precipitation Analysis</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

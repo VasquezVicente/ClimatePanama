@@ -1,6 +1,0 @@
-"0",""
-"0","#worldclim "
-"0","worldclim<-list.files(""../data_reanalysis/WorldClim 2.1"",full.names=TRUE,pattern="".tif"")"
-"0","worldclim<-worldclim[1:4]"
-"0","worldclim<-annual_pan(worldclim,extentMap)"
-"0","plot(worldclim)"

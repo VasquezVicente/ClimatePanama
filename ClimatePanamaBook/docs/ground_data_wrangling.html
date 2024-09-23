@@ -54,7 +54,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -165,8 +184,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./results_precip.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Rain Gauges vs Gridded Precipitation Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./climate_panama_visualizations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Plots and Figures</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Plots and Figures</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -189,6 +214,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#libraries" id="toc-libraries" class="nav-link" data-scroll-target="#libraries"><span class="header-section-number">3.2</span> Libraries</a></li>
   <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><span class="header-section-number">3.3</span> The data</a></li>
   <li><a href="#qaqc-for-sites" id="toc-qaqc-for-sites" class="nav-link" data-scroll-target="#qaqc-for-sites"><span class="header-section-number">3.4</span> QAQC for sites</a></li>
+  <li><a href="#gap-fill-the-timeseries-1970-2016" id="toc-gap-fill-the-timeseries-1970-2016" class="nav-link" data-scroll-target="#gap-fill-the-timeseries-1970-2016"><span class="header-section-number">3.5</span> Gap fill the timeseries 1970-2016</a></li>
   </ul>
 </nav>
     </div>
@@ -214,19 +240,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="about" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="about"><span class="header-section-number">3.1</span> About</h2>
-<p>The script imports the monthly precipitation summaries from meteorological stations managed by the ACP (Autoridad del canal de Panama) and STRI (Smitsonian Tropical Research institute). It calculates the response variables used in the Climate Panama project: annual mean precipitation and january-april precipitation. Data visualization is used to determine the group of sites that meet the minimum criteria.We fit a linear mixed model with random effects for year and fixed effect for site across the complete set of years. The code filters the timeseries for a period between 1970-2016 and ensures that no site is repeated. We keep all the real values and gap fill with the predicted values from the models.</p>
+<p>We use the term “ground data” to refer to rain gauge observations collected from meteorological stations managed by the Smithsonian Tropical Research Institute and the Panama Canal Authority (Autoridad del Canal de Panamá). First, we merged both datasets and addressed key questions to establish criteria for selecting the stations to be included in the analysis. We then calculated annual precipitation and January-to-April precipitation, the latter serving as a proxy for dry season precipitation. Data visualization was used to identify the sites that meet the minimum criteria. We used the lmer4 package to fit a linear mixed model, using year as a random effect and site as a fixed effect across the full time period. The time series was filtered for the 1970-2016 period, ensuring no site was duplicated. We retained all actual values and gap-filled missing data using the predicted values from the model.</p>
 </section>
 <section id="libraries" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="libraries"><span class="header-section-number">3.2</span> Libraries</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="the-data" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="the-data"><span class="header-section-number">3.3</span> The data</h2>
-<p>The github repository contains a folder with all the ground data.</p>
+<p>The github repository contains a version of the data that has been cleaned and calculated into monthly values.Data provided by the Meteorological and Hydrological Branch of the Panama Canal Authority and the Physical Monitoring Program of the Smithsonian Tropical Research Institute.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ACP_DATA<span class="ot">&lt;-</span> <span class="st">"../data_ground/met_data/ACP_data/cleanedVV/ACP_data.csv"</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>STRI_DATA<span class="ot">&lt;-</span><span class="st">"../data_ground/met_data/STRI_data/STRI_monthlyPrecip.csv"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -282,6 +309,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"plots/meanannual_v_nyears.jpg"</span>, <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Comment: we can clearly see a group of sites that has 30 or more years of data. Also, we recognize the presence of 3 sites with very high mean annual precipitation falling out of scope of our paper.</p>
 </section>
 <section id="qaqc-for-sites" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="qaqc-for-sites"><span class="header-section-number">3.4</span> QAQC for sites</h2>
@@ -334,7 +362,7 @@ BCIELECT-BCICLEAR -356.2368 -634.8312 -77.64239 0.0081833</code></pre>
 <p><img src="ground_data_wrangling_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><em>The metadata indicates that both BCICLEAR and BCIELECT are both different sensor. BCICLEAR is an standard rain gauge that is emptied manually by technicians. On the other hand, BCIELECT is a tipping bucket showing 356 mm less annual mean precipitation. Finally, the BCI station managed by the Panama canal authority is placed on the Gatun lake shore. We will keep the three sites</em></p>
+<p><em>The metadata indicates that both BCICLEAR and BCIELECT are both different sensor. BCICLEAR is an standard rain gauge that is emptied manually by technicians. On the other hand, BCIELECT is a electronic tipping bucket showing 356 mm less annual mean precipitation. Finally, the BCI station managed by the Panama canal authority is placed on the Gatun lake shore. We will keep the three sites</em></p>
 <p>The GALETA station appears on the ACP monthly summary and it is also listed in the STRI datasets, here given the name of GALETASTRI. Are this different sensors? or repeated sets of data.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#GALETA AND GALETASTRI</span></span>
@@ -396,7 +424,10 @@ GALETASTRI-GALETA -3.957544 -245.751 237.8359 0.9741082</code></pre>
 [31] "SANTAROSA"   "ZANGUENGA"  </code></pre>
 </div>
 </div>
-<p>Use the <em>lme4</em> package to fit a linear mixed model with random effects for year and fixed effects for site for each of the response variable (annual precipitation and january through april precipitation). Note that we have created the model using all the avaliable years.</p>
+</section>
+<section id="gap-fill-the-timeseries-1970-2016" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="gap-fill-the-timeseries-1970-2016"><span class="header-section-number">3.5</span> Gap fill the timeseries 1970-2016</h2>
+<p>Use the <em>lme4</em> package to fit a linear mixed model with random effects for year and fixed effects for site for annual precipitation and January to April precipitation <span class="citation" data-cites="lm">(<a href="references.html#ref-lm" role="doc-biblioref">Bates et al. 2015</a>)</span>. Note that we have created the model using all the avaliable years.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>model_annual<span class="ot">&lt;-</span> <span class="fu">lmer</span>(annualPrecip<span class="sc">~</span> site <span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>year), <span class="at">data=</span>precipitation_data_subset)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>model_jfma<span class="ot">&lt;-</span> <span class="fu">lmer</span>(jfmaPrecip<span class="sc">~</span> site <span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>year), <span class="at">data=</span>precipitation_data_subset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -465,6 +496,11 @@ GALETASTRI-GALETA -3.957544 -245.751 237.8359 0.9741082</code></pre>
 </div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-lm" class="csl-entry" role="listitem">
+Bates, Douglas, Martin Mächler, Ben Bolker, and Steve Walker. 2015. <span>“Fitting Linear Mixed-Effects Models Using <span class="nocase">lme4</span>.”</span> <em>Journal of Statistical Software</em> 67 (1): 1–48. <a href="https://doi.org/10.18637/jss.v067.i01">https://doi.org/10.18637/jss.v067.i01</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->

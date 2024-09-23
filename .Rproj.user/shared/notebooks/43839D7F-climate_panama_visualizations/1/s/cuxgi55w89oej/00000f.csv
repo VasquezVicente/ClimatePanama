@@ -6,4 +6,4 @@
 "0","striStation<- read.csv(STRI_MET)"
 "0","acpStation<- read.csv(ACP_MET)"
 "0",""
-"0","extentMap  <- raster::extent(c(-80.2,-79.4, 8.8, 9.5))"
+"0","extentMap  <- terra::ext(c(-80.2,-79.4, 8.8, 9.5))"

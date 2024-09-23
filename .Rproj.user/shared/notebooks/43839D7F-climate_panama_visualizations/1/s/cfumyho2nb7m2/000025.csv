@@ -1,5 +1,0 @@
-"0","# CHELSA 1.2 "
-"0","chelsa_orig<-list.files(""../data_reanalysis/CHELSA 1.2/"",full.names=TRUE,pattern = "".tif"")"
-"0","chelsa_orig<-chelsa_orig[1:4]"
-"0","chelsa_orig<-annual_pan(chelsa_orig,extentMap)"
-"0","plot(chelsa_orig)"

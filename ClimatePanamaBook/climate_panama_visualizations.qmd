@@ -1,24 +1,27 @@
 ---
 title: "Plots and Figures"
+bibliography: references.bib
 ---
 
 ## Libraries
+We utilize rasterVis, basemaps and gridExtra packages for the figures presented on the paper[@vis,@base,@grid]. The package sf is used for vectors [@sfsf]. Finally, scico package its used for color-blind safe palettes [@crameri_scientific_2023].
 ```{r}
 #| warning: false
+#| output: false
+setwd("C:/Users/Vicente/repo/ClimatePanama/ClimatePanamaBook")
+library(terra)
 library(ggplot2)
-library(raster)
 library(rasterVis)
 library(dplyr)
 library(basemaps)
 library(sf)
-library(rasterVis)
 library(gridExtra)
 library(scico)
-library(readr)
+library(tidyr)
 ```
 
-## FIGURE 1. SITES
-Read in files for Figure 1 
+## Figure 1. Sites plot
+Read in files
 ```{r}
 setwd("C:/Users/Vicente/repo/ClimatePanama/ClimatePanamaBook")
 
@@ -28,7 +31,7 @@ STRI_MET<- "../tables/stri_met_stations.csv"
 striStation<- read.csv(STRI_MET)
 acpStation<- read.csv(ACP_MET)
 
-extentMap  <- raster::extent(c(-80.2,-79.4, 8.8, 9.5))
+extentMap  <- terra::ext(c(-80.2,-79.4, 8.8, 9.5))
 ```
 
 Stations wrangling and cleaning
@@ -112,14 +115,13 @@ ggsave("sites.tiff", path = "../plots", plot = sites_plot, dpi = 900, units = "i
 sites_plot
 ```
 
-## FIGURE 2. Climatologies
+## Figure 2. Climatologies
 Total annual precipitation, excluding the lowest correlation CHELSA w5e5
 ```{r}
 annual_pan<-function(list,extent){
-  a<-lapply(list, raster)
-  b<-raster::stack(a)
-  c<-raster::calc(b,sum)
-  d<-raster::crop(c,extent)
+  b<-terra::rast(list)
+  c<-terra::app(b,sum)
+  d<-terra::crop(c,extent)
   return(d)
 }
 ```
@@ -134,7 +136,7 @@ plot(chelsa_orig)
 #CHIRPS annual precip at 0.05 
 chirps<-list.files("../data_reanalysis/CHIRPS 2.0/climatology",full.name=TRUE,pattern=".tif")
 chirps<-annual_pan(chirps,extentMap)
-chirps<-projectRaster(chirps,chelsa_orig, method='ngb')
+chirps<-terra::project(chirps,chelsa_orig, method='near')
 values(chirps)<-ifelse(values(chirps)<0,NA,values(chirps))
 plot(chirps)
 
@@ -146,27 +148,27 @@ plot(chelsa2_orig)
 #chp 0.05 degree original 1980-2009 
 chp<- list.files("../data_reanalysis/CHPclim",full.names=TRUE,pattern = ".tif")
 chp<-annual_pan(chp,extentMap)
-chp<-projectRaster(chp,chelsa_orig, method='ngb')
+chp<-terra::project(chp,chelsa_orig, method='near')
 plot(chp)
 
 
 #pbcor 0.05 degree origina
 pbcor_chp<- list.files("../data_reanalysis/PBCOR/CHPclim corrected",full.names=TRUE,pattern = ".tif")
 pbcor_chp<-annual_pan(pbcor_chp,extentMap)
-pbcor_chp<-projectRaster(pbcor_chp,chelsa_orig, method='ngb')
+pbcor_chp<-terra::project(pbcor_chp,chelsa_orig, method='near')
 plot(pbcor_chp)
 
 
 #pbcor 0.05 degree original
 pbcor_chelsa<- list.files("../data_reanalysis/PBCOR/CHELSA 1.2 corrected",full.names=TRUE)
 pbcor_chelsa<-annual_pan(pbcor_chelsa,extentMap)
-pbcor_chelsa<-projectRaster(pbcor_chelsa,chelsa_orig,method='ngb')
+pbcor_chelsa<-terra::project(pbcor_chelsa,chelsa_orig,method='near')
 plot(pbcor_chelsa)
 
 #terra
-terra<- list.files("../data_reanalysis/TerraClimate",full.names = TRUE,pattern = ".tif")
+terra<- list.files("../data_reanalysis/TerraClimate",full.names = TRUE,pattern = "\\.tif$")
 terra<-annual_pan(terra,extentMap)
-terra<-projectRaster(terra,chelsa_orig,method = 'ngb')
+terra<-terra::project(terra,chelsa_orig,method = 'near')
 plot(terra)
 
 
@@ -178,7 +180,7 @@ plot(chelsaearthenv)
 #Pbcorworldclim
 pbcor_worldclim<-list.files("../data_reanalysis/PBCOR/WorldClim corrected",full.names = TRUE,pattern = ".tif")
 pbcor_worldclim<-annual_pan(pbcor_worldclim,extentMap)
-pbcor_worldclim<-projectRaster(pbcor_worldclim,chelsa_orig,method="ngb")
+pbcor_worldclim<-terra::project(pbcor_worldclim,chelsa_orig,method="ngb")
 plot(pbcor_worldclim)
 
 #worldclim 
@@ -190,8 +192,7 @@ plot(worldclim)
 Stack the plots, define a list and plot in a grid
 ```{r}
 #| warning: false
-res_stack<-raster::stack(chelsa_orig,chelsa2_orig,chelsaearthenv,pbcor_chelsa,pbcor_chp,pbcor_worldclim,terra,
-                         chp,worldclim,chirps)
+res_stack<-c(chelsa_orig,chelsa2_orig,chelsaearthenv,pbcor_chelsa,pbcor_chp,pbcor_worldclim,terra,chp,worldclim,chirps)
 
 models<-list('layer.1'="CHELSA 1.2",
              'layer.2'="CHELSA 2.1",
@@ -233,7 +234,7 @@ plot(chelsa_orig)
 chirps<-list.files("../data_reanalysis/CHIRPS 2.0/climatology",full.name=TRUE,pattern=".tif")
 chirps<-chirps[1:4]
 chirps<-annual_pan(chirps,extentMap)
-chirps<-projectRaster(chirps,chelsa_orig, method='ngb')
+chirps<-terra::project(chirps,chelsa_orig, method='near')
 values(chirps)<-ifelse(values(chirps)<0,NA,values(chirps))
 plot(chirps)
 
@@ -247,7 +248,7 @@ plot(chelsa2_orig)
 chp<- list.files("../data_reanalysis/CHPclim",full.names=TRUE,pattern = ".tif")
 chp<- chp[1:4]
 chp<-annual_pan(chp,extentMap)
-chp<-projectRaster(chp,chelsa_orig, method='ngb')
+chp<-terra::project(chp,chelsa_orig, method='near')
 plot(chp)
 
 
@@ -255,7 +256,7 @@ plot(chp)
 pbcor_chp<- list.files("../data_reanalysis/PBCOR/CHPclim corrected",full.names=TRUE,pattern = ".tif")
 pbcor_chp<-pbcor_chp[1:4]
 pbcor_chp<-annual_pan(pbcor_chp,extentMap)
-pbcor_chp<-projectRaster(pbcor_chp,chelsa_orig, method='ngb')
+pbcor_chp<-terra::project(pbcor_chp,chelsa_orig, method='near')
 plot(pbcor_chp)
 
 
@@ -263,14 +264,14 @@ plot(pbcor_chp)
 pbcor_chelsa<- list.files("../data_reanalysis/PBCOR/CHELSA 1.2 corrected",full.names=TRUE)
 pbcor_chelsa<-pbcor_chelsa[1:4]
 pbcor_chelsa<-annual_pan(pbcor_chelsa,extentMap)
-pbcor_chelsa<-projectRaster(pbcor_chelsa,chelsa_orig,method='ngb')
+pbcor_chelsa<-terra::project(pbcor_chelsa,chelsa_orig,method='near')
 plot(pbcor_chelsa)
 
 #terra
-terra<- list.files("../data_reanalysis/TerraClimate",full.names = TRUE,pattern = ".tif")
+terra<- list.files("../data_reanalysis/TerraClimate",full.names = TRUE,pattern = "\\.tif$")
 terra<-terra[1:4]
 terra<-annual_pan(terra,extentMap)
-terra<-projectRaster(terra,chelsa_orig,method = 'ngb')
+terra<-terra::project(terra,chelsa_orig,method = 'near')
 plot(terra)
 
 #Chelsa earthenv 2003-2016
@@ -283,7 +284,7 @@ plot(chelsaearthenv)
 pbcor_worldclim<-list.files("../data_reanalysis/PBCOR/WorldClim corrected",full.names = TRUE,pattern = ".tif")
 pbcor_worldclim<-pbcor_worldclim[1:4]
 pbcor_worldclim<-annual_pan(pbcor_worldclim,extentMap)
-pbcor_worldclim<-projectRaster(pbcor_worldclim,chelsa_orig,method="ngb")
+pbcor_worldclim<-terra::project(pbcor_worldclim,chelsa_orig,method="ngb")
 plot(pbcor_worldclim)
 
 #worldclim 
@@ -292,10 +293,10 @@ worldclim<-worldclim[1:4]
 worldclim<-annual_pan(worldclim,extentMap)
 plot(worldclim)
 ```
-### Stack the plots and plot in a grid. 
+Stack the rasters and plot in a grid. 
 ```{r}
 #| warning: false
-res_stack_jfma<-raster::stack(chelsa_orig,chelsa2_orig,chelsaearthenv,pbcor_chelsa,pbcor_chp,pbcor_worldclim,terra,chp,worldclim,chirps)
+res_stack_jfma<-c(chelsa_orig,chelsa2_orig,chelsaearthenv,pbcor_chelsa,pbcor_chp,pbcor_worldclim,terra,chp,worldclim,chirps)
 
 models<-list('layer.1'="CHELSA 1.2",
              'layer.2'="CHELSA 2.1",
@@ -406,12 +407,12 @@ Bias_jfma_panels <- Bias_jfma_panels +
         plot.title = element_text(hjust = 0.5,size=14),
         plot.background = element_rect(fill = "white"))
 
-ggsave(Bias_annual_panels,path = '../plots',filename = "annual_jfma_maps.tiff",  units="in", width=10, height=10, dpi=900)
-ggsave(Bias_jfma_panels,path = '../plots',filename = "bias_jfma_maps.tiff",  units="in", width=10, height=10, dpi=900)
+ggsave(Bias_annual_panels,path = '../plots',filename = "annual_bias_maps.tiff",  units="in", width=10, height=10, dpi=900)
+ggsave(Bias_jfma_panels,path = '../plots',filename = "jfma_bias_maps.tiff",  units="in", width=10, height=10, dpi=900)
 Bias_annual_panels
 Bias_jfma_panels
 ```
-### Arrange both set of panels in a grid 
+Arrange both set of panels in a grid 
 ```{r}
 c<-grid.arrange(Bias_annual_panels,Bias_jfma_panels,ncol = 1)
 ggsave(c,path='../plots' ,filename = "../plots/bias_figure.tiff",  units="in", width=20, height=10, dpi=600)
@@ -511,8 +512,8 @@ d<-grid.arrange(annual_corr,jfma_corr,ncol = 1)
 ggsave(d,path='../plots' ,filename = "../plots/correlation.tiff",  units="in", width=10, height=10, dpi=600)
 ggsave(d,path='../plots' ,filename = "../plots/correlation.jpg",  units="in", width=10, height=10, dpi=300)
 ```
-### Figure.5 seasonality plots
 
+## Figure.5 Seasonality plots
 Mutating the data is necessary to consider a second line representing a second set of ground data in BCI.
 ```{r}
 acp38_ag<-read.csv("../tables/acp38_ag.csv")
@@ -565,7 +566,7 @@ seasonality_plot<-ggplot(acp38_ag_long,aes(x=Month,y=value))+
 ggsave(seasonality_plot,path='../plots' ,filename = "../plots/seasonality.tiff",  units="in", width=9, height=6, dpi=600)
 seasonality_plot
 ```
-### Figure 6. Interannual variability
+## Figure 6. Interannual variability
 
 Mutating the dataset to consider the existence of a second line representing another set of ground data coming from a secondary rain gauge in BCI. 
 ```{r}

@@ -1,4 +1,0 @@
-"0","c<-grid.arrange(Bias_annual_panels,Bias_jfma_panels,ncol = 1)"
-"2","Error in grid.arrange(Bias_annual_panels, Bias_jfma_panels, ncol = 1) : 
-  could not find function ""grid.arrange""
-"

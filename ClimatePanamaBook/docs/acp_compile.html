@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.353">
+<meta name="generator" content="quarto-1.3.433">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ClimatePanamaBook - 3&nbsp; Gather ACP data</title>
+<title>ClimatePanamaBook - 2&nbsp; Gather ACP data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -54,7 +54,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -91,7 +110,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
@@ -107,10 +127,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./acp_compile.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Gather ACP data</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./acp_compile.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Gather ACP data</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -140,38 +160,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="./stri_compile.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Gather STRI data</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Gather STRI data</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./acp_compile.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Gather ACP data</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Gather ACP data</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ground_data_wrangling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ground data wrangling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Ground data wrangling and cleaning</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Download_gridded_precipitation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Download precipitation gridded products</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Download precipitation gridded products</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  <a href="./results_precip.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Rain Gauges vs Gridded Precipitation Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./climate_panama_visualizations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Plots and Figures</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -190,16 +210,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#libraries" id="toc-libraries" class="nav-link active" data-scroll-target="#libraries"><span class="header-section-number">3.1</span> Libraries</a>
-  <ul class="collapse">
-  <li><a href="#function-to-transform-from-degrees-to-decimal" id="toc-function-to-transform-from-degrees-to-decimal" class="nav-link" data-scroll-target="#function-to-transform-from-degrees-to-decimal"><span class="header-section-number">3.1.1</span> Function to transform from degrees to decimal</a></li>
-  </ul></li>
-  <li><a href="#directories-and-links" id="toc-directories-and-links" class="nav-link" data-scroll-target="#directories-and-links"><span class="header-section-number">3.2</span> Directories and links</a></li>
-  <li><a href="#read-the-data" id="toc-read-the-data" class="nav-link" data-scroll-target="#read-the-data"><span class="header-section-number">3.3</span> Read the data</a></li>
-  <li><a href="#clean-the-data" id="toc-clean-the-data" class="nav-link" data-scroll-target="#clean-the-data"><span class="header-section-number">3.4</span> Clean the data</a></li>
-  <li><a href="#clean-met-stations-data-frame" id="toc-clean-met-stations-data-frame" class="nav-link" data-scroll-target="#clean-met-stations-data-frame"><span class="header-section-number">3.5</span> Clean MET stations data frame</a></li>
-  <li><a href="#test-that-we-have-not-missed-any-stations" id="toc-test-that-we-have-not-missed-any-stations" class="nav-link" data-scroll-target="#test-that-we-have-not-missed-any-stations"><span class="header-section-number">3.6</span> Test that we have not missed any stations</a></li>
-  <li><a href="#save-the-data-for-later-use" id="toc-save-the-data-for-later-use" class="nav-link" data-scroll-target="#save-the-data-for-later-use"><span class="header-section-number">3.7</span> Save the data for later use</a></li>
+  <li><a href="#libraries" id="toc-libraries" class="nav-link active" data-scroll-target="#libraries"><span class="header-section-number">2.1</span> Libraries</a></li>
+  <li><a href="#clean-the-data" id="toc-clean-the-data" class="nav-link" data-scroll-target="#clean-the-data"><span class="header-section-number">2.2</span> Clean the data</a></li>
   </ul>
 </nav>
     </div>
@@ -208,7 +220,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Gather ACP data</span></h1>
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Gather ACP data</span></h1>
 </div>
 
 
@@ -223,15 +235,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="libraries" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="libraries"><span class="header-section-number">3.1</span> Libraries</h2>
+<section id="libraries" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="libraries"><span class="header-section-number">2.1</span> Libraries</h2>
+<p>The packages we utilize are dplyr<span class="citation" data-cites="dplyr112">(<a href="references.html#ref-dplyr112" role="doc-biblioref">Wickham et al. 2023</a>)</span> and tidyr<span class="citation" data-cites="ti">(<a href="references.html#ref-ti" role="doc-biblioref">Wickham, Vaughan, and Girlich 2024</a>)</span> for data wrangling, ggplot2<span class="citation" data-cites="ggplotbook">(<a href="references.html#ref-ggplotbook" role="doc-biblioref">Wickham 2016</a>)</span> for data visualization and readxl<span class="citation" data-cites="xlfile">(<a href="references.html#ref-xlfile" role="doc-biblioref">Wickham and Bryan 2023</a>)</span> for reading excel files.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="function-to-transform-from-degrees-to-decimal" class="level3" data-number="3.1.1">
-<h3 data-number="3.1.1" class="anchored" data-anchor-id="function-to-transform-from-degrees-to-decimal"><span class="header-section-number">3.1.1</span> Function to transform from degrees to decimal</h3>
+<p>Function to transform from degrees to decimal</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>convert_dms_to_dd <span class="ot">&lt;-</span> <span class="cf">function</span>(dms) {</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  degrees <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">".*?(</span><span class="sc">\\</span><span class="st">d+)°.*"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, dms))</span>
@@ -241,36 +254,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(dd)</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-</section>
-<section id="directories-and-links" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="directories-and-links"><span class="header-section-number">3.2</span> Directories and links</h2>
+<p>Directories and links</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>DIRTOACP<span class="ot">&lt;-</span> <span class="st">"../data_ground/met_data/ACP_data/cleanedVV"</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>link<span class="ot">&lt;-</span> <span class="st">'https://smithsonian.figshare.com/ndownloader/files/41529324'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Download the file</p>
+<p>Download the data files.Data sets provided by the Meteorological and Hydrological Branch of the Panama Canal Authority <span class="citation" data-cites="paton_monthly_2022">(<a href="references.html#ref-paton_monthly_2022" role="doc-biblioref">Paton and Panama Canal Authority 2022</a>)</span>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(link,<span class="at">destfile =</span><span class="st">"../data_ground/met_data/ACP_data/cleanedVV/Monthly_Rain_ACP_Vertical.xlsx"</span>, <span class="at">mode =</span> <span class="st">"wb"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="read-the-data" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="read-the-data"><span class="header-section-number">3.3</span> Read the data</h2>
+<p>Read the data</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ACP_data<span class="ot">&lt;-</span><span class="fu">read_excel</span>(<span class="st">"../data_ground/met_data/ACP_data/cleanedVV/Monthly_Rain_ACP_Vertical.xlsx"</span>,<span class="at">sheet =</span> <span class="dv">4</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ACP_met_stations<span class="ot">&lt;-</span><span class="fu">read_excel</span>(<span class="st">"../data_ground/met_data/ACP_data/cleanedVV/Monthly_Rain_ACP_Vertical.xlsx"</span>,<span class="at">sheet =</span> <span class="dv">2</span>,<span class="at">skip =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>New names:
-* `LAT (N)` -&gt; `LAT (N)...6`
-* `LONG (W)` -&gt; `LONG (W)...7`
-* `LAT (N)` -&gt; `LAT (N)...8`
-* `LONG (W)` -&gt; `LONG (W)...9`
-* `` -&gt; `...12`</code></pre>
+• `LAT (N)` -&gt; `LAT (N)...6`
+• `LONG (W)` -&gt; `LONG (W)...7`
+• `LAT (N)` -&gt; `LAT (N)...8`
+• `LONG (W)` -&gt; `LONG (W)...9`
+• `` -&gt; `...12`</code></pre>
 </div>
 </div>
 </section>
-<section id="clean-the-data" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="clean-the-data"><span class="header-section-number">3.4</span> Clean the data</h2>
+<section id="clean-the-data" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="clean-the-data"><span class="header-section-number">2.2</span> Clean the data</h2>
 <p>The following steps were performed in ../data_ground/met_data/ACP_data/cleanedHM. Here is the steps neccesary to output the same results.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ACP_data <span class="ot">&lt;-</span> ACP_data <span class="sc">%&gt;%</span> </span>
@@ -282,10 +290,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month_year =</span> <span class="fu">as.Date</span>(<span class="fu">paste0</span>(<span class="st">"1"</span>,<span class="st">"/"</span>,Month,<span class="st">"/"</span>, Year), <span class="at">format =</span> <span class="st">"%d/%m/%Y"</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(month_year, monthly_precip, site)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="clean-met-stations-data-frame" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="clean-met-stations-data-frame"><span class="header-section-number">3.5</span> Clean MET stations data frame</h2>
-<p>There is a series of mutate steps that consolidates the site names between the data sheet and the metadata sheets.</p>
+<p>Clean MET stations data frame There is a series of mutate steps that consolidates the site names between the data sheet and the metadata sheets.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ACP_met_stations <span class="ot">&lt;-</span> ACP_met_stations <span class="sc">%&gt;%</span> </span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">'ACP Name'</span>, <span class="st">'STRI Name'</span>, <span class="st">'ELE (m)'</span>, <span class="st">'LAT (N)...6'</span>,<span class="st">'LONG (W)...7'</span>,<span class="st">'LAT (N)...8'</span>, <span class="st">'LONG (W)...9'</span>) <span class="sc">%&gt;%</span> </span>
@@ -314,9 +319,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>ACP_met_stations<span class="ot">&lt;-</span> ACP_met_stations<span class="sc">%&gt;%</span><span class="fu">filter</span>(site<span class="sc">!=</span><span class="st">"DEACTIVATEDSTATIONS"</span>)<span class="sc">%&gt;%</span><span class="fu">filter</span>(ACP_name<span class="sc">!=</span><span class="st">"Pedro Miguel (LAKE)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="test-that-we-have-not-missed-any-stations" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="test-that-we-have-not-missed-any-stations"><span class="header-section-number">3.6</span> Test that we have not missed any stations</h2>
+<p>Test that we have not missed any stations</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(<span class="fu">setdiff</span>(<span class="fu">unique</span>(ACP_data<span class="sc">$</span>site), <span class="fu">unique</span>(ACP_met_stations<span class="sc">$</span>site)))<span class="sc">&gt;</span><span class="dv">0</span>){</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">"There are sites in the data that are not in the met stations"</span>)</span>
@@ -327,15 +330,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[1] "There are no sites in the data that are not in the met stations"</code></pre>
 </div>
 </div>
-</section>
-<section id="save-the-data-for-later-use" class="level2" data-number="3.7">
-<h2 data-number="3.7" class="anchored" data-anchor-id="save-the-data-for-later-use"><span class="header-section-number">3.7</span> Save the data for later use</h2>
+<p>Save the data for later use</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(ACP_data,<span class="st">'../data_ground/met_data/ACP_data/cleanedVV/ACP_data.csv'</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(ACP_met_stations,<span class="st">'../data_ground/met_data/ACP_data/cleanedVV/ACP_met_stations.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-paton_monthly_2022" class="csl-entry" role="listitem">
+Paton, Steve, and Panama Canal Authority. 2022. <span>“Monthly <span>Rain</span>_ACP_vertical.xlsx.”</span> Smithsonian Tropical Research Institute. <a href="https://doi.org/10.25573/DATA.10304306.V8">https://doi.org/10.25573/DATA.10304306.V8</a>.
+</div>
+<div id="ref-ggplotbook" class="csl-entry" role="listitem">
+Wickham, Hadley. 2016. <em>Ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
+</div>
+<div id="ref-xlfile" class="csl-entry" role="listitem">
+Wickham, Hadley, and Jennifer Bryan. 2023. <em>Readxl: Read Excel Files</em>.
+</div>
+<div id="ref-dplyr112" class="csl-entry" role="listitem">
+Wickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis Vaughan. 2023. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://dplyr.tidyverse.org">https://dplyr.tidyverse.org</a>.
+</div>
+<div id="ref-ti" class="csl-entry" role="listitem">
+Wickham, Hadley, Davis Vaughan, and Maximilian Girlich. 2024. <em>Tidyr: Tidy Messy Data</em>. <a href="https://tidyr.tidyverse.org">https://tidyr.tidyverse.org</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
@@ -575,12 +593,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./stri_compile.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Gather STRI data</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Gather STRI data</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./ground_data_wrangling.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ground data wrangling</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Ground data wrangling and cleaning</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -1,14 +1,17 @@
 ---
 title: "Rain Gauges vs Gridded Precipitation Analysis"
-format: html
-editor: visual
+bibliography: references.bib
 ---
 
 ## Library
+
+We utilize the terra package for rasters [@terra1]. The package KableExtra is for table visualizations[@kable]. The sp package is used for calculating distances [@spsp]. Packages purr and tiblle are for data wrangling [@pur,@tib]
 ```{r}
-#\warnings=False
+#| output: false
+#| warning: false
+#| message: false
 library(dplyr)
-library(raster)
+library(terra)
 library(readxl)
 library(kableExtra)
 library(purrr)
@@ -17,6 +20,7 @@ library(tibble)
 ```
 
 Read in files for the analysis
+
 ```{r}
 setwd("C:/Users/Vicente/repo/ClimatePanama/ClimatePanamaBook")
 # Read in the data
@@ -25,10 +29,11 @@ striStation<- read.csv("../tables/stri_met_stations.csv")
 acpStation<- read.csv("../data_ground/met_data/ACP_data/cleanedVV/ACP_met_stations.csv")
 
 #Global variables
-extentMap  <- raster::extent(c(-80.2,-79.4, 8.8, 9.5))
+extentMap  <- terra::ext(c(-80.2,-79.4, 8.8, 9.5))
 ```
 
 ## Functions
+
 ```{r}
 calculate_climatology<- function(minyear,maxyear,data){
     climatology<- data %>% 
@@ -41,44 +46,36 @@ calculate_climatology<- function(minyear,maxyear,data){
 }
 
 annual_pan<-function(list,extent){
-  a<-lapply(list, raster)
-  b<-raster::stack(a)
-  c<-raster::calc(b,sum)
-  d<-raster::crop(c,extent)
+  b<-terra::rast(list)
+  c<-terra::app(b,sum)
+  d<-terra::crop(c,extent)
   return(d)
 }
 
 jfma_pan <- function(list, extent) {
-  a <- lapply(head(list, 4), raster)
-  b <- raster::stack(a)
-  c <- raster::calc(b, sum)
-  d <- raster::crop(c, extent)
+  b <- terra::rast(head(list, 4))
+  c <- terra::app(b, sum)
+  d <- terra::crop(c, extent)
   return(d)
 }
 
 find_nearest_non_na <- function(raster_object, coordinate) {
-  non_na_cells <- which(!is.na(getValues(raster_object)))
+  non_na_cells <- which(!is.na(terra::values(raster_object)))
   non_na_coords <- xyFromCell(raster_object, non_na_cells)
   dists <- sp::spDists(x = matrix(coordinate, nrow = 1), y = non_na_coords, longlat = TRUE)
   nearest_cell <- non_na_cells[which.min(dists)]
-  return(getValues(raster_object)[nearest_cell])
+  return(terra::values(raster_object)[nearest_cell])
 }
 
 extract_land <- function(list_object, coordinate) {
   result <- numeric(nrow(coordinate))
   for (i in seq_len(nrow(coordinate))) {
-    extracted_value <- raster::extract(list_object, coordinate[i, ], na.rm = FALSE)
+    extracted_value <- terra::extract(list_object, coordinate[i, ], na.rm = FALSE)[1,2]
     result[i] <- ifelse(is.na(extracted_value), find_nearest_non_na(list_object, as.matrix(coordinate[i, ])), extracted_value)
   }
   return(result)
 }
 
-extract_sesonality<-function(list_object,coordinate, max_search_distance){
-  vect<- ifelse(!is.na(raster::extract(list_object,coordinate,na.rm=FALSE)),
-                raster::extract(list_object,coordinate,na.rm=FALSE),
-                raster::extract(list_object,nearestLand(coordinate, list_object, 4000),na.rm=FALSE))
-  return(vect)
-}
 #stats calculation
 stats<-function(predicted,observed){
   correlation<-cor.test(observed,predicted)$estimate
@@ -89,7 +86,9 @@ stats<-function(predicted,observed){
   return(done)
 }
 ```
+
 List of data sets, their temporal extents and the location of the climatology tiffs for each of them
+
 ```{r}
 datasets_info <- list(
   list(start_year = 1979, end_year = 2013, dataset_name = "CHELSA 1.2",column_name="CHELSA1.2", temporal = "1979-2013",path = "../data_reanalysis/CHELSA 1.2/"),
@@ -106,9 +105,13 @@ datasets_info <- list(
 )
 
 ```
+## Climatologies
 
 Loop through each dataset and calculate climatology
+
 ```{r}
+#| warning: false
+#| output: false
 climatologies <- datasets_info %>%
   map_df(function(info) {
     calculate_climatology(info$start_year, info$end_year, data_ground) %>%
@@ -126,16 +129,17 @@ for (source in datasets_info) {
   files <- list.files(source$path, pattern = "\\.tif$", full.names = TRUE)
   annual_data <- annual_pan(files, extentMap)
   climatologies[[source$dataset_name]] <- extract_land(annual_data,climatologies[,3:2])
+  
   jfma_data = jfma_pan(files, extentMap)
   column_name = paste(source$dataset_name, "_jfma", sep = "")
+  
   climatologies[[column_name]] = extract_land(jfma_data, climatologies[,3:2])
 }
-
 
 write.csv(climatologies,file="../tables/climatologies.csv")
 ```
 
-## Compute a results data frame 
+Compute a results data frame
 
 ```{r}
 results <- data.frame(
@@ -187,8 +191,9 @@ write.csv(results_jfma, file= "../tables/spatial_variation_jfma.csv")
 ```
 
 Tables for visualizations
+
 ```{r}
-#|warnings=False
+#| warning: false
 annual_table<-results %>%mutate(Correlation = round(Correlation, 2), RMSE= round(RMSE,0),Bias=round(Bias,0),MAE=round(MAE,0)) %>% 
   rownames_to_column(var = "rowname") %>%
   dplyr::select(-rowname) %>%
@@ -209,10 +214,9 @@ jfma_table
 ```
 
 ## Seasonal variation(12-month)
-```{r}
-#|warnings=False
-#|output=False
 
+```{r}
+#| warning: false
 month <- read.csv("../tables/monthly_ground.csv")
 sites <- read.csv("../tables/dfprecip.csv")
 
@@ -249,8 +253,7 @@ acp38_ag$lat_dd <- sites$lat_dd[match(acp38_ag$site, sites$site)]
 ## loop for extraction of values of raster reanalyis climatologies for specific sites and month.
 for (i in 1:length(datasets_info)) {
   files_list <- list.files(datasets_info[[i]]$path, pattern = "\\.tif$", full.names = TRUE)
-  raster_stack <- raster::stack(files_list)
-  print(raster_stack)
+  raster_stack <- terra::rast(files_list)
   acp38_ag[[datasets_info[[i]]$column_name]] <- NA
   for (j in 1:12) {
     acp38_ag[acp38_ag$Month == j, datasets_info[[i]]$column_name] <- extract_land(raster_stack[[j]], acp38_ag[acp38_ag$Month == j, c("long_dd", "lat_dd")])
@@ -258,7 +261,9 @@ for (i in 1:length(datasets_info)) {
 }
 write.csv(acp38_ag,"../tables/acp38_ag.csv")
 ```
-After extracting values, we can run some statistics 
+
+After extracting values, we can run some statistics
+
 ```{r}
 sites_unique <- unique(acp38_ag$site)
 all_correlations <- data.frame( site = character(),
@@ -296,7 +301,9 @@ for (i in seq_along(datasets)){
 }
 write.csv(all_averages, file= "../tables/seasonal_variation.csv")
 ```
+
 Plot the statistics in a table
+
 ```{r}
 seasonality_table<-all_averages%>%mutate(Correlation = round(Correlation, 2), RMSE= round(RMSE,0)) %>% 
   rownames_to_column(var = "rowname") %>%
@@ -309,6 +316,7 @@ seasonality_table
 ```
 
 ## Interannual variability
+
 ```{r}
 # create a list which contains the temporal extent and location of files 
 datasets_yearly <- list(
@@ -325,6 +333,8 @@ datasets_yearly <- list(
 Group by year and extract for each spatial point
 
 ```{r}
+#| warning: false
+#| output: false 
 acp38_year <- lapply(datasets_yearly, function(dataset) {
   acp38 %>% group_by(Year,site)%>%
     summarise(annual_precip=sum(monthlyPrecip))%>%
@@ -336,16 +346,14 @@ acp38_year <- lapply(datasets_yearly, function(dataset) {
 for (j in seq_along(datasets_yearly)){
     print(datasets_yearly[[j]]$dataset_name)
     files_list <- list.files(datasets_yearly[[j]]$path, pattern = ".tif", full.names = TRUE)
-    raster_stack<- raster::stack(files_list)
+    raster_stack<- terra::rast(files_list)
     acp38_year[[datasets_yearly[[j]]$column_name]] <- NA
     for (i in unique(acp38_year$Year)) {
       if (any(grepl(i,names(raster_stack)))) {
-        print(paste("There is a raster with the year", i))
         layer_index<-grep(i, names(raster_stack)) 
         raster_layer <- raster_stack[[layer_index]]
         acp38_year[acp38_year$Year==as.integer(i),datasets_yearly[[j]]$column_name]<- extract_land(raster_layer,acp38_year[acp38_year$Year==as.integer(i),c("long_dd","lat_dd")])
       } else {
-        print(paste("No raster found for the year", i))
       }
     }
 }
@@ -354,6 +362,8 @@ for (j in seq_along(datasets_yearly)){
 Calculate the statistics for interannual variability per site and compute averages across 9 sites
 
 ```{r}
+#| warning: false
+#| output: false
 sites_unique_year <- unique(acp38_year$site)
 all_correlations_year <- data.frame( site = character(),
                                 dataset=character(),
@@ -391,5 +401,3 @@ write.csv(summary_table, file= "../tables/interannual_variation.csv")
 write.csv(acp38_year, file = "../tables/acp38_year.csv")
 interannual_table
 ```
-
-

@@ -1,8 +1,0 @@
-"0",""
-"0","#CHIRPS annual precip at 0.05 "
-"0","chirps<-list.files(""../data_reanalysis/CHIRPS 2.0/climatology"",full.name=TRUE,pattern="".tif"")"
-"0","chirps<-chirps[1:4]"
-"0","chirps<-annual_pan(chirps,extentMap)"
-"0","chirps<-projectRaster(chirps,chelsa_orig, method='ngb')"
-"0","values(chirps)<-ifelse(values(chirps)<0,NA,values(chirps))"
-"0","plot(chirps)"

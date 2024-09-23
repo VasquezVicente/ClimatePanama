@@ -14,12 +14,9 @@ book:
     - results_precip.qmd
     - climate_panama_visualizations.qmd
     - references.qmd
-
-bibliography: references.bib
-
 format:
   html:
     theme: cosmo
+bibliography: references.bib
 
-editor: visual
 

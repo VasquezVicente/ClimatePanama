@@ -17,7 +17,7 @@
 "0","    ras <- raster::calc(ras, mean)"
 "0","    print(paste0(""Calculated "", m))"
 "0","    output_file <- paste0(""../data_reanalysis/CHIRPS 2.0/climatology/CHIRPS_2.0_"", m, "".tif"")"
-"0","    raster::writeRaster(ras, filename = output_file, format = ""GTiff"", overwrite = TRUE)"
+"0","    terra::writeRaster(ras, filename = output_file, format = ""GTiff"", overwrite = TRUE)"
 "0","  }"
 "0","}else{"
 "0","  print(""climatology already proccessed"")"

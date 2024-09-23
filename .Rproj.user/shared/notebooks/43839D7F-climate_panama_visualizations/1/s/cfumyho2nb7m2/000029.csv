@@ -1,6 +1,0 @@
-"0",""
-"0","#chelsa 2.1 annual precip 0,0083333 degree orig "
-"0","chelsa2_orig<-list.files(""../data_reanalysis/CHELSA 2.1"",full.names=TRUE,pattern = "".tif"")"
-"0","chelsa2_orig<- chelsa2_orig[1:4]"
-"0","chelsa2_orig<-annual_pan(chelsa2_orig,extentMap)"
-"0","plot(chelsa2_orig)"
