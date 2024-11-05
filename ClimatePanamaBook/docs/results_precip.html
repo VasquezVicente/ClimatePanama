@@ -300,24 +300,47 @@ div.csl-indent {
 <span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(terra<span class="sc">::</span><span class="fu">values</span>(raster_object)[nearest_cell])</span>
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>extract_land <span class="ot">&lt;-</span> <span class="cf">function</span>(list_object, coordinate) {</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">nrow</span>(coordinate))</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(coordinate))) {</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    extracted_value <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(list_object, coordinate[i, ], <span class="at">na.rm =</span> <span class="cn">FALSE</span>)[<span class="dv">1</span>,<span class="dv">2</span>]</span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    result[i] <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(extracted_value), <span class="fu">find_nearest_non_na</span>(list_object, <span class="fu">as.matrix</span>(coordinate[i, ])), extracted_value)</span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="co">#stats calculation</span></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>stats<span class="ot">&lt;-</span><span class="cf">function</span>(predicted,observed){</span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>  correlation<span class="ot">&lt;-</span><span class="fu">cor.test</span>(observed,predicted)<span class="sc">$</span>estimate</span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>  rmse<span class="ot">&lt;-</span><span class="fu">sqrt</span>(<span class="fu">mean</span>((predicted<span class="sc">-</span>observed)<span class="sc">^</span><span class="dv">2</span> , <span class="at">na.rm =</span> <span class="cn">TRUE</span> ) )</span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>  bias<span class="ot">&lt;-</span> <span class="fu">mean</span>((predicted<span class="sc">-</span>observed),<span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>  mae<span class="ot">&lt;-</span>  <span class="fu">mean</span>(<span class="fu">abs</span>(predicted<span class="sc">-</span>observed), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>  done<span class="ot">&lt;-</span><span class="fu">c</span>(correlation,rmse,bias,mae)</span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(done)</span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>extract_land <span class="ot">&lt;-</span> <span class="cf">function</span>(list_object, coordinate) {</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">nrow</span>(coordinate))</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(coordinate))) {</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    extracted_value <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(list_object, coordinate[i, ], <span class="at">na.rm =</span> <span class="cn">FALSE</span>)[<span class="dv">1</span>,<span class="dv">2</span>]</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    result[i] <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(extracted_value), <span class="fu">find_nearest_non_na</span>(list_object, <span class="fu">as.matrix</span>(coordinate[i, ])), extracted_value)</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>find_nearest_non_na_id <span class="ot">&lt;-</span> <span class="cf">function</span>(raster_object, coordinate) {</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>  non_na_cells <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="sc">!</span><span class="fu">is.na</span>(terra<span class="sc">::</span><span class="fu">values</span>(raster_object)))</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>  non_na_coords <span class="ot">&lt;-</span> <span class="fu">xyFromCell</span>(raster_object, non_na_cells)</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>  dists <span class="ot">&lt;-</span> sp<span class="sc">::</span><span class="fu">spDists</span>(<span class="at">x =</span> <span class="fu">matrix</span>(coordinate, <span class="at">nrow =</span> <span class="dv">1</span>), <span class="at">y =</span> non_na_coords, <span class="at">longlat =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>  nearest_cell <span class="ot">&lt;-</span> non_na_cells[<span class="fu">which.min</span>(dists)]</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(nearest_cell)</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>extract_row_column <span class="ot">&lt;-</span> <span class="cf">function</span>(list_object, coordinate) {</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">character</span>(<span class="fu">nrow</span>(coordinate))  <span class="co"># Use character vector to store "row,col"</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(coordinate))) {</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>    extracted_value <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(list_object, coordinate[i, ], <span class="at">na.rm =</span> <span class="cn">FALSE</span>)[<span class="dv">1</span>, <span class="dv">2</span>]</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>    extracted_id <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(list_object, coordinate[i, ], <span class="at">na.rm =</span> <span class="cn">FALSE</span>,<span class="at">cells=</span><span class="cn">TRUE</span>)[<span class="dv">1</span>,<span class="dv">3</span>]</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>    result[i] <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(extracted_value), <span class="fu">find_nearest_non_na_id</span>(list_object,<span class="fu">as.matrix</span>(coordinate[i,])), extracted_id)</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="co">#stats calculation</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>stats<span class="ot">&lt;-</span><span class="cf">function</span>(predicted,observed){</span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>  correlation<span class="ot">&lt;-</span><span class="fu">cor.test</span>(observed,predicted)<span class="sc">$</span>estimate</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>  rmse<span class="ot">&lt;-</span><span class="fu">sqrt</span>(<span class="fu">mean</span>((predicted<span class="sc">-</span>observed)<span class="sc">^</span><span class="dv">2</span> , <span class="at">na.rm =</span> <span class="cn">TRUE</span> ) )</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>  bias<span class="ot">&lt;-</span> <span class="fu">mean</span>((predicted<span class="sc">-</span>observed),<span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>  mae<span class="ot">&lt;-</span>  <span class="fu">mean</span>(<span class="fu">abs</span>(predicted<span class="sc">-</span>observed), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>  done<span class="ot">&lt;-</span><span class="fu">c</span>(correlation,rmse,bias,mae)</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(done)</span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>List of data sets, their temporal extents and the location of the climatology tiffs for each of them</p>
 <div class="cell">
@@ -357,74 +380,144 @@ div.csl-indent {
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(source<span class="sc">$</span>path, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.tif$"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  annual_data <span class="ot">&lt;-</span> <span class="fu">annual_pan</span>(files, extentMap)</span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  climatologies[[source<span class="sc">$</span>dataset_name]] <span class="ot">&lt;-</span> <span class="fu">extract_land</span>(annual_data,climatologies[,<span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>])</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  jfma_data <span class="ot">=</span> <span class="fu">jfma_pan</span>(files, extentMap)</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  column_name <span class="ot">=</span> <span class="fu">paste</span>(source<span class="sc">$</span>dataset_name, <span class="st">"_jfma"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  climatologies[[column_name]] <span class="ot">=</span> <span class="fu">extract_land</span>(jfma_data, climatologies[,<span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>])</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>climatologies[[<span class="fu">paste0</span>(source<span class="sc">$</span>dataset_name,<span class="st">"_cell"</span>)]]<span class="ot">&lt;-</span><span class="fu">extract_row_column</span>(annual_data,climatologies[,<span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>])</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  jfma_data <span class="ot">=</span> <span class="fu">jfma_pan</span>(files, extentMap)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  column_name <span class="ot">=</span> <span class="fu">paste</span>(source<span class="sc">$</span>dataset_name, <span class="st">"_jfma"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  climatologies[[column_name]] <span class="ot">=</span> <span class="fu">extract_land</span>(jfma_data, climatologies[,<span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>])</span>
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(climatologies,<span class="at">file=</span><span class="st">"../tables/climatologies.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(climatologies,<span class="at">file=</span><span class="st">"../tables/climatologies.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sources_unique <span class="ot">&lt;-</span> <span class="fu">unique</span>(climatologies<span class="sc">$</span>source)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>df<span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (source <span class="cf">in</span> sources_unique) {</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  data_column <span class="ot">&lt;-</span> <span class="fu">paste0</span>(source) </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  unique_values <span class="ot">&lt;-</span> <span class="fu">nrow</span>(<span class="fu">unique</span>(climatologies[climatologies<span class="sc">$</span>source <span class="sc">==</span> source, <span class="fu">paste0</span>(source,<span class="st">"_cell"</span>)]))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Find sites with the same value</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  sites_with_same_value <span class="ot">&lt;-</span> climatologies[climatologies<span class="sc">$</span>source <span class="sc">==</span> source, ] <span class="sc">%&gt;%</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(.data[[<span class="fu">paste0</span>(source, <span class="st">"_cell"</span>)]]) <span class="sc">%&gt;%</span>                  </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">n</span>() <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span>             </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">sites =</span> <span class="fu">paste</span>(site, <span class="at">collapse =</span> <span class="st">", "</span>))</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">paste</span>(<span class="st">"Source:"</span>, source, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>))</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">paste</span>(<span class="st">"  - Unique raster cell:"</span>, unique_values, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>))</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">paste</span>(<span class="st">"  - Sites in the same cell:"</span>, sites_with_same_value<span class="sc">$</span>sites, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>))</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Source: CHELSA 1.2 
+  - Unique raster cell: 30 
+  - Sites in the same cell: BCI, BCICLEAR, BCIELECT 
+Source: CHELSA 2.1 
+  - Unique raster cell: 30 
+  - Sites in the same cell: BCI, BCICLEAR, BCIELECT 
+Source: CHELSA EarthEnv 
+  - Unique raster cell: 30 
+  - Sites in the same cell: BCI, BCICLEAR, BCIELECT 
+Source: CHPclim 
+  - Unique raster cell: 28 
+  - Sites in the same cell: BCI, BCICLEAR, BCIELECT 
+   - Sites in the same cell: CASCADAS, EMPIREHILL 
+   - Sites in the same cell: BALBOAHTS, DIABLO 
+Source: WorldClim 2.1 
+  - Unique raster cell: 30 
+  - Sites in the same cell: BCI, BCICLEAR, BCIELECT 
+Source: CHIRPS 2.0 
+  - Unique raster cell: 28 
+  - Sites in the same cell: BCI, BCICLEAR, BCIELECT 
+   - Sites in the same cell: CASCADAS, EMPIREHILL 
+   - Sites in the same cell: BALBOAHTS, DIABLO 
+Source: CHELSA-W5E5v1.0 
+  - Unique raster cell: 30 
+  - Sites in the same cell: BCI, BCICLEAR, BCIELECT 
+Source: TerraClimate 
+  - Unique raster cell: 27 
+  - Sites in the same cell: BCI, BCICLEAR, BCIELECT 
+   - Sites in the same cell: EMPIREHILL, HODGESHILL 
+   - Sites in the same cell: BALBOAFAA, BALBOAHTS, DIABLO 
+Source: PBCOR CHELSA 1.2 
+  - Unique raster cell: 27 
+  - Sites in the same cell: BCI, BCICLEAR, BCIELECT 
+   - Sites in the same cell: CASCADAS, EMPIREHILL 
+   - Sites in the same cell: BALBOAHTS, DIABLO 
+   - Sites in the same cell: CRISTOBAL, GALETASTRI 
+Source: PBCOR CHPclim 
+  - Unique raster cell: 28 
+  - Sites in the same cell: BCI, BCICLEAR, BCIELECT 
+   - Sites in the same cell: CASCADAS, EMPIREHILL 
+   - Sites in the same cell: BALBOAHTS, DIABLO 
+Source: PBCOR WorldClim 2.1 
+  - Unique raster cell: 27 
+  - Sites in the same cell: BCI, BCICLEAR, BCIELECT 
+   - Sites in the same cell: CASCADAS, EMPIREHILL 
+   - Sites in the same cell: BALBOAHTS, DIABLO 
+   - Sites in the same cell: CRISTOBAL, GALETASTRI </code></pre>
+</div>
 </div>
 <p>Compute a results data frame</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Source =</span> <span class="fu">character</span>(),</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Correlation =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">RMSE =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Bias =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">MAE =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>results_jfma <span class="ot">&lt;-</span>results</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(datasets_info)) {</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  source <span class="ot">&lt;-</span> datasets_info[[i]]<span class="sc">$</span>dataset_name</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  predicted <span class="ot">&lt;-</span> climatologies[climatologies<span class="sc">$</span>source <span class="sc">==</span> source,][[source]]</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  observed <span class="ot">&lt;-</span> climatologies[climatologies<span class="sc">$</span>source <span class="sc">==</span> source,][[<span class="st">"annual"</span>]]</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  stats_result <span class="ot">&lt;-</span> <span class="fu">stats</span>(predicted, observed)</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(results, <span class="fu">data.frame</span>(</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Source =</span> source,</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Correlation =</span> stats_result[<span class="dv">1</span>],</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">RMSE =</span> stats_result[<span class="dv">2</span>],</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">Bias =</span> stats_result[<span class="dv">3</span>],</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">MAE =</span> stats_result[<span class="dv">4</span>],</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(datasets_info)) {</span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  source <span class="ot">&lt;-</span> datasets_info[[i]]<span class="sc">$</span>dataset_name</span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  column<span class="ot">=</span><span class="fu">paste0</span>(source,<span class="st">"_jfma"</span>)</span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>  predicted <span class="ot">&lt;-</span> climatologies[climatologies<span class="sc">$</span>source <span class="sc">==</span> source,][[column]]</span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>  observed <span class="ot">&lt;-</span> climatologies[climatologies<span class="sc">$</span>source <span class="sc">==</span> source,][[<span class="st">"jfma"</span>]]</span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>  stats_result <span class="ot">&lt;-</span> <span class="fu">stats</span>(predicted, observed)</span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  results_jfma <span class="ot">&lt;-</span> <span class="fu">rbind</span>(results_jfma, <span class="fu">data.frame</span>(</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">Source =</span> source,</span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">Correlation =</span> stats_result[<span class="dv">1</span>],</span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">RMSE =</span> stats_result[<span class="dv">2</span>],</span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">Bias =</span> stats_result[<span class="dv">3</span>],</span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">MAE =</span> stats_result[<span class="dv">4</span>],</span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="co">#save both results as csv in tables folder</span></span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(results, <span class="at">file=</span> <span class="st">"../tables/spatial_variation_annual.csv"</span>)</span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(results_jfma, <span class="at">file=</span> <span class="st">"../tables/spatial_variation_jfma.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Source =</span> <span class="fu">character</span>(),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Correlation =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">RMSE =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Bias =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">MAE =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>results_jfma <span class="ot">&lt;-</span>results</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(datasets_info)) {</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  source <span class="ot">&lt;-</span> datasets_info[[i]]<span class="sc">$</span>dataset_name</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  predicted <span class="ot">&lt;-</span> climatologies[climatologies<span class="sc">$</span>source <span class="sc">==</span> source,][[source]]</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  observed <span class="ot">&lt;-</span> climatologies[climatologies<span class="sc">$</span>source <span class="sc">==</span> source,][[<span class="st">"annual"</span>]]</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  stats_result <span class="ot">&lt;-</span> <span class="fu">stats</span>(predicted, observed)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(results, <span class="fu">data.frame</span>(</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Source =</span> source,</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Correlation =</span> stats_result[<span class="dv">1</span>],</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">RMSE =</span> stats_result[<span class="dv">2</span>],</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">Bias =</span> stats_result[<span class="dv">3</span>],</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">MAE =</span> stats_result[<span class="dv">4</span>],</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(datasets_info)) {</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>  source <span class="ot">&lt;-</span> datasets_info[[i]]<span class="sc">$</span>dataset_name</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  column<span class="ot">=</span><span class="fu">paste0</span>(source,<span class="st">"_jfma"</span>)</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>  predicted <span class="ot">&lt;-</span> climatologies[climatologies<span class="sc">$</span>source <span class="sc">==</span> source,][[column]]</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>  observed <span class="ot">&lt;-</span> climatologies[climatologies<span class="sc">$</span>source <span class="sc">==</span> source,][[<span class="st">"jfma"</span>]]</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>  stats_result <span class="ot">&lt;-</span> <span class="fu">stats</span>(predicted, observed)</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>  results_jfma <span class="ot">&lt;-</span> <span class="fu">rbind</span>(results_jfma, <span class="fu">data.frame</span>(</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">Source =</span> source,</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">Correlation =</span> stats_result[<span class="dv">1</span>],</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">RMSE =</span> stats_result[<span class="dv">2</span>],</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">Bias =</span> stats_result[<span class="dv">3</span>],</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">MAE =</span> stats_result[<span class="dv">4</span>],</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="co">#save both results as csv in tables folder</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(results, <span class="at">file=</span> <span class="st">"../tables/spatial_variation_annual.csv"</span>)</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(results_jfma, <span class="at">file=</span> <span class="st">"../tables/spatial_variation_jfma.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Tables for visualizations</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>annual_table<span class="ot">&lt;-</span>results <span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">Correlation =</span> <span class="fu">round</span>(Correlation, <span class="dv">2</span>), <span class="at">RMSE=</span> <span class="fu">round</span>(RMSE,<span class="dv">0</span>),<span class="at">Bias=</span><span class="fu">round</span>(Bias,<span class="dv">0</span>),<span class="at">MAE=</span><span class="fu">round</span>(MAE,<span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"rowname"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>rowname) <span class="sc">%&gt;%</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"Gridded Climate Product"</span> <span class="ot">=</span> <span class="st">"Source"</span>) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="st">"Mean bias (mm)"</span><span class="ot">=</span><span class="st">"Bias"</span>)<span class="sc">%&gt;%</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">"Spatial variation among 31 sites in total annual precipitation"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_classic</span>(<span class="at">full_width =</span> F)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>annual_table<span class="sc">%&gt;%</span><span class="fu">save_kable</span>(<span class="st">"../plots/spatial_annual_variation.png"</span>,<span class="at">density=</span><span class="dv">900</span>)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>annual_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>annual_table<span class="ot">&lt;-</span>results <span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">Correlation =</span> <span class="fu">round</span>(Correlation, <span class="dv">2</span>), <span class="at">RMSE=</span> <span class="fu">round</span>(RMSE,<span class="dv">0</span>),<span class="at">Bias=</span><span class="fu">round</span>(Bias,<span class="dv">0</span>),<span class="at">MAE=</span><span class="fu">round</span>(MAE,<span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"rowname"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>rowname) <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"Gridded Climate Product"</span> <span class="ot">=</span> <span class="st">"Source"</span>) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="st">"Mean bias (mm)"</span><span class="ot">=</span><span class="st">"Bias"</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">"Spatial variation among 31 sites in total annual precipitation"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_classic</span>(<span class="at">full_width =</span> F)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>annual_table<span class="sc">%&gt;%</span><span class="fu">save_kable</span>(<span class="st">"../plots/spatial_annual_variation.png"</span>,<span class="at">density=</span><span class="dv">900</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>annual_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="lightable-classic table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>Spatial variation among 31 sites in total annual precipitation</caption>
@@ -520,14 +613,14 @@ div.csl-indent {
 
 
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>jfma_table<span class="ot">&lt;-</span>results_jfma <span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">Correlation =</span> <span class="fu">round</span>(Correlation, <span class="dv">2</span>), <span class="at">RMSE=</span> <span class="fu">round</span>(RMSE,<span class="dv">0</span>),<span class="at">Bias=</span><span class="fu">round</span>(Bias,<span class="dv">0</span>),<span class="at">MAE=</span><span class="fu">round</span>(MAE,<span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"rowname"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>rowname) <span class="sc">%&gt;%</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"Gridded Climate Product"</span> <span class="ot">=</span> <span class="st">"Source"</span>) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="st">"Mean bias (mm)"</span><span class="ot">=</span><span class="st">"Bias"</span>)<span class="sc">%&gt;%</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">"Spatial variation among 31 sites in January-to-April precipitation"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_classic</span>(<span class="at">full_width =</span> F)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>jfma_table<span class="sc">%&gt;%</span><span class="fu">save_kable</span>(<span class="st">"../plots/spatial_jfma_variation.png"</span>,<span class="at">density=</span><span class="dv">900</span>)</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>jfma_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>jfma_table<span class="ot">&lt;-</span>results_jfma <span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">Correlation =</span> <span class="fu">round</span>(Correlation, <span class="dv">2</span>), <span class="at">RMSE=</span> <span class="fu">round</span>(RMSE,<span class="dv">0</span>),<span class="at">Bias=</span><span class="fu">round</span>(Bias,<span class="dv">0</span>),<span class="at">MAE=</span><span class="fu">round</span>(MAE,<span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"rowname"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>rowname) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"Gridded Climate Product"</span> <span class="ot">=</span> <span class="st">"Source"</span>) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="st">"Mean bias (mm)"</span><span class="ot">=</span><span class="st">"Bias"</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">"Spatial variation among 31 sites in January-to-April precipitation"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_classic</span>(<span class="at">full_width =</span> F)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>jfma_table<span class="sc">%&gt;%</span><span class="fu">save_kable</span>(<span class="st">"../plots/spatial_jfma_variation.png"</span>,<span class="at">density=</span><span class="dv">900</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>jfma_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="lightable-classic table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>Spatial variation among 31 sites in January-to-April precipitation</caption>
@@ -628,73 +721,73 @@ div.csl-indent {
 <section id="seasonal-variation12-month" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="seasonal-variation12-month"><span class="header-section-number">5.4</span> Seasonal variation(12-month)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>month <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../tables/monthly_ground.csv"</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sites <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../tables/dfprecip.csv"</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Filter data based on conditions</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>acp38 <span class="ot">&lt;-</span> month <span class="sc">%&gt;%</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(site <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"AGUACLARA"</span>, <span class="st">"SANMIGUEL"</span>, <span class="st">"BCI"</span>, <span class="st">"PELUCA"</span>, <span class="st">"BCICLEAR"</span>, <span class="st">"GUACHA"</span>, <span class="st">"CASCADAS"</span>, <span class="st">"PEDROMIGUEL"</span>, <span class="st">"GAMBOA"</span>) <span class="sc">&amp;</span> </span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>           Year <span class="sc">&gt;=</span> <span class="dv">1970</span> <span class="sc">&amp;</span> Year <span class="sc">&lt;=</span> <span class="dv">2016</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">monthlyPrecip =</span> <span class="fu">as.numeric</span>(monthlyPrecip))</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>acp38_full_extent <span class="ot">&lt;-</span> acp38 <span class="sc">%&gt;%</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(site, Month) <span class="sc">%&gt;%</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mon_mean =</span> <span class="fu">mean</span>(monthlyPrecip, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">temporal =</span> <span class="st">"1970-2016"</span>, <span class="at">dataset_name =</span> <span class="st">"Ground"</span>)</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate climatology of the ground data for every specific temporal extent</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>acp38_ag <span class="ot">&lt;-</span> <span class="fu">lapply</span>(datasets_info, <span class="cf">function</span>(dataset) {</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  acp38 <span class="sc">%&gt;%</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Year <span class="sc">&gt;=</span> dataset<span class="sc">$</span>start_year <span class="sc">&amp;</span> Year <span class="sc">&lt;=</span> dataset<span class="sc">$</span>end_year) <span class="sc">%&gt;%</span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(site, Month) <span class="sc">%&gt;%</span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">mon_mean =</span> <span class="fu">mean</span>(monthlyPrecip, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">temporal =</span> dataset<span class="sc">$</span>temporal, <span class="at">dataset_name =</span> dataset<span class="sc">$</span>dataset_name)</span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the two data frames</span></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>acp38_ag <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(acp38_ag, acp38_full_extent)</span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate climatology of the ground data  for every specific temporal extent</span></span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Match lat and long</span></span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>acp38_ag<span class="sc">$</span>long_dd <span class="ot">&lt;-</span> sites<span class="sc">$</span>long_dd[<span class="fu">match</span>(acp38_ag<span class="sc">$</span>site, sites<span class="sc">$</span>site)]</span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>acp38_ag<span class="sc">$</span>lat_dd <span class="ot">&lt;-</span> sites<span class="sc">$</span>lat_dd[<span class="fu">match</span>(acp38_ag<span class="sc">$</span>site, sites<span class="sc">$</span>site)]</span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="do">## loop for extraction of values of raster reanalyis climatologies for specific sites and month.</span></span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(datasets_info)) {</span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>  files_list <span class="ot">&lt;-</span> <span class="fu">list.files</span>(datasets_info[[i]]<span class="sc">$</span>path, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.tif$"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>  raster_stack <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(files_list)</span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>  acp38_ag[[datasets_info[[i]]<span class="sc">$</span>column_name]] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>) {</span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>    acp38_ag[acp38_ag<span class="sc">$</span>Month <span class="sc">==</span> j, datasets_info[[i]]<span class="sc">$</span>column_name] <span class="ot">&lt;-</span> <span class="fu">extract_land</span>(raster_stack[[j]], acp38_ag[acp38_ag<span class="sc">$</span>Month <span class="sc">==</span> j, <span class="fu">c</span>(<span class="st">"long_dd"</span>, <span class="st">"lat_dd"</span>)])</span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(acp38_ag,<span class="st">"../tables/acp38_ag.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>month <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../tables/monthly_ground.csv"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>sites <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../tables/dfprecip.csv"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Filter data based on conditions</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>acp38 <span class="ot">&lt;-</span> month <span class="sc">%&gt;%</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(site <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"AGUACLARA"</span>, <span class="st">"SANMIGUEL"</span>, <span class="st">"BCI"</span>, <span class="st">"PELUCA"</span>, <span class="st">"BCICLEAR"</span>, <span class="st">"GUACHA"</span>, <span class="st">"CASCADAS"</span>, <span class="st">"PEDROMIGUEL"</span>, <span class="st">"GAMBOA"</span>) <span class="sc">&amp;</span> </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>           Year <span class="sc">&gt;=</span> <span class="dv">1970</span> <span class="sc">&amp;</span> Year <span class="sc">&lt;=</span> <span class="dv">2016</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">monthlyPrecip =</span> <span class="fu">as.numeric</span>(monthlyPrecip))</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>acp38_full_extent <span class="ot">&lt;-</span> acp38 <span class="sc">%&gt;%</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(site, Month) <span class="sc">%&gt;%</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mon_mean =</span> <span class="fu">mean</span>(monthlyPrecip, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">temporal =</span> <span class="st">"1970-2016"</span>, <span class="at">dataset_name =</span> <span class="st">"Ground"</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate climatology of the ground data for every specific temporal extent</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>acp38_ag <span class="ot">&lt;-</span> <span class="fu">lapply</span>(datasets_info, <span class="cf">function</span>(dataset) {</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  acp38 <span class="sc">%&gt;%</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Year <span class="sc">&gt;=</span> dataset<span class="sc">$</span>start_year <span class="sc">&amp;</span> Year <span class="sc">&lt;=</span> dataset<span class="sc">$</span>end_year) <span class="sc">%&gt;%</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(site, Month) <span class="sc">%&gt;%</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">mon_mean =</span> <span class="fu">mean</span>(monthlyPrecip, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">temporal =</span> dataset<span class="sc">$</span>temporal, <span class="at">dataset_name =</span> dataset<span class="sc">$</span>dataset_name)</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the two data frames</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>acp38_ag <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(acp38_ag, acp38_full_extent)</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate climatology of the ground data  for every specific temporal extent</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Match lat and long</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>acp38_ag<span class="sc">$</span>long_dd <span class="ot">&lt;-</span> sites<span class="sc">$</span>long_dd[<span class="fu">match</span>(acp38_ag<span class="sc">$</span>site, sites<span class="sc">$</span>site)]</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>acp38_ag<span class="sc">$</span>lat_dd <span class="ot">&lt;-</span> sites<span class="sc">$</span>lat_dd[<span class="fu">match</span>(acp38_ag<span class="sc">$</span>site, sites<span class="sc">$</span>site)]</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="do">## loop for extraction of values of raster reanalyis climatologies for specific sites and month.</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(datasets_info)) {</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>  files_list <span class="ot">&lt;-</span> <span class="fu">list.files</span>(datasets_info[[i]]<span class="sc">$</span>path, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.tif$"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>  raster_stack <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(files_list)</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>  acp38_ag[[datasets_info[[i]]<span class="sc">$</span>column_name]] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>) {</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    acp38_ag[acp38_ag<span class="sc">$</span>Month <span class="sc">==</span> j, datasets_info[[i]]<span class="sc">$</span>column_name] <span class="ot">&lt;-</span> <span class="fu">extract_land</span>(raster_stack[[j]], acp38_ag[acp38_ag<span class="sc">$</span>Month <span class="sc">==</span> j, <span class="fu">c</span>(<span class="st">"long_dd"</span>, <span class="st">"lat_dd"</span>)])</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(acp38_ag,<span class="st">"../tables/acp38_ag.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>After extracting values, we can run some statistics</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sites_unique <span class="ot">&lt;-</span> <span class="fu">unique</span>(acp38_ag<span class="sc">$</span>site)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>all_correlations <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="at">site =</span> <span class="fu">character</span>(),</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">dataset=</span><span class="fu">character</span>(),</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">Correlation =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                                <span class="at">RMSE =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                                <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#loop over the dataset and each of the sites for calculating the correlation and the rmse</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_along</span>(datasets_info)){</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(datasets_info[[j]]<span class="sc">$</span>dataset_name)</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(sites_unique))  {</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    temporal_range <span class="ot">&lt;-</span> datasets_info[[j]]<span class="sc">$</span>temporal</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    name <span class="ot">&lt;-</span> datasets_info[[j]]<span class="sc">$</span>dataset_name</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    col_name <span class="ot">&lt;-</span> datasets_info[[j]]<span class="sc">$</span>column_name</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    site_data <span class="ot">&lt;-</span> acp38_ag[acp38_ag<span class="sc">$</span>site <span class="sc">==</span> sites_unique[i] <span class="sc">&amp;</span> acp38_ag<span class="sc">$</span>temporal <span class="sc">==</span> temporal_range <span class="sc">&amp;</span> acp38_ag<span class="sc">$</span>dataset_name<span class="sc">==</span>name, ]</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    cor_test_result <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(site_data<span class="sc">$</span>mon_mean, <span class="fu">unlist</span>(site_data[,col_name]))<span class="sc">$</span>estimate</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    rmse<span class="ot">&lt;-</span><span class="fu">sqrt</span>(<span class="fu">mean</span>(<span class="fu">unlist</span>(site_data[,col_name])<span class="sc">-</span>site_data<span class="sc">$</span>mon_mean)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    new_row <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">site =</span> sites_unique[i], <span class="at">dataset =</span> name, <span class="at">Correlation =</span> cor_test_result, <span class="at">RMSE =</span> rmse)</span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    all_correlations <span class="ot">&lt;-</span> <span class="fu">rbind</span>(all_correlations, new_row)</span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>sites_unique <span class="ot">&lt;-</span> <span class="fu">unique</span>(acp38_ag<span class="sc">$</span>site)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>all_correlations <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="at">site =</span> <span class="fu">character</span>(),</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">dataset=</span><span class="fu">character</span>(),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">Correlation =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                                <span class="at">RMSE =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                                <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#loop over the dataset and each of the sites for calculating the correlation and the rmse</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_along</span>(datasets_info)){</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(datasets_info[[j]]<span class="sc">$</span>dataset_name)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(sites_unique))  {</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    temporal_range <span class="ot">&lt;-</span> datasets_info[[j]]<span class="sc">$</span>temporal</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    name <span class="ot">&lt;-</span> datasets_info[[j]]<span class="sc">$</span>dataset_name</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    col_name <span class="ot">&lt;-</span> datasets_info[[j]]<span class="sc">$</span>column_name</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    site_data <span class="ot">&lt;-</span> acp38_ag[acp38_ag<span class="sc">$</span>site <span class="sc">==</span> sites_unique[i] <span class="sc">&amp;</span> acp38_ag<span class="sc">$</span>temporal <span class="sc">==</span> temporal_range <span class="sc">&amp;</span> acp38_ag<span class="sc">$</span>dataset_name<span class="sc">==</span>name, ]</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    cor_test_result <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(site_data<span class="sc">$</span>mon_mean, <span class="fu">unlist</span>(site_data[,col_name]))<span class="sc">$</span>estimate</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    rmse<span class="ot">&lt;-</span><span class="fu">sqrt</span>(<span class="fu">mean</span>(<span class="fu">unlist</span>(site_data[,col_name])<span class="sc">-</span>site_data<span class="sc">$</span>mon_mean)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    new_row <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">site =</span> sites_unique[i], <span class="at">dataset =</span> name, <span class="at">Correlation =</span> cor_test_result, <span class="at">RMSE =</span> rmse)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    all_correlations <span class="ot">&lt;-</span> <span class="fu">rbind</span>(all_correlations, new_row)</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "CHELSA 1.2"
 [1] "CHELSA 2.1"
@@ -708,30 +801,30 @@ div.csl-indent {
 [1] "PBCOR CHPclim"
 [1] "PBCOR WorldClim 2.1"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>all_averages<span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">datset=</span><span class="fu">character</span>(),</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Correlation=</span> <span class="fu">numeric</span>(),</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">RMSE=</span><span class="fu">numeric</span>())</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>datasets<span class="ot">&lt;-</span> <span class="fu">unique</span>(all_correlations<span class="sc">$</span>dataset)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(datasets)){</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  dataset_name<span class="ot">=</span>datasets[i]</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  mean_correlation<span class="ot">=</span> <span class="fu">mean</span>(all_correlations[all_correlations<span class="sc">$</span>dataset<span class="sc">==</span>dataset_name,]<span class="sc">$</span>Correlation)</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  mean_rsme<span class="ot">=</span> <span class="fu">mean</span>(all_correlations[all_correlations<span class="sc">$</span>dataset<span class="sc">==</span>dataset_name,]<span class="sc">$</span>RMSE)</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  new_row<span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">dataset=</span>dataset_name,<span class="at">Correlation=</span>mean_correlation,<span class="at">RMSE=</span>mean_rsme)</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  all_averages<span class="ot">=</span> <span class="fu">rbind</span>(all_averages,new_row)</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(all_averages, <span class="at">file=</span> <span class="st">"../tables/seasonal_variation.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>all_averages<span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">datset=</span><span class="fu">character</span>(),</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Correlation=</span> <span class="fu">numeric</span>(),</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">RMSE=</span><span class="fu">numeric</span>())</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>datasets<span class="ot">&lt;-</span> <span class="fu">unique</span>(all_correlations<span class="sc">$</span>dataset)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(datasets)){</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  dataset_name<span class="ot">=</span>datasets[i]</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  mean_correlation<span class="ot">=</span> <span class="fu">mean</span>(all_correlations[all_correlations<span class="sc">$</span>dataset<span class="sc">==</span>dataset_name,]<span class="sc">$</span>Correlation)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  mean_rsme<span class="ot">=</span> <span class="fu">mean</span>(all_correlations[all_correlations<span class="sc">$</span>dataset<span class="sc">==</span>dataset_name,]<span class="sc">$</span>RMSE)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  new_row<span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">dataset=</span>dataset_name,<span class="at">Correlation=</span>mean_correlation,<span class="at">RMSE=</span>mean_rsme)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  all_averages<span class="ot">=</span> <span class="fu">rbind</span>(all_averages,new_row)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(all_averages, <span class="at">file=</span> <span class="st">"../tables/seasonal_variation.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Plot the statistics in a table</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>seasonality_table<span class="ot">&lt;-</span>all_averages<span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">Correlation =</span> <span class="fu">round</span>(Correlation, <span class="dv">2</span>), <span class="at">RMSE=</span> <span class="fu">round</span>(RMSE,<span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"rowname"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>rowname) <span class="sc">%&gt;%</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"Gridded Climate Product"</span> <span class="ot">=</span> <span class="st">"dataset"</span>)<span class="sc">%&gt;%</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">"Seasonal variation within 9 sites"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_classic</span>(<span class="at">full_width =</span> F)</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>seasonality_table<span class="sc">%&gt;%</span><span class="fu">save_kable</span>(<span class="st">"../plots/seasonal_variation.png"</span>,<span class="at">density=</span><span class="dv">900</span>)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>seasonality_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>seasonality_table<span class="ot">&lt;-</span>all_averages<span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">Correlation =</span> <span class="fu">round</span>(Correlation, <span class="dv">2</span>), <span class="at">RMSE=</span> <span class="fu">round</span>(RMSE,<span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"rowname"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>rowname) <span class="sc">%&gt;%</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"Gridded Climate Product"</span> <span class="ot">=</span> <span class="st">"dataset"</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">"Seasonal variation within 9 sites"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_classic</span>(<span class="at">full_width =</span> F)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>seasonality_table<span class="sc">%&gt;%</span><span class="fu">save_kable</span>(<span class="st">"../plots/seasonal_variation.png"</span>,<span class="at">density=</span><span class="dv">900</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>seasonality_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="lightable-classic table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>Seasonal variation within 9 sites</caption>
@@ -808,79 +901,80 @@ div.csl-indent {
 <section id="interannual-variability" class="level2" data-number="5.5">
 <h2 data-number="5.5" class="anchored" data-anchor-id="interannual-variability"><span class="header-section-number">5.5</span> Interannual variability</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a list which contains the temporal extent and location of files </span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>datasets_yearly <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"CHELSA 1.2"</span>,<span class="at">column_name=</span><span class="st">"CHELSA1.2"</span>, <span class="at">temporal =</span> <span class="st">"1979-2013"</span>,<span class="at">path =</span> <span class="st">"../data_reanalysis/CHELSA 1.2/yearly"</span>),</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"CHELSA 2.1"</span>,<span class="at">column_name=</span><span class="st">"CHELSA2.1"</span>, <span class="at">temporal =</span> <span class="st">"1981-2010"</span>, <span class="at">path =</span> <span class="st">"../data_reanalysis/CHELSA 2.1/yearly"</span>),</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"CHELSA EarthEnv"</span>,<span class="at">column_name=</span><span class="st">"CHELSA_EarthEnv"</span>, <span class="at">temporal =</span> <span class="st">"2003-2016"</span>,<span class="at">path =</span> <span class="st">"../data_reanalysis/CHELSA EarthEnv/yearly"</span>),</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"CHIRPS 2.0"</span>,<span class="at">column_name=</span><span class="st">"CHIRPS2.0"</span>,<span class="at">temporal =</span> <span class="st">"1981-2016"</span>, <span class="at">path =</span> <span class="st">"../data_reanalysis/CHIRPS 2.0/yearly"</span>),</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"CHELSA-W5E5v1.0"</span>,<span class="at">column_name=</span><span class="st">"CHELSAW5E5v1.0"</span>, <span class="at">temporal =</span> <span class="st">"1979-2016"</span>,<span class="at">path =</span> <span class="st">"../data_reanalysis/CHELSA-W5E5v1.0/yearly"</span>),</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"TerraClimate"</span>,<span class="at">column_name=</span><span class="st">"TerraClimate"</span>, <span class="at">temporal =</span> <span class="st">"1979-2016"</span>, <span class="at">path =</span> <span class="st">"../data_reanalysis/TerraClimate/yearly"</span>)</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a list which contains the temporal extent and location of files </span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>datasets_yearly <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"CHELSA 1.2"</span>,<span class="at">column_name=</span><span class="st">"CHELSA1.2"</span>, <span class="at">temporal =</span> <span class="st">"1979-2013"</span>,<span class="at">path =</span> <span class="st">"../data_reanalysis/CHELSA 1.2/yearly"</span>),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"CHELSA 2.1"</span>,<span class="at">column_name=</span><span class="st">"CHELSA2.1"</span>, <span class="at">temporal =</span> <span class="st">"1981-2010"</span>, <span class="at">path =</span> <span class="st">"../data_reanalysis/CHELSA 2.1/yearly"</span>),</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"CHELSA EarthEnv"</span>,<span class="at">column_name=</span><span class="st">"CHELSA_EarthEnv"</span>, <span class="at">temporal =</span> <span class="st">"2003-2016"</span>,<span class="at">path =</span> <span class="st">"../data_reanalysis/CHELSA EarthEnv/yearly"</span>),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"CHIRPS 2.0"</span>,<span class="at">column_name=</span><span class="st">"CHIRPS2.0"</span>,<span class="at">temporal =</span> <span class="st">"1981-2016"</span>, <span class="at">path =</span> <span class="st">"../data_reanalysis/CHIRPS 2.0/yearly"</span>),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"CHELSA-W5E5v1.0"</span>,<span class="at">column_name=</span><span class="st">"CHELSAW5E5v1.0"</span>, <span class="at">temporal =</span> <span class="st">"1979-2016"</span>,<span class="at">path =</span> <span class="st">"../data_reanalysis/CHELSA-W5E5v1.0/yearly"</span>),</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dataset_name =</span> <span class="st">"TerraClimate"</span>,<span class="at">column_name=</span><span class="st">"TerraClimate"</span>, <span class="at">temporal =</span> <span class="st">"1979-2016"</span>, <span class="at">path =</span> <span class="st">"../data_reanalysis/TerraClimate/yearly"</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Group by year and extract for each spatial point</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>acp38_year <span class="ot">&lt;-</span> <span class="fu">lapply</span>(datasets_yearly, <span class="cf">function</span>(dataset) {</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  acp38 <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Year,site)<span class="sc">%&gt;%</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">annual_precip=</span><span class="fu">sum</span>(monthlyPrecip))<span class="sc">%&gt;%</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">long_dd=</span>sites<span class="sc">$</span>long_dd[<span class="fu">match</span>(site, sites<span class="sc">$</span>site)])<span class="sc">%&gt;%</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">lat_dd=</span>sites<span class="sc">$</span>lat_dd[<span class="fu">match</span>(site,sites<span class="sc">$</span>site)])<span class="sc">%&gt;%</span> </span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">temporal =</span> dataset<span class="sc">$</span>temporal, <span class="at">dataset_name =</span> dataset<span class="sc">$</span>dataset_name)</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>})<span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_along</span>(datasets_yearly)){</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(datasets_yearly[[j]]<span class="sc">$</span>dataset_name)</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    files_list <span class="ot">&lt;-</span> <span class="fu">list.files</span>(datasets_yearly[[j]]<span class="sc">$</span>path, <span class="at">pattern =</span> <span class="st">".tif"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    raster_stack<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(files_list)</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    acp38_year[[datasets_yearly[[j]]<span class="sc">$</span>column_name]] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">unique</span>(acp38_year<span class="sc">$</span>Year)) {</span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">any</span>(<span class="fu">grepl</span>(i,<span class="fu">names</span>(raster_stack)))) {</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>        layer_index<span class="ot">&lt;-</span><span class="fu">grep</span>(i, <span class="fu">names</span>(raster_stack)) </span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>        raster_layer <span class="ot">&lt;-</span> raster_stack[[layer_index]]</span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>        acp38_year[acp38_year<span class="sc">$</span>Year<span class="sc">==</span><span class="fu">as.integer</span>(i),datasets_yearly[[j]]<span class="sc">$</span>column_name]<span class="ot">&lt;-</span> <span class="fu">extract_land</span>(raster_layer,acp38_year[acp38_year<span class="sc">$</span>Year<span class="sc">==</span><span class="fu">as.integer</span>(i),<span class="fu">c</span>(<span class="st">"long_dd"</span>,<span class="st">"lat_dd"</span>)])</span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>acp38_year <span class="ot">&lt;-</span> <span class="fu">lapply</span>(datasets_yearly, <span class="cf">function</span>(dataset) {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  acp38 <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Year,site)<span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">annual_precip=</span><span class="fu">sum</span>(monthlyPrecip))<span class="sc">%&gt;%</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">long_dd=</span>sites<span class="sc">$</span>long_dd[<span class="fu">match</span>(site, sites<span class="sc">$</span>site)])<span class="sc">%&gt;%</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">lat_dd=</span>sites<span class="sc">$</span>lat_dd[<span class="fu">match</span>(site,sites<span class="sc">$</span>site)])<span class="sc">%&gt;%</span> </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">temporal =</span> dataset<span class="sc">$</span>temporal, <span class="at">dataset_name =</span> dataset<span class="sc">$</span>dataset_name)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>})<span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_along</span>(datasets_yearly)){</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(datasets_yearly[[j]]<span class="sc">$</span>dataset_name)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    files_list <span class="ot">&lt;-</span> <span class="fu">list.files</span>(datasets_yearly[[j]]<span class="sc">$</span>path, <span class="at">pattern =</span> <span class="st">".tif"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    raster_stack<span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(files_list)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    acp38_year[[datasets_yearly[[j]]<span class="sc">$</span>column_name]] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">unique</span>(acp38_year<span class="sc">$</span>Year)) {</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">any</span>(<span class="fu">grepl</span>(i,<span class="fu">names</span>(raster_stack)))) {</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>        layer_index<span class="ot">&lt;-</span><span class="fu">grep</span>(i, <span class="fu">names</span>(raster_stack)) </span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>        raster_layer <span class="ot">&lt;-</span> raster_stack[[layer_index]]</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>        acp38_year[acp38_year<span class="sc">$</span>Year<span class="sc">==</span><span class="fu">as.integer</span>(i),datasets_yearly[[j]]<span class="sc">$</span>column_name]<span class="ot">&lt;-</span> <span class="fu">extract_land</span>(raster_layer,acp38_year[acp38_year<span class="sc">$</span>Year<span class="sc">==</span><span class="fu">as.integer</span>(i),<span class="fu">c</span>(<span class="st">"long_dd"</span>,<span class="st">"lat_dd"</span>)])</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Calculate the statistics for interannual variability per site and compute averages across 9 sites</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>sites_unique_year <span class="ot">&lt;-</span> <span class="fu">unique</span>(acp38_year<span class="sc">$</span>site)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>all_correlations_year <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="at">site =</span> <span class="fu">character</span>(),</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">dataset=</span><span class="fu">character</span>(),</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">Correlation =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                                <span class="at">RMSE =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                                <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_along</span>(datasets_yearly)){</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(datasets_yearly[[j]]<span class="sc">$</span>dataset_name)</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(sites_unique_year))  {</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    temporal_range <span class="ot">&lt;-</span> datasets_yearly[[j]]<span class="sc">$</span>temporal</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    name <span class="ot">&lt;-</span> datasets_yearly[[j]]<span class="sc">$</span>dataset_name</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    col_name <span class="ot">&lt;-</span> datasets_yearly[[j]]<span class="sc">$</span>column_name</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    site_data <span class="ot">&lt;-</span> acp38_year[acp38_year<span class="sc">$</span>site <span class="sc">==</span> sites_unique_year[i] <span class="sc">&amp;</span> acp38_year<span class="sc">$</span>temporal <span class="sc">==</span> temporal_range <span class="sc">&amp;</span> acp38_year<span class="sc">$</span>dataset_name<span class="sc">==</span>name,]</span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    cor_test_result <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(<span class="fu">as.numeric</span>(site_data<span class="sc">$</span>annual_precip), <span class="fu">as.numeric</span>(<span class="fu">unlist</span>(site_data[, col_name])), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>estimate</span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((<span class="fu">as.numeric</span>(<span class="fu">unlist</span>(site_data[, col_name])) <span class="sc">-</span> site_data<span class="sc">$</span>annual_precip)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    new_row <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">site =</span> sites_unique_year[i], <span class="at">dataset =</span> name, <span class="at">Correlation =</span> cor_test_result, <span class="at">RMSE =</span> rmse)</span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    all_correlations_year <span class="ot">&lt;-</span> <span class="fu">rbind</span>(all_correlations_year, new_row)</span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>summary_table <span class="ot">&lt;-</span> all_correlations_year <span class="sc">%&gt;%</span></span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(dataset) <span class="sc">%&gt;%</span></span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Correlation =</span> <span class="fu">mean</span>(Correlation, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">RMSE =</span> <span class="fu">mean</span>(RMSE, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>interannual_table <span class="ot">&lt;-</span> summary_table <span class="sc">%&gt;%</span></span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Correlation =</span> <span class="fu">round</span>(Correlation, <span class="dv">2</span>), <span class="at">RMSE =</span> <span class="fu">round</span>(RMSE, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"Mean Correlation"</span> <span class="ot">=</span> Correlation, <span class="st">"Mean RMSE"</span> <span class="ot">=</span> RMSE) <span class="sc">%&gt;%</span></span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"Dataset"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">"Summary of Correlation and RMSE by Dataset"</span>) </span>
-<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>interannual_table<span class="sc">%&gt;%</span> <span class="fu">kable_classic</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)<span class="sc">%&gt;%</span><span class="fu">save_kable</span>(<span class="st">"../plots/interannual_table.png"</span>,<span class="at">density=</span><span class="dv">900</span>)</span>
-<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(summary_table, <span class="at">file=</span> <span class="st">"../tables/interannual_variation.csv"</span>)</span>
-<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(acp38_year, <span class="at">file =</span> <span class="st">"../tables/acp38_year.csv"</span>)</span>
-<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>interannual_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>sites_unique_year <span class="ot">&lt;-</span> <span class="fu">unique</span>(acp38_year<span class="sc">$</span>site)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>all_correlations_year <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="at">site =</span> <span class="fu">character</span>(),</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">dataset=</span><span class="fu">character</span>(),</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">Correlation =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                                <span class="at">RMSE =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                                <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_along</span>(datasets_yearly)){</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(datasets_yearly[[j]]<span class="sc">$</span>dataset_name)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(sites_unique_year))  {</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    temporal_range <span class="ot">&lt;-</span> datasets_yearly[[j]]<span class="sc">$</span>temporal</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    name <span class="ot">&lt;-</span> datasets_yearly[[j]]<span class="sc">$</span>dataset_name</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    col_name <span class="ot">&lt;-</span> datasets_yearly[[j]]<span class="sc">$</span>column_name</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    site_data <span class="ot">&lt;-</span> acp38_year[acp38_year<span class="sc">$</span>site <span class="sc">==</span> sites_unique_year[i] <span class="sc">&amp;</span> acp38_year<span class="sc">$</span>temporal <span class="sc">==</span> temporal_range <span class="sc">&amp;</span> acp38_year<span class="sc">$</span>dataset_name<span class="sc">==</span>name,]</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    cor_test_result <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(<span class="fu">as.numeric</span>(site_data<span class="sc">$</span>annual_precip), <span class="fu">as.numeric</span>(<span class="fu">unlist</span>(site_data[, col_name])), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>estimate</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((<span class="fu">as.numeric</span>(<span class="fu">unlist</span>(site_data[, col_name])) <span class="sc">-</span> site_data<span class="sc">$</span>annual_precip)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    new_row <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">site =</span> sites_unique_year[i], <span class="at">dataset =</span> name, <span class="at">Correlation =</span> cor_test_result, <span class="at">RMSE =</span> rmse)</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    all_correlations_year <span class="ot">&lt;-</span> <span class="fu">rbind</span>(all_correlations_year, new_row)</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>summary_table <span class="ot">&lt;-</span> all_correlations_year <span class="sc">%&gt;%</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(dataset) <span class="sc">%&gt;%</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Correlation =</span> <span class="fu">mean</span>(Correlation, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">RMSE =</span> <span class="fu">mean</span>(RMSE, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>interannual_table <span class="ot">&lt;-</span> summary_table <span class="sc">%&gt;%</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Correlation =</span> <span class="fu">round</span>(Correlation, <span class="dv">2</span>), <span class="at">RMSE =</span> <span class="fu">round</span>(RMSE, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"Mean Correlation"</span> <span class="ot">=</span> Correlation, <span class="st">"Mean RMSE"</span> <span class="ot">=</span> RMSE) <span class="sc">%&gt;%</span></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"Dataset"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">"Summary of Correlation and RMSE by Dataset"</span>)<span class="sc">%&gt;%</span> <span class="fu">kable_classic</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>interannual_table<span class="sc">%&gt;%</span><span class="fu">save_kable</span>(<span class="st">"../plots/interannual_table.png"</span>,<span class="at">density=</span><span class="dv">900</span>)</span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(summary_table, <span class="at">file=</span> <span class="st">"../tables/interannual_variation.csv"</span>)</span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(acp38_year, <span class="at">file =</span> <span class="st">"../tables/acp38_year.csv"</span>)</span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>interannual_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

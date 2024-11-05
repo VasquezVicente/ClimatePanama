@@ -67,6 +67,8 @@ find_nearest_non_na <- function(raster_object, coordinate) {
   return(terra::values(raster_object)[nearest_cell])
 }
 
+
+
 extract_land <- function(list_object, coordinate) {
   result <- numeric(nrow(coordinate))
   for (i in seq_len(nrow(coordinate))) {
@@ -75,6 +77,27 @@ extract_land <- function(list_object, coordinate) {
   }
   return(result)
 }
+
+find_nearest_non_na_id <- function(raster_object, coordinate) {
+  non_na_cells <- which(!is.na(terra::values(raster_object)))
+  non_na_coords <- xyFromCell(raster_object, non_na_cells)
+  dists <- sp::spDists(x = matrix(coordinate, nrow = 1), y = non_na_coords, longlat = TRUE)
+  nearest_cell <- non_na_cells[which.min(dists)]
+  return(nearest_cell)
+}
+
+extract_row_column <- function(list_object, coordinate) {
+  result <- character(nrow(coordinate))  # Use character vector to store "row,col"
+  for (i in seq_len(nrow(coordinate))) {
+    extracted_value <- terra::extract(list_object, coordinate[i, ], na.rm = FALSE)[1, 2]
+    extracted_id <- terra::extract(list_object, coordinate[i, ], na.rm = FALSE,cells=TRUE)[1,3]
+    
+    result[i] <- ifelse(is.na(extracted_value), find_nearest_non_na_id(list_object,as.matrix(coordinate[i,])), extracted_id)
+    
+  }
+  return(result)
+}
+
 
 #stats calculation
 stats<-function(predicted,observed){
@@ -129,14 +152,38 @@ for (source in datasets_info) {
   files <- list.files(source$path, pattern = "\\.tif$", full.names = TRUE)
   annual_data <- annual_pan(files, extentMap)
   climatologies[[source$dataset_name]] <- extract_land(annual_data,climatologies[,3:2])
+climatologies[[paste0(source$dataset_name,"_cell")]]<-extract_row_column(annual_data,climatologies[,3:2])
   
   jfma_data = jfma_pan(files, extentMap)
   column_name = paste(source$dataset_name, "_jfma", sep = "")
   
   climatologies[[column_name]] = extract_land(jfma_data, climatologies[,3:2])
+
 }
 
 write.csv(climatologies,file="../tables/climatologies.csv")
+```
+
+```{r}
+
+sources_unique <- unique(climatologies$source)
+df<- data.frame()
+
+for (source in sources_unique) {
+  data_column <- paste0(source) 
+  unique_values <- nrow(unique(climatologies[climatologies$source == source, paste0(source,"_cell")]))
+
+  # Find sites with the same value
+  sites_with_same_value <- climatologies[climatologies$source == source, ] %>%
+    group_by(.data[[paste0(source, "_cell")]]) %>%                  
+    filter(n() > 1) %>%             
+    summarize(sites = paste(site, collapse = ", "))
+  cat(paste("Source:", source, "\n"))
+  cat(paste("  - Unique raster cell:", unique_values, "\n"))
+  cat(paste("  - Sites in the same cell:", sites_with_same_value$sites, "\n"))
+  
+}
+
 ```
 
 Compute a results data frame
@@ -395,8 +442,9 @@ interannual_table <- summary_table %>%
   mutate(Correlation = round(Correlation, 2), RMSE = round(RMSE, 0)) %>%
   rename("Mean Correlation" = Correlation, "Mean RMSE" = RMSE) %>%
   rownames_to_column(var = "Dataset") %>%
-  kbl(caption = "Summary of Correlation and RMSE by Dataset") 
-interannual_table%>% kable_classic(full_width = FALSE)%>%save_kable("../plots/interannual_table.png",density=900)
+  kbl(caption = "Summary of Correlation and RMSE by Dataset")%>% kable_classic(full_width = FALSE)
+
+interannual_table%>%save_kable("../plots/interannual_table.png",density=900)
 write.csv(summary_table, file= "../tables/interannual_variation.csv")
 write.csv(acp38_year, file = "../tables/acp38_year.csv")
 interannual_table
