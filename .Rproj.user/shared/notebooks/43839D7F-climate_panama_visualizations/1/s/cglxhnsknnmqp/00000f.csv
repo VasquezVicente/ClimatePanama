@@ -5,6 +5,8 @@
 "2","terra 1.7.65
 "
 "0","library(ggplot2)"
+"2","Need help? Try Stackoverflow: https://stackoverflow.com/tags/ggplot2
+"
 "0","library(rasterVis)"
 "2","Loading required package: lattice
 "
@@ -30,8 +32,7 @@ Attaching package: ‘dplyr’
 "
 "0","library(basemaps)"
 "0","library(sf)"
-"2","Linking to GEOS 3.11.2, GDAL 3.6.2, PROJ 9.2.0; sf_use_s2() is
-TRUE
+"2","Linking to GEOS 3.11.2, GDAL 3.6.2, PROJ 9.2.0; sf_use_s2() is TRUE
 "
 "0","library(gridExtra)"
 "2","

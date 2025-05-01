@@ -2,6 +2,9 @@
 *.tiff
 *.RData
 *.Rhistory
+*.docx
+*.zip
+
 
 # Ignore the following directories and files
 data_reanalysis/
