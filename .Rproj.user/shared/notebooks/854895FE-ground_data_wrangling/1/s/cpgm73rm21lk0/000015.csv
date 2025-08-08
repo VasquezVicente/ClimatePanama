@@ -1,4 +1,0 @@
-"0",""
-"0","ggplot(precipitation %>% filter(site %in% sites[25:32]), "
-"0","       aes(x = year, y = annual, group = site,color=site,shape=gap_fill)) + geom_line() + geom_point(size=3) +"
-"0","  labs(x = ""Year"", y = ""Annual Precipitation (mm)"", color = ""Site"")"

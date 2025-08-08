@@ -1,8 +1,0 @@
-"0","gap_fill_true <- sum(precipitation$gap_fill == TRUE)"
-"0","gap_fill_false <- sum(precipitation$gap_fill == FALSE)"
-"0","percentage_gap_fill <- (gap_fill_true / (gap_fill_true + gap_fill_false)) * 100"
-"0","percentage_gap_fill"
-"1","[1]"
-"1"," 9.175532"
-"1","
-"

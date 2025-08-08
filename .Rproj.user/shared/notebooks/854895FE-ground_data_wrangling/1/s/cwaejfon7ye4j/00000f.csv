@@ -1,2 +1,0 @@
-"0","long_term_averages<-precipitation_data%>%group_by(site)%>%"
-"0","summarize(longterm_mean_annual= mean(annualPrecip),longterm_mean_jfma=mean(jfmaPrecip))"

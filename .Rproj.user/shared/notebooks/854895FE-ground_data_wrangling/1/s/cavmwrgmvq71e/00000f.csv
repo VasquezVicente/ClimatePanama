@@ -1,6 +1,0 @@
-"0","nstations<- monthlyPrecipData %>% group_by(year)%>% filter(!is.na(monthly_precip))%>%summarize(nstations= n_distinct(site))"
-"0",""
-"0","ggplot(nstations, aes(x=year,y=nstations))+"
-"0","  geom_point()+"
-"0","  theme_bw()+"
-"0","  labs(x=""Year"", y=""Number of stations"")"

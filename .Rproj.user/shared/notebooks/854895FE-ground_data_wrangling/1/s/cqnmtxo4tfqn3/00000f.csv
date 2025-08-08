@@ -1,1 +1,0 @@
-"0","precipitation_data_subset<- precipitation_data %>% filter(site!=""GALETA"") "
