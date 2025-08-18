@@ -135,6 +135,7 @@ Loop through each dataset and calculate climatology
 ```{r}
 #| warning: false
 #| output: false
+setwd("C:/Users/Vicente/repo/ClimatePanama/ClimatePanamaBook")
 climatologies <- datasets_info %>%
   map_df(function(info) {
     calculate_climatology(info$start_year, info$end_year, data_ground) %>%
@@ -148,15 +149,14 @@ climatologies <- datasets_info %>%
 
 
 #extract the values at the coordinates for climatologies
+
 for (source in datasets_info) {
   files <- list.files(source$path, pattern = "\\.tif$", full.names = TRUE)
   annual_data <- annual_pan(files, extentMap)
   climatologies[[source$dataset_name]] <- extract_land(annual_data,climatologies[,3:2])
-climatologies[[paste0(source$dataset_name,"_cell")]]<-extract_row_column(annual_data,climatologies[,3:2])
-  
+  climatologies[[paste0(source$dataset_name,"_cell")]]<-extract_row_column(annual_data,climatologies[,3:2])
   jfma_data = jfma_pan(files, extentMap)
   column_name = paste(source$dataset_name, "_jfma", sep = "")
-  
   climatologies[[column_name]] = extract_land(jfma_data, climatologies[,3:2])
 
 }
@@ -189,6 +189,10 @@ for (source in sources_unique) {
 Compute a results data frame
 
 ```{r}
+setwd("C:/Users/Vicente/repo/ClimatePanama/ClimatePanamaBook")
+## reruning without BCIELECT
+climatologies<- climatologies %>% filter(site != 'BCIELECT')
+
 results <- data.frame(
   Source = character(),
   Correlation = numeric(),
@@ -209,8 +213,8 @@ for (i in 1:length(datasets_info)) {
     Source = source,
     Correlation = stats_result[1],
     RMSE = stats_result[2],
-    Bias = stats_result[3],
     MAE = stats_result[4],
+    Bias = stats_result[3],
     stringsAsFactors = FALSE
   ))
 }
@@ -226,11 +230,22 @@ for (i in 1:length(datasets_info)) {
     Source = source,
     Correlation = stats_result[1],
     RMSE = stats_result[2],
-    Bias = stats_result[3],
     MAE = stats_result[4],
+    Bias = stats_result[3],
     stringsAsFactors = FALSE
   ))
 }
+
+results$Source[results$Source == "CHIRPS 2.0"] <- "CHIRPS v2.0"
+results$Source[results$Source == "CHPclim"] <- "CHPclim v1.0"
+results_jfma$Source[results_jfma$Source == "CHIRPS 2.0"] <- "CHIRPS v2.0"
+results_jfma$Source[results_jfma$Source == "CHPclim"] <- "CHPclim v1.0"
+
+order_vec <- c("CHELSA 1.2","CHELSA 2.1","CHELSA EarthEnv","CHELSA-W5E5v1.0","CHIRPS v2.0","CHPclim v1.0",
+  "TerraClimate","WorldClim 2.1","PBCOR CHELSA 1.2","PBCOR CHPclim","PBCOR WorldClim 2.1")
+
+results <- results[match(order_vec, results$Source), ]
+results_jfma <- results_jfma[match(order_vec, results_jfma$Source), ]
 
 #save both results as csv in tables folder
 write.csv(results, file= "../tables/spatial_variation_annual.csv")

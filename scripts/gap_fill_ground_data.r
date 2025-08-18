@@ -3,11 +3,8 @@
 # WORK IN PROGRESS
 
 rm(list=ls())
-library(tidyverse)
-library(lme4)
-library(ggplot2)
-library(mice) # for imputation 
-
+library(pacman)
+p_load(tidyverse, lme4, ggplot2, mice)
 
 #Auxiliary objects#
 WORKINGDIRECTORY<-getwd()

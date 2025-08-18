@@ -56,17 +56,31 @@ Calculate the response variables: Annual precipitation and January through April
 
 ```{r}
 #| message: false
-precipitation_data<- monthlyPrecipData %>% 
-              filter(!is.na(monthly_precip))%>%
-              group_by(site, year)%>%filter(n() == 12)%>%
-              summarize(annualPrecip = sum(monthly_precip, na.rm = TRUE),
-              jfmaPrecip = sum(monthly_precip[month %in% c(1,2,3,4)], na.rm = TRUE))
+
+#filter out BCIELECT
+GAPBCI <- monthlyPrecipData %>%
+  filter(site == "BCIELECT") %>%
+  filter((year == 1970) | (year == 1971 & month <= 3)
+  )%>% mutate(site="BCICLEAR")
+
+precipitation_data<- bind_rows(monthlyPrecipData,GAPBCI)
+
+
+precip_annual<- precipitation_data %>% filter(!is.na(monthly_precip))%>%group_by(site, year)%>% filter(n() == 12)%>%
+              summarize(annualPrecip = sum(monthly_precip, na.rm = TRUE))
+
+precip_jfma <- precipitation_data %>% filter(month %in% c(1,2,3,4)) %>% filter(!is.na(monthly_precip))%>% group_by(site,year)%>% filter(n()==4) %>% summarize(jfmaPrecip=sum(monthly_precip, na.rm = TRUE))
+
+
+combined<- left_join(precip_annual,precip_jfma, by= c('site','year'))
+
+
 ```
 
 Calculate long term averages per site
 
 ```{r}
-long_term_averages<-precipitation_data%>%group_by(site)%>%
+long_term_averages<-combined%>%group_by(site)%>%
 summarize(longterm_mean_annual= mean(annualPrecip),longterm_mean_jfma=mean(jfmaPrecip))
 ```
 
@@ -74,7 +88,7 @@ How many years of actual data does every site has?
 
 ```{r}
 #| warning: false
-nyears= precipitation_data %>% filter(year>=1970 & year<=2016)%>%
+nyears= combined %>% filter(year>=1970 & year<=2016)%>%
  group_by(site) %>% tally() %>% 
  rename(nyears= n)%>% full_join(long_term_averages,by='site')
 
@@ -93,7 +107,7 @@ There is met stations located very close by to each other. We need to ensure tha
 An example is the Barro Colorado Island: which has 3 MET stations. Two of them are located within meters of each other. We will run some basic metrics to ensure this arent replicated stations.
 
 ```{r}
-BCI_subset<- precipitation_data%>% 
+BCI_subset<- combined%>% 
 filter(site=="BCI"|site=="BCICLEAR"|site=="BCIELECT")%>%
 filter(year>=1970 & year<=2016)
 
@@ -112,14 +126,14 @@ geom_line()+theme_bw()+labs(x="Year", y="Annual Precipitation (mm)")
 
 ```
 
-*The metadata indicates that both BCICLEAR and BCIELECT are both different sensor. BCICLEAR is an standard rain gauge that is emptied manually by technicians. On the other hand, BCIELECT is a electronic tipping bucket showing 356 mm less annual mean precipitation. Finally, the BCI station managed by the Panama canal authority is placed on the Gatun lake shore. We will keep the three sites*
+*The metadata indicates that both BCICLEAR and BCIELECT are both different sensor. BCICLEAR is an standard rain gauge that is emptied manually by technicians. On the other hand, BCIELECT is a electronic tipping bucket showing 356 mm less annual mean precipitation. Finally, the BCI station managed by the Panama canal authority is placed on the Gatun lake shore. We will keep only the BCI and BCICLEAR. 
 
 The GALETA station appears on the ACP monthly summary and it is also listed in the STRI datasets, here given the name of GALETASTRI. Are this different sensors? or repeated sets of data.
 
 ```{r}
 
 #GALETA AND GALETASTRI
-GALETA_subset<- precipitation_data%>% filter(site=="GALETA"|site=="GALETASTRI")%>%
+GALETA_subset<- combined%>% filter(site=="GALETA"|site=="GALETASTRI")%>%
 filter(year>=1970 & year<=2016)
 ggplot(GALETA_subset, aes(x=year, y=annualPrecip, color=site))+geom_line()+theme_bw()+labs(x="Year", y="Annual Precipitation (mm)")
 #anova
@@ -133,12 +147,12 @@ summary(anova_galeta)
 print(tukey_results_galeta)
 ```
 
-*The GALETA case shows very little to no difference in the yearly averages for most of the years. The metadata of GALETASTRI mentions the use of Limon Bay to fill in the gaps and the Horizontal version of the ACP monthly summaries lists GALETA as 'GALETA(STRI)'. We conclude that the sets of data are repeated. We will keep GALETASTRI since this monthly summaries were calculated in this study*
+*The GALETA case shows very little to no difference in the yearly averages for most of the years. The metadata of GALETASTRI mentions the use of Limon Bay to fill in the gaps and the Horizontal version of the ACP monthly summaries lists GALETA as 'GALETA(STRI)'. We conclude that the sets of data are repeated. We will keep GALETASTRI since the monthly summaries were calculated in this study*
 
-Remove the GALETA station
+Remove the GALETA station and BCIELECT stations.
 
 ```{r}
-precipitation_data_subset<- precipitation_data %>% filter(site!="GALETA") 
+precipitation_data_subset<- combined %>% filter(!site %in% c("GALETA","BCIELECT")) 
 ```
 
 Filter the stations with more than 30 years of data between 1970 and 2016

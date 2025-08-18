@@ -6,11 +6,12 @@
 *.zip
 
 
+
 # Ignore the following directories and files
 data_reanalysis/
 elevation/
 .Rproj.user/
 data_ground/met_data/STRI_data/
-
+.Rhistory
 
 .Rproj.user
