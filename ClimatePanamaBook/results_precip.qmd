@@ -17,12 +17,12 @@ library(kableExtra)
 library(purrr)
 library(sp)
 library(tibble)
+library(ggplot2)
 ```
 
 Read in files for the analysis
 
 ```{r}
-setwd("C:/Users/Vicente/repo/ClimatePanama/ClimatePanamaBook")
 # Read in the data
 data_ground<- read.csv("../tables/precipitation.csv")
 striStation<- read.csv("../tables/stri_met_stations.csv")
@@ -37,11 +37,12 @@ extentMap  <- terra::ext(c(-80.2,-79.4, 8.8, 9.5))
 ```{r}
 calculate_climatology<- function(minyear,maxyear,data){
     climatology<- data %>% 
-        dplyr::select(year,site,annual,jfma)%>%
+        dplyr::select(year,site,annual,jfma,gap_fill)%>%
         filter(year>=minyear&year<=maxyear)%>%
         group_by(site)%>%
         summarize(annual=mean(annual,na.rm=TRUE),
-                jfma=mean(jfma,na.rm=TRUE))
+                jfma=mean(jfma,na.rm=TRUE),
+                gapFill_percentage = mean(gap_fill, na.rm = TRUE) * 100)
     return(climatology)
 }
 
@@ -135,7 +136,6 @@ Loop through each dataset and calculate climatology
 ```{r}
 #| warning: false
 #| output: false
-setwd("C:/Users/Vicente/repo/ClimatePanama/ClimatePanamaBook")
 climatologies <- datasets_info %>%
   map_df(function(info) {
     calculate_climatology(info$start_year, info$end_year, data_ground) %>%
@@ -145,7 +145,7 @@ climatologies <- datasets_info %>%
   mutate(latitude = ifelse(is.na(latitude.x), latitude.y, latitude.x),
          longitude = ifelse(is.na(longitude.x), longitude.y, longitude.x),
          longitude = -1 * abs(longitude)) %>%
-  dplyr::select(site, latitude, longitude, source, annual, jfma, Elevation)
+  dplyr::select(site, latitude, longitude, source, annual, jfma, Elevation, gapFill_percentage)
 
 
 #extract the values at the coordinates for climatologies
@@ -162,6 +162,25 @@ for (source in datasets_info) {
 }
 
 write.csv(climatologies,file="../tables/climatologies.csv")
+```
+
+#Briefly analyse the gap filling effect on site and Gridded dataset
+```{r}
+ggplot(climatologies, aes(x = site, y = gapFill_percentage)) +
+  geom_boxplot() +
+  labs(title = "Gap Fill Percentage by Site",
+       x = "Site",
+       y = "Gap Fill Percentage (%)") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(climatologies, aes(x = source, y = gapFill_percentage)) +
+  geom_boxplot() +
+  labs(title = "Gap Fill Percentage by Site",
+       x = "Source",
+       y = "Gap Fill Percentage (%)") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 ```{r}
@@ -189,10 +208,6 @@ for (source in sources_unique) {
 Compute a results data frame
 
 ```{r}
-setwd("C:/Users/Vicente/repo/ClimatePanama/ClimatePanamaBook")
-## reruning without BCIELECT
-climatologies<- climatologies %>% filter(site != 'BCIELECT')
-
 results <- data.frame(
   Source = character(),
   Correlation = numeric(),

@@ -283,20 +283,31 @@ div.csl-indent {
 </div>
 <p>Calculate the response variables: Annual precipitation and January through April precipitation. We only keep the years that have 12 months of data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>precipitation_data<span class="ot">&lt;-</span> monthlyPrecipData <span class="sc">%&gt;%</span> </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>              <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(monthly_precip))<span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">group_by</span>(site, year)<span class="sc">%&gt;%</span><span class="fu">filter</span>(<span class="fu">n</span>() <span class="sc">==</span> <span class="dv">12</span>)<span class="sc">%&gt;%</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarize</span>(<span class="at">annualPrecip =</span> <span class="fu">sum</span>(monthly_precip, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">jfmaPrecip =</span> <span class="fu">sum</span>(monthly_precip[month <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>)], <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#filter out BCIELECT</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>GAPBCI <span class="ot">&lt;-</span> monthlyPrecipData <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(site <span class="sc">==</span> <span class="st">"BCIELECT"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>((year <span class="sc">==</span> <span class="dv">1970</span>) <span class="sc">|</span> (year <span class="sc">==</span> <span class="dv">1971</span> <span class="sc">&amp;</span> month <span class="sc">&lt;=</span> <span class="dv">3</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">site=</span><span class="st">"BCICLEAR"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>precipitation_data<span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(monthlyPrecipData,GAPBCI)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>precip_annual<span class="ot">&lt;-</span> precipitation_data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(monthly_precip))<span class="sc">%&gt;%</span><span class="fu">group_by</span>(site, year)<span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">n</span>() <span class="sc">==</span> <span class="dv">12</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarize</span>(<span class="at">annualPrecip =</span> <span class="fu">sum</span>(monthly_precip, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>precip_jfma <span class="ot">&lt;-</span> precipitation_data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(month <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>)) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(monthly_precip))<span class="sc">%&gt;%</span> <span class="fu">group_by</span>(site,year)<span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">n</span>()<span class="sc">==</span><span class="dv">4</span>) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">jfmaPrecip=</span><span class="fu">sum</span>(monthly_precip, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>combined<span class="ot">&lt;-</span> <span class="fu">left_join</span>(precip_annual,precip_jfma, <span class="at">by=</span> <span class="fu">c</span>(<span class="st">'site'</span>,<span class="st">'year'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Calculate long term averages per site</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>long_term_averages<span class="ot">&lt;-</span>precipitation_data<span class="sc">%&gt;%</span><span class="fu">group_by</span>(site)<span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>long_term_averages<span class="ot">&lt;-</span>combined<span class="sc">%&gt;%</span><span class="fu">group_by</span>(site)<span class="sc">%&gt;%</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summarize</span>(<span class="at">longterm_mean_annual=</span> <span class="fu">mean</span>(annualPrecip),<span class="at">longterm_mean_jfma=</span><span class="fu">mean</span>(jfmaPrecip))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>How many years of actual data does every site has?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>nyears<span class="ot">=</span> precipitation_data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year<span class="sc">&gt;=</span><span class="dv">1970</span> <span class="sc">&amp;</span> year<span class="sc">&lt;=</span><span class="dv">2016</span>)<span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>nyears<span class="ot">=</span> combined <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year<span class="sc">&gt;=</span><span class="dv">1970</span> <span class="sc">&amp;</span> year<span class="sc">&lt;=</span><span class="dv">2016</span>)<span class="sc">%&gt;%</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">group_by</span>(site) <span class="sc">%&gt;%</span> <span class="fu">tally</span>() <span class="sc">%&gt;%</span> </span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">rename</span>(<span class="at">nyears=</span> n)<span class="sc">%&gt;%</span> <span class="fu">full_join</span>(long_term_averages,<span class="at">by=</span><span class="st">'site'</span>)</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -316,7 +327,7 @@ div.csl-indent {
 <p>There is met stations located very close by to each other. We need to ensure that the set of data aren’t repeated.</p>
 <p>An example is the Barro Colorado Island: which has 3 MET stations. Two of them are located within meters of each other. We will run some basic metrics to ensure this arent replicated stations.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>BCI_subset<span class="ot">&lt;-</span> precipitation_data<span class="sc">%&gt;%</span> </span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>BCI_subset<span class="ot">&lt;-</span> combined<span class="sc">%&gt;%</span> </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(site<span class="sc">==</span><span class="st">"BCI"</span><span class="sc">|</span>site<span class="sc">==</span><span class="st">"BCICLEAR"</span><span class="sc">|</span>site<span class="sc">==</span><span class="st">"BCIELECT"</span>)<span class="sc">%&gt;%</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(year<span class="sc">&gt;=</span><span class="dv">1970</span> <span class="sc">&amp;</span> year<span class="sc">&lt;=</span><span class="dv">2016</span>)</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -332,14 +343,14 @@ div.csl-indent {
   site     mean_annual_precip sd_annual_precip     n
   &lt;chr&gt;                 &lt;dbl&gt;            &lt;dbl&gt; &lt;int&gt;
 1 BCI                   2538.             590.    47
-2 BCICLEAR              2649.             562.    45
+2 BCICLEAR              2653.             556.    47
 3 BCIELECT              2292.             538.    47</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>             Df   Sum Sq Mean Sq F value Pr(&gt;F)   
-site          2  3077427 1538713   4.842 0.0093 **
-Residuals   136 43215268  317759                  
+<pre><code>             Df   Sum Sq Mean Sq F value  Pr(&gt;F)   
+site          2  3184805 1592402   5.046 0.00767 **
+Residuals   138 43551185  315588                   
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
@@ -352,9 +363,9 @@ Fit: aov(formula = annualPrecip ~ site, data = BCI_subset)
 
 $site
                        diff       lwr       upr     p adj
-BCICLEAR-BCI       110.2735 -168.3210 388.86788 0.6172843
-BCIELECT-BCI      -245.9634 -521.5129  29.58622 0.0905150
-BCIELECT-BCICLEAR -356.2368 -634.8312 -77.64239 0.0081833</code></pre>
+BCICLEAR-BCI       114.2297 -160.3330 388.79235 0.5871126
+BCIELECT-BCI      -245.9634 -520.5260  28.59931 0.0890147
+BCIELECT-BCICLEAR -360.1930 -634.7557 -85.63037 0.0064297</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(BCI_subset, <span class="fu">aes</span>(<span class="at">x=</span>year, <span class="at">y=</span>annualPrecip, <span class="at">color=</span>site))<span class="sc">+</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_line</span>()<span class="sc">+</span><span class="fu">theme_bw</span>()<span class="sc">+</span><span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Year"</span>, <span class="at">y=</span><span class="st">"Annual Precipitation (mm)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -362,11 +373,11 @@ BCIELECT-BCICLEAR -356.2368 -634.8312 -77.64239 0.0081833</code></pre>
 <p><img src="ground_data_wrangling_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><em>The metadata indicates that both BCICLEAR and BCIELECT are both different sensor. BCICLEAR is an standard rain gauge that is emptied manually by technicians. On the other hand, BCIELECT is a electronic tipping bucket showing 356 mm less annual mean precipitation. Finally, the BCI station managed by the Panama canal authority is placed on the Gatun lake shore. We will keep the three sites</em></p>
+<p>*The metadata indicates that both BCICLEAR and BCIELECT are both different sensor. BCICLEAR is an standard rain gauge that is emptied manually by technicians. On the other hand, BCIELECT is a electronic tipping bucket showing 356 mm less annual mean precipitation. Finally, the BCI station managed by the Panama canal authority is placed on the Gatun lake shore. We will keep only the BCI and BCICLEAR.</p>
 <p>The GALETA station appears on the ACP monthly summary and it is also listed in the STRI datasets, here given the name of GALETASTRI. Are this different sensors? or repeated sets of data.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#GALETA AND GALETASTRI</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>GALETA_subset<span class="ot">&lt;-</span> precipitation_data<span class="sc">%&gt;%</span> <span class="fu">filter</span>(site<span class="sc">==</span><span class="st">"GALETA"</span><span class="sc">|</span>site<span class="sc">==</span><span class="st">"GALETASTRI"</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>GALETA_subset<span class="ot">&lt;-</span> combined<span class="sc">%&gt;%</span> <span class="fu">filter</span>(site<span class="sc">==</span><span class="st">"GALETA"</span><span class="sc">|</span>site<span class="sc">==</span><span class="st">"GALETASTRI"</span>)<span class="sc">%&gt;%</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(year<span class="sc">&gt;=</span><span class="dv">1970</span> <span class="sc">&amp;</span> year<span class="sc">&lt;=</span><span class="dv">2016</span>)</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(GALETA_subset, <span class="fu">aes</span>(<span class="at">x=</span>year, <span class="at">y=</span>annualPrecip, <span class="at">color=</span>site))<span class="sc">+</span><span class="fu">geom_line</span>()<span class="sc">+</span><span class="fu">theme_bw</span>()<span class="sc">+</span><span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Year"</span>, <span class="at">y=</span><span class="st">"Annual Precipitation (mm)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -404,10 +415,10 @@ $site
 GALETASTRI-GALETA -3.957544 -245.751 237.8359 0.9741082</code></pre>
 </div>
 </div>
-<p><em>The GALETA case shows very little to no difference in the yearly averages for most of the years. The metadata of GALETASTRI mentions the use of Limon Bay to fill in the gaps and the Horizontal version of the ACP monthly summaries lists GALETA as ‘GALETA(STRI)’. We conclude that the sets of data are repeated. We will keep GALETASTRI since this monthly summaries were calculated in this study</em></p>
-<p>Remove the GALETA station</p>
+<p><em>The GALETA case shows very little to no difference in the yearly averages for most of the years. The metadata of GALETASTRI mentions the use of Limon Bay to fill in the gaps and the Horizontal version of the ACP monthly summaries lists GALETA as ‘GALETA(STRI)’. We conclude that the sets of data are repeated. We will keep GALETASTRI since the monthly summaries were calculated in this study</em></p>
+<p>Remove the GALETA station and BCIELECT stations.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>precipitation_data_subset<span class="ot">&lt;-</span> precipitation_data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(site<span class="sc">!=</span><span class="st">"GALETA"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>precipitation_data_subset<span class="ot">&lt;-</span> combined <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span>site <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"GALETA"</span>,<span class="st">"BCIELECT"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Filter the stations with more than 30 years of data between 1970 and 2016</p>
 <div class="cell">
@@ -416,12 +427,12 @@ GALETASTRI-GALETA -3.957544 -245.751 237.8359 0.9741082</code></pre>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(precipitation_data_subset<span class="sc">$</span>site)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "AGUACLARA"   "ALHAJUELA"   "BALBOAFAA"   "BALBOAHTS"   "BCI"        
- [6] "BCICLEAR"    "BCIELECT"    "CANDELARIA"  "CANO"        "CANONES"    
-[11] "CASCADAS"    "CHICO"       "CHORRO"      "CIENTO"      "CRISTOBAL"  
-[16] "DIABLO"      "EMPIREHILL"  "ESCANDALOSA" "GALETASTRI"  "GAMBOA"     
-[21] "GATUN"       "GUACHA"      "HODGESHILL"  "HUMEDAD"     "MONTELIRIO" 
-[26] "PEDROMIGUEL" "PELUCA"      "RAICES"      "SALAMANCA"   "SANMIGUEL"  
-[31] "SANTAROSA"   "ZANGUENGA"  </code></pre>
+ [6] "BCICLEAR"    "CANDELARIA"  "CANO"        "CANONES"     "CASCADAS"   
+[11] "CHICO"       "CHORRO"      "CIENTO"      "CRISTOBAL"   "DIABLO"     
+[16] "EMPIREHILL"  "ESCANDALOSA" "GALETASTRI"  "GAMBOA"      "GATUN"      
+[21] "GUACHA"      "HODGESHILL"  "HUMEDAD"     "MONTELIRIO"  "PEDROMIGUEL"
+[26] "PELUCA"      "RAICES"      "SALAMANCA"   "SANMIGUEL"   "SANTAROSA"  
+[31] "ZANGUENGA"  </code></pre>
 </div>
 </div>
 </section>
@@ -460,7 +471,7 @@ GALETASTRI-GALETA -3.957544 -245.751 237.8359 0.9741082</code></pre>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>percentage_gap_fill <span class="ot">&lt;-</span> (gap_fill_true <span class="sc">/</span> (gap_fill_true <span class="sc">+</span> gap_fill_false)) <span class="sc">*</span> <span class="dv">100</span></span>
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>percentage_gap_fill</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 9.175532</code></pre>
+<pre><code>[1] 9.334248</code></pre>
 </div>
 </div>
 <p>We can visualize subsets of the final precipitation data frame. Note that some sites will have more instances of predicted response variables.</p>

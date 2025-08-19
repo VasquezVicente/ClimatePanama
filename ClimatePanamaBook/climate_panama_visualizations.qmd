@@ -66,33 +66,39 @@ site_df <- cbind(site, site_coords)
 Plot using the color blind safe terrain color palette
 ```{r}
 #| warning: false
-set_defaults(map_service = "esri", map_type = "world_shaded_relief")
-bbox <- st_bbox(c(xmin = -80.2, xmax = -79.4, ymin = 8.7, ymax = 9.6), crs = st_crs(4326))
+bbox <- st_bbox(c(xmin = -80.2, xmax = -79.4, ymin = 8.8, ymax = 9.5), crs = st_crs(4326))
+bbox_sf <- st_as_sfc(bbox) %>% st_transform(3857)
+basemap <- basemap_ggplot(bbox_sf, map_service = "esri", map_type = "world_shaded_relief", map_res= 5) ##max i can go is 5 
+ 
+x_labels_4326 <- seq(-80.2, -79.4, by = 0.2)
+y_labels_4326 <- seq(8.8, 9.5, by = 0.2)
 
-x_labels_4326 <- c(-80.2, -80.0, -79.8, -79.6, -79.4)
-y_labels_4326 <- c(8.8, 9.0, 9.2, 9.4, 9.6)
+grid_lines <- expand.grid(lon = x_labels_4326, lat = y_labels_4326) %>%
+  st_as_sf(coords = c("lon", "lat"), crs = 4326) %>%
+  st_transform(3857)
 
-# Add scales with correct labels
-basemap_ggplot(bbox)+
-  scale_x_continuous(breaks = c(-8927823.16162054, -8905559.263461886, -8883295.365303231, -8861031.467144575,-8838767.568985922), labels = x_labels_4326) +
-  scale_y_continuous(breaks = c(983485.8254568293, 1006021.0627551333, 1028568.7625034255, 1051129.2135379848,1073702.705496413), labels = y_labels_4326)+
-  theme(axis.title.x = element_blank(), axis.title.y = element_blank(),
-        panel.grid.major = element_blank(),  # Remove major grid lines
-        panel.grid.minor = element_blank(),
-        axis.text = element_text(size = 12),
-        panel.background = element_blank())
-  
+coords_3857 <- st_coordinates(grid_lines)
+x_breaks_3857 <- unique(coords_3857[ , "X"])
+y_breaks_3857 <- unique(coords_3857[ , "Y"])
 
-p<-basemap_ggplot(bbox) +geom_point(data = site_df, aes(x = X, y = Y, color = source), size = 2) +
-  scale_x_continuous(breaks = c(-8920000, -8900000, -8880000, -8860000, -8840000), labels = x_labels_4326) +
-  scale_y_continuous(breaks = c(980000, 1000000, 1020000, 1040000, 1060000), labels = y_labels_4326) +
+cb_palette <- c(
+  "ACP" = "red",
+  "STRI" =  "blue"   
+
+)
+
+p <- basemap +
+  geom_point(data = site_df, aes(x = X, y = Y, color = source), size = 2) + scale_color_manual(values = cb_palette) +
+  scale_x_continuous(breaks = x_breaks_3857, labels = x_labels_4326, expand= c(0.001,0.001)) +   ## error if grid lines expanded by 0,0
+  scale_y_continuous(breaks = y_breaks_3857, labels = y_labels_4326, expand =c(0.001,0.001)) +
+  coord_equal()+
   theme(
-    axis.title.x = element_blank(),
-    axis.title.y = element_blank(),
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    axis.text = element_text(size = 12),
-    panel.background = element_blank())
+    axis.title = element_blank(),
+    panel.grid = element_blank(),
+    axis.ticks.length = unit(0.3, "cm"),
+    axis.text = element_text(size = 10),
+    panel.background = element_blank()
+  )
 
 site_df2<- subset(site_df, !site %in% c("BCIELECT", "BCICLEAR", "BALBOAHTS", "DIABLO","ESCANDALOSA","PELUCA"))
 BCIELECT<-subset(site_df, site %in% c("BCIELECT"))
@@ -133,8 +139,9 @@ Stack the climatologies and plot them with the same resolution
 # CHELSA 1.2
 chelsa_orig<-list.files("../data_reanalysis/CHELSA 1.2/",full.names=TRUE,pattern = ".tif")
 chelsa_orig<-annual_pan(chelsa_orig,extentMap)
+no_water_mask <- classify(!is.na(chelsa_orig[[1]]), cbind(1, 1), others = NA)
 plot(chelsa_orig)
-
+plot(no_water_mask)
 #CHIRPS annual precip at 0.05 
 chirps<-list.files("../data_reanalysis/CHIRPS 2.0/climatology",full.name=TRUE,pattern=".tif")
 chirps<-annual_pan(chirps,extentMap)
@@ -145,12 +152,15 @@ plot(chirps)
 #chelsa 2.1 annual precip 0,0083333 degree orig 
 chelsa2_orig<-list.files("../data_reanalysis/CHELSA 2.1",full.names=TRUE,pattern = ".tif")
 chelsa2_orig<-annual_pan(chelsa2_orig,extentMap)
+crs(chelsa2_orig) <- "EPSG:4326"
+chelsa2_orig<- chelsa2_orig*no_water_mask
 plot(chelsa2_orig)
 
 #chp 0.05 degree original 1980-2009 
 chp<- list.files("../data_reanalysis/CHPclim",full.names=TRUE,pattern = ".tif")
 chp<-annual_pan(chp,extentMap)
 chp<-terra::project(chp,chelsa_orig, method='near')
+chp<- chp*no_water_mask
 plot(chp)
 
 
@@ -177,12 +187,14 @@ plot(terra)
 #Chelsa earthenv 2003-2016
 chelsaearthenv<-list.files("../data_reanalysis/CHELSA EarthEnv/climatology",full.names = TRUE,pattern = ".tif")
 chelsaearthenv<-annual_pan(chelsaearthenv,extentMap)
+crs(chelsaearthenv) <- "EPSG:4326"
+chelsaearthenv<-chelsaearthenv*no_water_mask
 plot(chelsaearthenv)
 
 #Pbcorworldclim
 pbcor_worldclim<-list.files("../data_reanalysis/PBCOR/WorldClim corrected",full.names = TRUE,pattern = ".tif")
 pbcor_worldclim<-annual_pan(pbcor_worldclim,extentMap)
-pbcor_worldclim<-terra::project(pbcor_worldclim,chelsa_orig,method="ngb")
+pbcor_worldclim<-terra::project(pbcor_worldclim,chelsa_orig,method="near")
 plot(pbcor_worldclim)
 
 #worldclim 
@@ -194,18 +206,19 @@ plot(worldclim)
 Stack the plots, define a list and plot in a grid
 ```{r}
 #| warning: false
-res_stack<-c(chelsa_orig,chelsa2_orig,chelsaearthenv,pbcor_chelsa,pbcor_chp,pbcor_worldclim,terra,chp,worldclim,chirps)
+res_stack<-c(chelsa_orig,chelsa2_orig,chelsaearthenv,chirps,chp,terra,worldclim,pbcor_chelsa,pbcor_chp,pbcor_worldclim)
 
 models<-list('layer.1'="CHELSA 1.2",
              'layer.2'="CHELSA 2.1",
              'layer.3'="CHELSA EarthEnv",
-             'layer.4'="PBCOR CHELSA 1.2",
-             'layer.5'="PBCOR CHPclim",
-             'layer.6'="PBCOR WorldClim",
-             'layer.7'="TerraClimate",
-             'layer.8'="CHPclim v.1.0",
-             'layer.9'="WorldClim v2.1",
-             'layer.10'="CHIRPS v2")
+             'layer.4'="CHIRPS v2.0",
+             'layer.5'="CHPclim v.1.0",
+             'layer.6'="TerraClimate",
+             'layer.7'="WorldClim v2.1",
+             'layer.8'="PBCOR CHELSA 1.2",
+             'layer.9'="PBCOR CHPclim",
+             'layer.10'="PBCOR WorldClim 2.1"
+             )
 model2<- function(variable,value){
   return(models[value])
 }
@@ -244,6 +257,8 @@ plot(chirps)
 chelsa2_orig<-list.files("../data_reanalysis/CHELSA 2.1",full.names=TRUE,pattern = ".tif")
 chelsa2_orig<- chelsa2_orig[1:4]
 chelsa2_orig<-annual_pan(chelsa2_orig,extentMap)
+crs(chelsa2_orig) <- "EPSG:4326"
+chelsa2_orig<- chelsa2_orig*no_water_mask
 plot(chelsa2_orig)
 
 #chp 0.05 degree original 1980-2009 
@@ -251,6 +266,7 @@ chp<- list.files("../data_reanalysis/CHPclim",full.names=TRUE,pattern = ".tif")
 chp<- chp[1:4]
 chp<-annual_pan(chp,extentMap)
 chp<-terra::project(chp,chelsa_orig, method='near')
+chp<- chp*no_water_mask
 plot(chp)
 
 
@@ -280,6 +296,8 @@ plot(terra)
 chelsaearthenv<-list.files("../data_reanalysis/CHELSA EarthEnv/climatology",full.names = TRUE,pattern = ".tif")
 chelsaearthenv<-chelsaearthenv[1:4]
 chelsaearthenv<-annual_pan(chelsaearthenv,extentMap)
+crs(chelsaearthenv) <- "EPSG:4326"
+chelsaearthenv<-chelsaearthenv*no_water_mask
 plot(chelsaearthenv)
 
 #Pbcorworldclim
@@ -298,18 +316,19 @@ plot(worldclim)
 Stack the rasters and plot in a grid. 
 ```{r}
 #| warning: false
-res_stack_jfma<-c(chelsa_orig,chelsa2_orig,chelsaearthenv,pbcor_chelsa,pbcor_chp,pbcor_worldclim,terra,chp,worldclim,chirps)
+res_stack_jfma<-c(chelsa_orig,chelsa2_orig,chelsaearthenv,chirps,chp,terra,worldclim,pbcor_chelsa,pbcor_chp,pbcor_worldclim)
 
 models<-list('layer.1'="CHELSA 1.2",
              'layer.2'="CHELSA 2.1",
              'layer.3'="CHELSA EarthEnv",
-             'layer.4'="PBCOR CHELSA 1.2",
-             'layer.5'="PBCOR CHPclim",
-             'layer.6'="PBCOR WorldClim",
-             'layer.7'="TerraClimate",
-             'layer.8'="CHPclim v.1.0",
-             'layer.9'="WorldClim v2.1",
-             'layer.10'="CHIRPS v2")
+             'layer.4'="CHIRPS v2.0",
+             'layer.5'="CHPclim v.1.0",
+             'layer.6'="TerraClimate",
+             'layer.7'="WorldClim v2.1",
+             'layer.8'="PBCOR CHELSA 1.2",
+             'layer.9'="PBCOR CHPclim",
+             'layer.10'="PBCOR WorldClim 2.1"
+             )
 model2<- function(variable,value){
   return(models[value])
 }
@@ -328,30 +347,54 @@ jf2
 Arrange both combined plots in a grid. 
 ```{r}
 b<-grid.arrange(jf1,jf2,ncol = 1)
-ggsave(b,path='../plots' ,filename = "../plots/climatologies.tiff",  units="in", width=7.25, height=5.25, dpi=900)
+ggsave(b,path='../plots' ,filename = "../plots/climatologies.tiff",  units="in", width=8.25, height=6.25, dpi=900)
 b
 ```
 ## Figure 3. Annual Bias and January to April Bias
 Create data frames for bias of each response variable
 ```{r}
-precipitation_data_subset <- read.csv(file="../tables/climatologies.csv")
-data_sources <- c("CHELSA.1.2", "CHELSA.2.1", "CHELSA.EarthEnv", "CHPclim", "WorldClim.2.1", "CHIRPS.2.0", "CHELSA.W5E5v1.0", "TerraClimate", "PBCOR.CHELSA.1.2", "PBCOR.CHPclim", "PBCOR.WorldClim.2.1")
-source_names <- c("CHELSA 1.2", "CHELSA 2.1", "CHELSA EarthEnv", "CHPclim", "WorldClim 2.1", "CHIRPS 2.0", "CHELSA-W5E5v1.0", "TerraClimate", "PBCOR CHELSA 1.2", "PBCOR CHPclim", "PBCOR WorldClim 2.1")
+precipitation_data_subset <- read.csv(file = "../tables/climatologies.csv")
+
+data_sources <- c("CHELSA.1.2", "CHELSA.2.1", "CHELSA.EarthEnv", "CHIRPS.2.0", 
+                  "CHPclim", "TerraClimate", "WorldClim.2.1", "CHELSA.W5E5v1.0",
+                  "PBCOR.CHELSA.1.2", "PBCOR.CHPclim", "PBCOR.WorldClim.2.1")
+
+source_names <- c("CHELSA 1.2", "CHELSA 2.1", "CHELSA EarthEnv", "CHPclim", "WorldClim 2.1", "CHIRPS v2.0", 
+                  "CHELSA-W5E5v1.0", "TerraClimate", "PBCOR CHELSA 1.2", "PBCOR CHPclim", "PBCOR WorldClim 2.1")
+
+
+precipitation_data_subset$source <- gsub("CHIRPS 2.0", "CHIRPS v2.0", precipitation_data_subset$source)
 
 bias_frame <- precipitation_data_subset %>% 
-  select("site","longitude","latitude","annual","source") %>% 
-  mutate(bias=NA)
-bias_frame_jfma<- precipitation_data_subset %>% 
-  select("site","longitude","latitude","jfma","source") %>% 
-  mutate(bias=NA)
+  select(site, longitude, latitude, annual, source) %>% 
+  mutate(bias = NA)
+
+bias_frame_jfma <- precipitation_data_subset %>% 
+  select(site, longitude, latitude, jfma, source) %>% 
+  mutate(bias = NA)
 
 for(i in seq_along(data_sources)) {
-  bias_frame[bias_frame$source == source_names[i], "bias"] <- precipitation_data_subset[precipitation_data_subset$source == source_names[i], data_sources[i]] - precipitation_data_subset[precipitation_data_subset$source == source_names[i], "annual"]
+  bias_frame[bias_frame$source == source_names[i], "bias"] <- 
+    precipitation_data_subset[precipitation_data_subset$source == source_names[i], data_sources[i]] - 
+    precipitation_data_subset[precipitation_data_subset$source == source_names[i], "annual"]
 }
+
 jfma_sources <- paste0(data_sources, "_jfma")
 for(i in seq_along(jfma_sources)) {
-  bias_frame_jfma[bias_frame_jfma$source == source_names[i], "bias"] <- precipitation_data_subset[precipitation_data_subset$source == source_names[i], jfma_sources[i]] - precipitation_data_subset[precipitation_data_subset$source == source_names[i], "jfma"]
+  bias_frame_jfma[bias_frame_jfma$source == source_names[i], "bias"] <- 
+    precipitation_data_subset[precipitation_data_subset$source == source_names[i], jfma_sources[i]] - 
+    precipitation_data_subset[precipitation_data_subset$source == source_names[i], "jfma"]
 }
+
+bias_frame$source <- factor(bias_frame$source, levels = c("CHELSA 1.2", "CHELSA 2.1", "CHELSA EarthEnv", "CHIRPS v2.0", 
+                                                          "CHPclim", "TerraClimate", "WorldClim 2.1", "CHELSA-W5E5v1.0",     
+                                                          "PBCOR CHELSA 1.2", "PBCOR CHPclim", "PBCOR WorldClim 2.1"))
+
+bias_frame_jfma$source <- factor(bias_frame_jfma$source, levels = c("CHELSA 1.2", "CHELSA 2.1", "CHELSA EarthEnv", "CHIRPS v2.0", 
+                                                                    "CHPclim", "TerraClimate", "WorldClim 2.1", "CHELSA-W5E5v1.0",     
+                                                                    "PBCOR CHELSA 1.2", "PBCOR CHPclim", "PBCOR WorldClim 2.1"))
+
+
 ```
 
 Convert to other coordinate system for plotting purposes 
@@ -373,7 +416,8 @@ bias_frame_jfma <- bias_frame_jfma %>%
 Plot the panels for each response variable.
 ```{r}
 #| warning: false
-Bias_annual_panels <- basemap_ggplot(bbox) +
+max_abs_bias <- max(abs(bias_frame$bias), na.rm = TRUE)
+Bias_annual_panels <- basemap_ggplot(bbox_sf, map_service = "esri", map_type = "world_shaded_relief", map_res= 2) +
   theme_void() +
   geom_jitter(data = bias_frame,
               aes(x = longitude_3857, y = latitude_3857, colour = bias),
@@ -381,12 +425,17 @@ Bias_annual_panels <- basemap_ggplot(bbox) +
   geom_jitter(data = bias_frame,
               aes(x = longitude_3857, y = latitude_3857),
               size = 2, shape = 21, width = 0.3, height = 0.3) +
-  scale_color_scico(palette = "roma", direction = -1) +
+  scale_color_scico(palette = "roma", direction = -1, 
+                    midpoint = 0, 
+                    limits = c(-max_abs_bias, max_abs_bias))+
   facet_wrap(~source,ncol=5) +
+  coord_equal()+
   labs(color = "Bias (mm)") +
-  ggtitle("Annual Precipitation Bias")
+  ggtitle("Total Annual Precipitation")+ theme(legend.title = element_text(size = 10))
 
-Bias_jfma_panels <- basemap_ggplot(bbox) +
+max_abs_bias_jfma <- max(abs(bias_frame_jfma$bias), na.rm = TRUE)
+
+Bias_jfma_panels <- basemap_ggplot(bbox_sf, map_service = "esri", map_type = "world_shaded_relief", map_res= 2) +
   theme_void() +
   geom_jitter(data = bias_frame_jfma,
               aes(x = longitude_3857, y = latitude_3857, colour = bias),
@@ -394,10 +443,13 @@ Bias_jfma_panels <- basemap_ggplot(bbox) +
   geom_jitter(data = bias_frame_jfma,
               aes(x = longitude_3857, y = latitude_3857),
               size = 2, shape = 21, width = 0.3, height = 0.3) +
-  scale_color_scico(palette = "roma", direction = -1) +
+  scale_color_scico(palette = "roma", direction = -1, 
+                    midpoint = 0, 
+                    limits = c(-max_abs_bias_jfma, max_abs_bias_jfma)) +
   facet_wrap(~source,ncol = 5) +
+  coord_equal()+
   labs(color = "Bias (mm)") +
-  ggtitle("January to April Precipitation Bias")
+  ggtitle("January to April Precipitation") + theme(legend.title = element_text(size = 10))
 
 Bias_annual_panels <- Bias_annual_panels +
   theme(strip.text = element_text(size = 7),
@@ -411,13 +463,13 @@ Bias_jfma_panels <- Bias_jfma_panels +
 
 #ggsave(Bias_annual_panels,path = '../plots',filename = "annual_bias_maps.tiff",  units="in", width=10, height=10, dpi=900)
 #ggsave(Bias_jfma_panels,path = '../plots',filename = "jfma_bias_maps.tiff",  units="in", width=10, height=10, dpi=900)
-Bias_annual_panels
-Bias_jfma_panels
+#Bias_annual_panels
+#Bias_jfma_panels
 ```
 Arrange both set of panels in a grid 
 ```{r}
 c<-grid.arrange(Bias_annual_panels,Bias_jfma_panels,ncol = 1)
-ggsave(c,path='../plots' ,filename = "../plots/bias_figure.tiff",  units="in", width=7.5, height=6, dpi=900)
+ggsave(c,path='../plots' ,filename = "../plots/bias_figure.tiff",  units="in", width=9, height=6, dpi=900)
 c
 ```
 
@@ -425,8 +477,11 @@ c
 
 ```{r}
 precipitation_data_subset <- read.csv(file="../tables/climatologies.csv")
-data_sources <- c("CHELSA.1.2", "CHELSA.2.1", "CHELSA.EarthEnv", "CHPclim", "WorldClim.2.1", "CHIRPS.2.0", "CHELSA.W5E5v1.0", "TerraClimate", "PBCOR.CHELSA.1.2", "PBCOR.CHPclim", "PBCOR.WorldClim.2.1")
-source_names <- c("CHELSA 1.2", "CHELSA 2.1", "CHELSA EarthEnv", "CHPclim", "WorldClim 2.1", "CHIRPS 2.0", "CHELSA-W5E5v1.0", "TerraClimate", "PBCOR CHELSA 1.2", "PBCOR CHPclim", "PBCOR WorldClim 2.1")
+
+source_names <- c("CHELSA 1.2", "CHELSA 2.1", "CHELSA EarthEnv", "CHPclim", "WorldClim 2.1", "CHIRPS v2.0", 
+                  "CHELSA-W5E5v1.0", "TerraClimate", "PBCOR CHELSA 1.2", "PBCOR CHPclim", "PBCOR WorldClim 2.1")
+
+precipitation_data_subset$source <- gsub("CHIRPS 2.0", "CHIRPS v2.0", precipitation_data_subset$source)
 
 corr_frame <- precipitation_data_subset %>% 
   select("site","longitude","latitude","annual","source") %>% 
@@ -442,17 +497,21 @@ jfma_sources <- paste0(data_sources, "_jfma")
 for(i in seq_along(jfma_sources)) {
   corr_frame_jfma[corr_frame_jfma$source == source_names[i], "value"] <- precipitation_data_subset[precipitation_data_subset$source == source_names[i], jfma_sources[i]] 
 }
-
+corr_frame$source <- factor(corr_frame$source, levels = c("CHELSA 1.2","CHELSA 2.1","CHELSA EarthEnv", "CHIRPS v2.0","CHPclim",            
+                                                                            "TerraClimate","WorldClim 2.1","CHELSA-W5E5v1.0",     
+                                                                            "PBCOR CHELSA 1.2","PBCOR CHPclim","PBCOR WorldClim 2.1"))
+corr_frame_jfma$source <- factor(corr_frame_jfma$source, levels = c("CHELSA 1.2","CHELSA 2.1","CHELSA EarthEnv", "CHIRPS v2.0","CHPclim",  
+                                                                            "TerraClimate","WorldClim 2.1","CHELSA-W5E5v1.0",     
+                                                                            "PBCOR CHELSA 1.2","PBCOR CHPclim","PBCOR WorldClim 2.1"))
 ```
 
 Plot using ggplot
 ```{r}
 annual_corr<-ggplot(corr_frame[corr_frame$source!="CHELSA-W5E5v1.0",],aes(x = value,y=annual))+
-  geom_smooth(method='lm',se=FALSE)+
+  geom_smooth(method='lm',se=FALSE)+geom_abline(slope = 1, intercept = 0, lty= 2)+
   geom_point(col=rgb(0,0,0,alpha=0.5))+facet_wrap(vars(source),ncol=5)+
   theme_classic()+
   expand_limits(x=c(1000,4500),y=c(1000,4500))+
-  geom_abline(slope = 1, intercept = 0, lty= 2)+
   coord_equal()+
   theme(
     strip.text = element_text(size = 8)  
@@ -472,21 +531,20 @@ annual_corr<-annual_corr + geom_text(
   hjust   = 0,
   vjust   = 1,
   size    = 2
-)+labs(title = "Total Annual Correlation Plots")+ 
+)+labs(title = "Total Annual Precipitation")+ 
   xlab("Gridded products annual precipitation (mm)") +
   ylab("In-situ annual precipitation (mm)") 
 
-ggsave(annual_corr,path='../plots' ,filename = "../plots/correlation_annual.tiff",  units="in", width=7.25, height=6.25, dpi=900)
+ggsave(annual_corr,path='../plots' ,filename = "../plots/correlation_annual.tiff",  units="in", width=8.25, height=7.25, dpi=900)
 annual_corr
 ```
 Plot January to April correlation plots
 ```{r}
 jfma_corr<-ggplot(corr_frame_jfma[corr_frame_jfma$source!="CHELSA-W5E5v1.0",],aes(x = value,y=jfma))+
-  geom_smooth(method='lm',se=FALSE)+
+  geom_smooth(method='lm',se=FALSE)+geom_abline(slope = 1, intercept = 0, lty= 2)+
   geom_point(col=rgb(0,0,0,alpha=0.5))+facet_wrap(vars(source),ncol=5)+
   expand_limits(x=c(0,800),y=c(0,800))+
   theme_classic()+
-  geom_abline(slope = 1, intercept = 0, lty= 2)+
   coord_equal()+
   theme(
     strip.text = element_text(size = 8)  
@@ -506,7 +564,7 @@ jfma_corr<-jfma_corr + geom_text(
   hjust   = 0,
   vjust   = 1,
   size    = 2
-)+labs(title = "January-April Correlation Plots")+ 
+)+labs(title = "January to April Precipitation")+ 
   xlab("Gridded products Jan-Apr precipitation (mm)") +
   ylab("In-situ Jan-Apr precipitation (mm)") 
 
@@ -523,52 +581,102 @@ ggsave(d,path='../plots' ,filename = "../plots/correlation.tiff",  units="in", w
 ## Figure.5 Seasonality plots
 Mutating the data is necessary to consider a second line representing a second set of ground data in BCI.
 ```{r}
-acp38_ag<-read.csv("../tables/acp38_ag.csv")
-acp38_ag_long <- acp38_ag %>% 
-  tidyr::pivot_longer(cols = c(CHELSA1.2:PBCOR_WorldClim2.1), names_to = "colname", values_to = "value")%>%
+acp38_ag <- read.csv("../tables/acp38_ag.csv")
+
+acp38_ag$dataset_name <- gsub("CHIRPS 2.0", "CHIRPS v2.0", acp38_ag$dataset_name)
+
+acp38_ag_long <- acp38_ag %>%
+  tidyr::pivot_longer(
+    cols = c(CHELSA1.2, CHELSA2.1, CHELSA_EarthEnv, CHELSAW5E5v1.0,
+             CHIRPS2.0, CHPclim, TerraClimate, WorldClim2.1,
+             PBCOR_CHELSA1.2, PBCOR_CHPclim, PBCOR_WorldClim2.1),
+    names_to = "colname",
+    values_to = "value"
+  ) %>%
   mutate(colname = case_when(
     colname == "CHELSA1.2" ~ "CHELSA 1.2",
     colname == "CHELSA2.1" ~ "CHELSA 2.1",
     colname == "CHELSA_EarthEnv" ~ "CHELSA EarthEnv",
     colname == "CHPclim" ~ "CHPclim",
     colname == "WorldClim2.1" ~ "WorldClim 2.1",
-    colname == "CHIRPS2.0" ~ "CHIRPS 2.0",
+    colname == "CHIRPS2.0" ~ "CHIRPS v2.0",  # Match this AFTER pivot
     colname == "CHELSAW5E5v1.0" ~ "CHELSA-W5E5v1.0",
     colname == "TerraClimate" ~ "TerraClimate",
     colname == "PBCOR_CHELSA1.2" ~ "PBCOR CHELSA 1.2",
     colname == "PBCOR_CHPclim" ~ "PBCOR CHPclim",
-    colname == "PBCOR_WorldClim2.1" ~ "PBCOR WorldClim 2.1",
-  ))%>%
-  filter((dataset_name == colname) | (dataset_name == "Ground" & colname == "CHELSA 1.2"))%>%
+    colname == "PBCOR_WorldClim2.1" ~ "PBCOR WorldClim 2.1"
+  )) %>%
+  filter((dataset_name == colname) | (dataset_name == "Ground" & colname == "CHELSA 1.2")) %>%
   mutate(value = ifelse(dataset_name == "Ground", mon_mean, value)) %>%
-  mutate(dataset_name = ifelse(site == "BCICLEAR" & dataset_name == "Ground", "Ground manual", dataset_name))%>%
-  filter(!(site == "BCICLEAR" & dataset_name != "Ground manual"))%>%
-  mutate(site=ifelse(site=="BCICLEAR","BCI",site))
+  mutate(dataset_name = ifelse(site == "BCICLEAR" & dataset_name == "Ground", "Ground manual", dataset_name)) %>%
+  filter(!(site == "BCICLEAR" & dataset_name != "Ground manual")) %>%
+  mutate(site = ifelse(site == "BCICLEAR", "BCI", site))
 
-acp38_ag_long$dataset_name <- factor(acp38_ag_long$dataset_name, levels = c("CHELSA 1.2","CHELSA 2.1","CHELSA EarthEnv", "CHPclim",            
-                                                                            "WorldClim 2.1","CHIRPS 2.0","CHELSA-W5E5v1.0","TerraClimate",     
-                                                                            "PBCOR CHELSA 1.2","PBCOR CHPclim","PBCOR WorldClim 2.1","Ground",           
+
+year<- acp38_ag_long %>% filter(dataset_name=="Ground")%>%
+  group_by(site) %>% summarise(annual_mean=sum(value,na.rm=TRUE))
+
+acp38_ag_long$dataset_name <- factor(acp38_ag_long$dataset_name, levels = c("CHELSA 1.2","CHELSA 2.1","CHELSA EarthEnv","CHELSA-W5E5v1.0",
+                                                                            "CHIRPS v2.0","CHPclim", "TerraClimate","WorldClim 2.1",             
+                                                                            "PBCOR CHELSA 1.2","PBCOR CHPclim","PBCOR WorldClim 2.1","Ground",  
                                                                              "Ground manual"))
+unique(acp38_ag_long$dataset_name)
+site_labels <- setNames(
+  paste0(
+    year$site, " (", round(year$annual_mean, 0), " mm/yr)"
+  ),
+  year$site
+)
 
 acp38_ag_long$site <- factor(acp38_ag_long$site,    # Reordering group factor levels
                                levels = c("SANMIGUEL", "AGUACLARA", "PELUCA", "BCI","GUACHA","CASCADAS","GAMBOA","PEDROMIGUEL"))
 ```
 Plot using ggplot2 and customs colors
 ```{r}
-seasonality_plot<-ggplot(acp38_ag_long,aes(x=Month,y=value))+
-  geom_line(aes(color=dataset_name),linewidth=0.2)+
-  geom_point(aes(color=dataset_name),size=0.2)+
-  facet_wrap(vars(site),ncol = 4)+
-  scale_color_manual(labels = c("CHELSA 1.2","CHELSA 2.1","CHELSA EarthEnv", "CHPclim",            
-                                "WorldClim 2.1","CHIRPS 2.0","CHELSA-W5E5v1.0","TerraClimate",     
-                                "PBCOR CHELSA 1.2","PBCOR CHPclim","PBCOR WorldClim 2.1","Ground",           
-                                "Ground manual"),values=c('#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#a6cee3','brown',"black","purple")) +
-  scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10,11,12),
-                     labels=c("Jan", "Feb", "Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))+theme_classic()+
-  theme(axis.text.x = element_text(angle = 60, vjust = 0.5, hjust=1,size=6),strip.text = element_text(size = 5),)+
-  ylab("Precipitation (mm)")+
-  labs(color = "Gridded dataset")+
-  labs(title="Seasonal Precipitation Patterns")
+seasonality_plot <- ggplot(acp38_ag_long, aes(x = Month, y = value)) +
+  geom_line(aes(color = dataset_name, linewidth = dataset_name)) +
+  geom_point(aes(color = dataset_name), size = 0.2) +
+  facet_wrap(
+    vars(site),
+    ncol = 4,
+    labeller = labeller(site = site_labels)
+  ) +
+  scale_color_manual(
+    labels = c(
+      "CHELSA 1.2", "CHELSA 2.1", "CHELSA EarthEnv", "CHELSA-W5E5v1.0",
+      "CHIRPS v2.0", "CHPclim", "TerraClimate", "WorldClim 2.1",
+      "PBCOR CHELSA 1.2", "PBCOR CHPclim", "PBCOR WorldClim 2.1",
+      "Ground", "Ground manual"
+    ),
+    values = c(
+      '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f',
+      '#ff7f00', '#cab2d6', '#6a3d9a', '#a6cee3', 'brown', "black", "purple"
+    )
+  ) +
+  scale_discrete_manual(
+    "linewidth",
+    values = c(0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.5, 0.5)
+  ) +
+  scale_x_continuous(
+    breaks = 1:12,
+    labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+               "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+  ) +
+  theme_classic() +
+  theme(
+    axis.text.x = element_text(angle = 60, vjust = 1.2, hjust = 1, size = 7),
+    strip.text = element_text(size = 6),
+    axis.text.y = element_text(size = 7),
+    axis.title.x = element_text(size = 8),
+    axis.title.y = element_text(size = 8),
+    legend.text = element_text(size = 7),
+    legend.title = element_text(size = 8)
+  ) +
+  ylab("Monthly Precipitation (mm)") +
+  labs(
+    color = "Gridded dataset"
+  ) +
+  guides(linewidth = "none")
 
 ggsave(seasonality_plot,path='../plots' ,filename = "../plots/seasonality.tiff",  units="in", width=7.25, height=5, dpi=900)
 seasonality_plot
@@ -578,6 +686,7 @@ seasonality_plot
 Mutating the dataset to consider the existence of a second line representing another set of ground data coming from a secondary rain gauge in BCI. 
 ```{r}
 acp38_year<-read.csv("../tables/acp38_year.csv")
+acp38_year$dataset_name <- gsub("CHIRPS 2.0", "CHIRPS v2.0", acp38_year$dataset_name)
 
 acp38_year_long<- acp38_year%>%
   tidyr::pivot_longer(cols=c(annual_precip,CHELSA1.2:TerraClimate), names_to = "colname", values_to = "value")%>%
@@ -585,7 +694,7 @@ acp38_year_long<- acp38_year%>%
     colname == "CHELSA1.2" ~ "CHELSA 1.2",
     colname == "CHELSA2.1" ~ "CHELSA 2.1",
     colname == "CHELSA_EarthEnv" ~ "CHELSA EarthEnv",
-    colname == "CHIRPS2.0" ~ "CHIRPS 2.0",
+    colname == "CHIRPS2.0" ~ "CHIRPS v2.0",
     colname == "CHELSAW5E5v1.0" ~ "CHELSA-W5E5v1.0",
     colname == "TerraClimate" ~ "TerraClimate",
     colname == "annual_precip" ~ "Ground"
@@ -596,62 +705,59 @@ acp38_year_long<- acp38_year%>%
   mutate(site=ifelse(site=="BCICLEAR","BCI",site))%>%
   mutate(dataset_name=ifelse(dataset_name=="CHELSA 1.2"&colname=="Ground","Ground",dataset_name))
 
+year<- acp38_year_long %>% filter(dataset_name=="Ground")%>%
+  group_by(site) %>% summarise(annual_mean=mean(value,na.rm=TRUE))
+
 acp38_year_long$site <- factor(acp38_year_long$site,      # Reordering group factor levels
                     levels = c("SANMIGUEL", "AGUACLARA", "PELUCA", "BCI","GUACHA","CASCADAS","GAMBOA","PEDROMIGUEL"))
+
+site_labels <- setNames(
+  paste0(
+    year$site, " (", round(year$annual_mean, 0), " mm/yr)"
+  ),
+  year$site
+)
 acp38_year_long$dataset_name<-factor(acp38_year_long$dataset_name,
-                                     levels=c("CHELSA 1.2","CHELSA 2.1", "CHELSA EarthEnv","CHIRPS 2.0","CHELSA-W5E5v1.0","TerraClimate","Ground","Ground manual"))
+                                     levels=c("CHELSA 1.2","CHELSA 2.1", "CHELSA EarthEnv","CHELSA-W5E5v1.0","CHIRPS v2.0","TerraClimate","Ground","Ground manual"))
 acp38_year_long <- acp38_year_long %>%
   filter(!is.na(dataset_name))
 ```
 Plot using ggplot2
 ```{r}
-interannual_plot<-ggplot(acp38_year_long,aes(x=Year,y=value))+
-  geom_line(aes(color=dataset_name),linewidth=0.2)+
-  geom_point(aes(color=dataset_name),size=0.2)+
-  expand_limits(x=c(1970,2016),y=c(900,5900))+
-  facet_wrap(vars(site),ncol=4)+
-  theme_classic()+
-  xlab("Year")+
-  ylab("Annual Total precipitation")+
-   labs(color="Gridded dataset")+
-  labs(title="Interannual Variability",size=15)+
-  theme(strip.text = element_text(size = 5),
-        axis.text.x = element_text(size=5),
-        axis.text.y = element_text(size=5),
-        axis.title.x = element_text(size = 6),  
-        axis.title.y = element_text(size = 6),
-        legend.text = element_text(size = 5),
-        legend.title= element_text(size=6))+
-  scale_color_manual(values=c('#a65628','#e7298a','#e31a1c', '#ff7f00','#984ea3','#4daf4a','black','purple'))
+interannual_plot <- ggplot(acp38_year_long, aes(x = Year, y = value)) +
+  geom_line(aes(color = dataset_name, linewidth= dataset_name))+
+  geom_point(aes(color = dataset_name), size = 0.2) +
+  expand_limits(x = c(1970, 2016), y = c(900, 5900)) +
+  facet_wrap(vars(site), ncol = 4, labeller = labeller(site = site_labels)) +
+  theme_classic() +
+  xlab("Year") +
+  ylab("Annual Precipitation (mm)") +
+  labs(color = "Gridded dataset") +
+  theme(
+    strip.text = element_text(size = 7),
+    axis.text.x = element_text(size = 7),
+    axis.text.y = element_text(size = 7),
+    axis.title.x = element_text(size = 8),
+    axis.title.y = element_text(size = 8),
+    legend.text = element_text(size = 7),
+    legend.title = element_text(size = 8)
+  ) +
+  scale_color_manual(values = c(
+    "CHELSA 1.2" = "#a65628",
+    "CHELSA 2.1" = "#e7298a",
+    "CHELSA EarthEnv" = "#e31a1c",
+    "CHIRPS v2.0" = "#ff7f00",
+    "CHELSA-W5E5v1.0" = "#984ea3",
+    "TerraClimate" = "#4daf4a",
+    "Ground" = "black",
+    "Ground manual" = "purple"
+  )) +
+  scale_discrete_manual("linewidth",values = c(0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.5, 0.5))+
+  guides(linewidth = "none")
 
-year<- acp38_year_long %>% filter(dataset_name=="Ground")%>%
-  group_by(site) %>% summarise(annual_mean=mean(value,na.rm=TRUE))
-year2<-acp38_year_long %>% filter(dataset_name=="Ground manual")%>%
-  group_by(site)%>% summarise(annual_mean=mean(value,na.rm=TRUE))
-
-interannual_plot<-interannual_plot + geom_text(
-  data    = year,
-  mapping = aes(x = -Inf, y = 5350, label = paste0("Mean annual precipitation=",round(annual_mean,0))),
-  hjust   = -0.1,
-  vjust   = -1,
-  size=1
-)+
-  geom_text(
-    data    = year2,
-    mapping = aes(x = 1990, y = 5350, label = paste0("(electronic), ",round(annual_mean,0),"(manual)")),
-    hjust   = -0.1,
-    vjust   = -1,
-    size=1)
 
 ##annual
-ggsave(interannual_plot,path='../plots' ,filename = "../plots/interannual.tiff",  units="in", width=7.25, height=3, dpi=900)
+ggsave(interannual_plot,path='../plots' ,filename = "../plots/interannual.tiff",  units="in", width=8.25, height=4, dpi=900)
 interannual_plot
 ```
-
-
-
-
-
-
-
 

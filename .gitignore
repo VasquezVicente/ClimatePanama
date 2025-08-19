@@ -4,7 +4,9 @@
 *.Rhistory
 *.docx
 *.zip
-
+*.jpg
+*.png
+*.eps
 
 
 # Ignore the following directories and files

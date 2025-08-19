@@ -5,3 +5,14 @@ The ClimatePanama repository was created with the purpose of version control of 
 ## Climate Panama Book
 
 The entire code and results are documented in the github page. You can follow the chapters and reproduce the results. It is important to highlight that this are very large downloads which are all in a desktop computer. [Climate Panama Book](https://vasquezvicente.github.io/ClimatePanama/).
+
+## Code order
+All code is available is sub directory ClimatePanamaBook.
+
+ 1. stri_compile.qmd : Downloads and wrangles with STRI MET station data
+ 2. acp_compile.qmd : Downloads and wrangles with ACP MET station data
+ 3. ground_data_wrangling.qmd : Consolidate ground station data, gap fills data for spatial analysis.
+ 4. Download_gridded_precipitation.qmd : Downloads and crops gridded products data. 
+ 5. results_precip.qmd : Does comparisons between ground data and gridded products. Returns tables with results.
+ 6. climate_panama_visualizations.qmd : generates all manuscript figures.
+ 7. references.qmd : code references.
