@@ -176,7 +176,7 @@ ggplot(climatologies, aes(x = site, y = gapFill_percentage)) +
 
 ggplot(climatologies, aes(x = source, y = gapFill_percentage)) +
   geom_boxplot() +
-  labs(title = "Gap Fill Percentage by Site",
+  labs(title = "Gap Fill Percentage by Dataset",
        x = "Source",
        y = "Gap Fill Percentage (%)") +
   theme_minimal() +
